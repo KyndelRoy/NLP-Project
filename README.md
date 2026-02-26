@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ProjectNlp app
 
 ## Run the app
@@ -67,3 +68,6 @@ flet build web -v
 ```
 
 For more details on building Web app, refer to the [Web Packaging Guide](https://docs.flet.dev/publish/web/).
+=======
+# NLP-Project
+>>>>>>> b463c52e744480120634bc0c01b2a46498fcd92f
