@@ -57,13 +57,50 @@ def classify_text(req: ClassifyRequest):
     # 1. Language Detection
     detected_lang = "unknown"
     if language_model:
-        detected_lang = language_model.predict([req.text])[0]
+        if hasattr(language_model, "predict_proba"):
+            probas = language_model.predict_proba([req.text])[0]
+            classes = language_model.classes_
+            
+            lang_probs = {cls: prob for cls, prob in zip(classes, probas)}
+            sorted_langs = sorted(lang_probs.items(), key=lambda x: x[1], reverse=True)
+            primary_lang, primary_prob = sorted_langs[0]
+            
+            if primary_lang == 'other' and primary_prob > 0.5:
+                detected_lang = 'other'
+            else:
+                significant_langs = []
+                for lang, prob in sorted_langs:
+                    if lang == 'other':
+                        continue
+                    if prob >= 0.25:
+                        significant_langs.append(lang.capitalize())
+                
+                if not significant_langs:
+                    for lang, prob in sorted_langs:
+                        if lang != 'other':
+                            significant_langs.append(lang.lower())
+                            break
+                else:
+                    significant_langs = [lang.lower() for lang in significant_langs]
+                            
+                detected_lang = significant_langs
+        else:
+            lang = language_model.predict([req.text])[0]
+            detected_lang = [lang.lower()]
         
-    if detected_lang == "other":
+    # Check if 'other' is in the list and it's the only one
+    if isinstance(detected_lang, list) and len(detected_lang) == 1 and detected_lang[0] == 'other':
         return {
             "label": "N/A", 
             "score": 0.0, 
-            "language": detected_lang, 
+            "language": ["other"], 
+            "message": "Language not supported for topic modeling."
+        }
+    elif detected_lang == 'other':
+        return {
+            "label": "N/A", 
+            "score": 0.0, 
+            "language": ["other"], 
             "message": "Language not supported for topic modeling."
         }
     

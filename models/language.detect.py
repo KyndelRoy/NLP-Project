@@ -16,7 +16,7 @@ df_reshaped = df_reshaped.dropna()
 
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.svm import LinearSVC
+from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 
 # 1. Split the reshaped data
@@ -28,7 +28,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 # 'char' is better than 'word' for distinguishing Tagalog vs Cebuano
 model = Pipeline([
     ('tfidf', TfidfVectorizer(analyzer='char', ngram_range=(1, 3))),
-    ('clf', LinearSVC())
+    ('clf', LogisticRegression(max_iter=1000))
 ])
 
 # 3. Train

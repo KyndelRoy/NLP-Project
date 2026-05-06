@@ -4,7 +4,67 @@ document.addEventListener('DOMContentLoaded', () => {
     const sendBtn = document.getElementById('send-btn');
     const resultsContent = document.getElementById('results-content');
     const modelSelect = document.getElementById('model-select');
+    const dropdownTrigger = document.querySelector('.dropdown-trigger');
+    const dropdownOptions = document.getElementById('dropdown-options');
+    const selectedModelText = document.getElementById('selected-model-text');
+    const options = document.querySelectorAll('.option');
+
+    // Custom Dropdown Logic
+    dropdownTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownOptions.classList.toggle('show');
+    });
+
+    document.addEventListener('click', () => {
+        dropdownOptions.classList.remove('show');
+    });
+
+    options.forEach(opt => {
+        opt.addEventListener('click', () => {
+            const val = opt.getAttribute('data-value');
+            const text = opt.textContent;
+            
+            // Update hidden input and UI
+            modelSelect.value = val;
+            selectedModelText.textContent = text;
+            
+            // Update active state
+            options.forEach(o => o.classList.remove('active'));
+            opt.classList.add('active');
+            
+            dropdownOptions.classList.remove('show');
+        });
+    });
+
     const labelsContainer = document.getElementById('labels-container');
+    const themeBtns = document.querySelectorAll('.theme-btn');
+    const htmlElement = document.documentElement;
+
+    // Theme Switcher Logic
+    let savedTheme = localStorage.getItem('app-theme') || 'dark';
+    if (savedTheme !== 'light' && savedTheme !== 'dark') savedTheme = 'dark';
+    setTheme(savedTheme);
+
+    themeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const theme = btn.getAttribute('data-theme');
+            setTheme(theme);
+        });
+    });
+
+    function setTheme(theme) {
+        htmlElement.setAttribute('data-theme', theme);
+        localStorage.setItem('app-theme', theme);
+        
+        // Update active class
+        themeBtns.forEach(btn => {
+            if (btn.getAttribute('data-theme') === theme) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
 
     const API_URL = 'http://127.0.0.1:8000';
 
@@ -36,10 +96,13 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchLabels();
     setInterval(fetchLabels, 2000);
 
-    // Update character count
+    // Update character count and button state
     textInput.addEventListener('input', () => {
-        const length = textInput.value.length;
+        const length = textInput.value.trim().length;
         charCount.textContent = length.toLocaleString();
+        
+        // Toggle send button
+        sendBtn.disabled = length === 0;
         
         // Add subtle animation when typing
         charCount.style.transform = 'scale(1.1)';
@@ -97,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function displayResults(labels, scores, language, message) {
-        if (language === 'other') {
+        if (language === 'other' || (Array.isArray(language) && language[0] === 'other')) {
             resultsContent.innerHTML = `
                 <div class="result-item" style="animation: fadeInUp 0.4s ease-out;">
                     <div style="padding: 1rem; background: rgba(239, 68, 68, 0.1); border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.2);">
@@ -137,15 +200,27 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }
 
+        // Handle multiple languages
+        let langList = Array.isArray(language) ? language : [language];
+        let languageHtml = '';
+        
+        langList.forEach(lang => {
+            if (!lang) return;
+            const displayLang = lang.charAt(0).toUpperCase() + lang.slice(1);
+            languageHtml += `<span class="topic-badge badge-${lang.toLowerCase()}">${displayLang}</span>`;
+        });
+        
         resultsContent.innerHTML = `
             <div class="result-item" style="animation: fadeInUp 0.4s ease-out;">
                 ${topicsHtml}
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
                     <span style="font-weight: 500; font-size: 0.875rem; color: var(--text-secondary);">Detected Language</span>
-                    <span class="topic-badge" style="background-color: var(--accent-color); color: white;">${language || 'unknown'}</span>
+                    <div style="display: flex; gap: 0.5rem;">
+                        ${languageHtml || '<span class="topic-badge">Unknown</span>'}
+                    </div>
                 </div>
                 <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 1rem;">
-                    Analysis completed using ${modelSelect.options[modelSelect.selectedIndex].text}.
+                    Analysis completed using ${selectedModelText.textContent}.
                 </p>
             </div>
         `;

@@ -14,6 +14,11 @@
 
 <body>
     <main class="main-content">
+        <div class="theme-toggle-container">
+            <button class="theme-btn" data-theme="light">Light Mode</button>
+            <button class="theme-btn active" data-theme="dark">Dark Mode</button>
+        </div>
+
         <header class="greeting-container">
             <h2 class="greeting-title">Low Resource Language<br>Topic Detector</h2>
             <p class="support-note">Currently supports English, Tagalog, and Cebuano</p>
@@ -24,14 +29,21 @@
                 <textarea id="text-input" placeholder="Enter text to classify..." aria-label="Text to classify"></textarea>
                 <div class="prompt-footer">
                     <div class="model-picker">
-                        <select id="model-select" aria-label="Select Classification Model">
-                            <option value="bart">BART-Large-MNLI</option>
-                            <option value="specialized">Specialized Multilingual</option>
-                            <option value="fast">Fast Classification</option>
-                        </select>
+                    <div class="custom-dropdown" id="model-dropdown">
+                        <div class="dropdown-trigger">
+                            <span id="selected-model-text">BART-Large-MNLI</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                        </div>
+                        <div class="dropdown-options" id="dropdown-options">
+                            <div class="option active" data-value="bart">BART-Large-MNLI</div>
+                            <div class="option" data-value="specialized">Specialized Multilingual</div>
+                            <div class="option" data-value="fast">Fast Classification</div>
+                        </div>
+                        <input type="hidden" id="model-select" value="bart">
                     </div>
-                    <button id="send-btn" type="button" title="Send Analysis">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    </div>
+                    <button id="send-btn" type="button" title="Send Analysis" disabled>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(45deg); margin-right: 2px; margin-top: -2px;">
                             <line x1="22" y1="2" x2="11" y2="13"></line>
                             <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                         </svg>
