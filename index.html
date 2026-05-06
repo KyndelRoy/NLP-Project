@@ -4,68 +4,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Topic Classifier | Advanced AI Text Analysis</title>
-    <meta name="description" content="A professional topic classification interface for multilingual text analysis.">
+    <title>Low Resource Language Topic Detector</title>
+    <meta name="description" content="AI-powered topic detection for low-resource languages.">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <header class="main-header">
-        <div class="header-content">
-            <h1 id="app-title">TOPIC CLASSIFIER</h1>
-        </div>
-    </header>
+    <main class="main-content">
+        <header class="greeting-container">
+            <h2 class="greeting-title">Low Resource Language<br>Topic Detector</h2>
+            <p class="support-note">Currently supports English, Tagalog, and Cebuano</p>
+        </header>
 
-    <main class="container">
-        <section class="selection-area">
-            <h2 id="section-title">Choose a Model</h2>
-            <div class="controls">
-                <select id="model-select" aria-label="Select Classification Model">
-                    <option value="general">Facebook/BART-Large-MNLI</option>
-                    <option value="specialized">Specialized Multilingual Model</option>
-                    <option value="fast">Fast Classification Model</option>
-                </select>
-                <button id="send-btn" type="button">Send</button>
-            </div>
-            <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-secondary, #f4f4f5); border-radius: 0.5rem; border: 1px solid var(--border, #e4e4e7);">
-                <h3 style="font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-primary);">Candidate Labels</h3>
-                <div id="labels-container" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                    <span style="font-size: 0.875rem; color: var(--text-muted, #71717a);">Loading labels...</span>
+        <div class="prompt-wrapper">
+            <div class="prompt-bar">
+                <textarea id="text-input" placeholder="Enter text to classify..." aria-label="Text to classify"></textarea>
+                <div class="prompt-footer">
+                    <div class="model-picker">
+                        <select id="model-select" aria-label="Select Classification Model">
+                            <option value="bart">BART-Large-MNLI</option>
+                            <option value="specialized">Specialized Multilingual</option>
+                            <option value="fast">Fast Classification</option>
+                        </select>
+                    </div>
+                    <button id="send-btn" type="button" title="Send Analysis">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
                 </div>
             </div>
-        </section>
-
-        <section class="input-area">
-            <div class="textarea-wrapper">
-                <textarea id="text-input" placeholder="Enter text to classify..."
-                    aria-label="Text to classify"></textarea>
-                <div class="char-count"><span id="current-chars">0</span> characters</div>
-            </div>
-        </section>
+            <div class="char-count"><span id="current-chars">0</span> characters</div>
+        </div>
 
         <section class="results-area">
-            <div class="results-card">
-                <div class="card-header">
-                    <h3>Results</h3>
-                </div>
-                <div id="results-content" class="card-body">
-                    <div class="empty-state">
-                        <p class="muted-foreground">Classifier results will appear here after analysis.</p>
-                    </div>
-                </div>
+            <div id="results-content">
+                <!-- Analysis results will appear here -->
             </div>
         </section>
     </main>
-
-    <footer class="main-footer">
-        <nav class="footer-nav">
-            <a href="#" id="link-about">About</a>
-            <a href="#" id="link-terms">Terms</a>
-        </nav>
-    </footer>
 
     <script src="script.js"></script>
 </body>

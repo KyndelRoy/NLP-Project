@@ -61,10 +61,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // UI Loading State
         sendBtn.disabled = true;
-        sendBtn.innerHTML = '<span class="loading-dots">Analyzing</span>';
+        sendBtn.style.opacity = "0.5";
         resultsContent.innerHTML = `
-            <div class="loading-state" style="text-align: center; color: var(--text-muted);">
-                <p>Running ${model} analysis...</p>
+            <div class="loading-state" style="text-align: center; color: var(--text-secondary); margin-top: 2rem;">
+                <p class="loading-dots">Analyzing with ${model}</p>
             </div>
         `;
 
@@ -86,55 +86,65 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const data = await response.json();
-            displayResults(data.label, data.score, data.language, data.message);
+            displayResults(data.labels || data.label, data.scores || data.score, data.language, data.message);
         } catch (error) {
             console.error(error);
             resultsContent.innerHTML = `<p style="color: #ef4444;">Error analyzing text. Is the backend running at ${API_URL}?</p>`;
         } finally {
             sendBtn.disabled = false;
-            sendBtn.textContent = 'Send';
+            sendBtn.style.opacity = "1";
         }
     });
 
-    function displayResults(topic, confidence, language, message) {
+    function displayResults(labels, scores, language, message) {
         if (language === 'other') {
             resultsContent.innerHTML = `
-                <div class="result-item" style="animation: fadeIn 0.3s ease-out forwards;">
-                    <div style="padding: 1rem; background: hsl(var(--destructive) / 0.1); border-radius: 0.5rem; border: 1px solid hsl(var(--destructive) / 0.2);">
-                        <h4 style="color: hsl(var(--destructive)); font-size: 0.875rem; font-weight: 600; margin-bottom: 0.25rem;">Unsupported Language</h4>
-                        <p style="font-size: 0.875rem; color: hsl(var(--destructive) / 0.8);">${message}</p>
+                <div class="result-item" style="animation: fadeInUp 0.4s ease-out;">
+                    <div style="padding: 1rem; background: rgba(239, 68, 68, 0.1); border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.2);">
+                        <h4 style="color: #ef4444; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.25rem;">Unsupported Language</h4>
+                        <p style="font-size: 0.875rem; color: rgba(239, 68, 68, 0.8);">${message}</p>
                     </div>
                 </div>
             `;
             return;
         }
 
-        // Convert to percentage if it's less than 1
-        let confPercent = confidence;
-        if (confidence <= 1.0) {
-            confPercent = confidence * 100;
+        // Ensure labels and scores are arrays for uniform processing
+        if (!Array.isArray(labels)) {
+            labels = [labels];
+            scores = [scores];
         }
         
+        let topicsHtml = '';
+        for (let i = 0; i < labels.length; i++) {
+            let confPercent = scores[i] <= 1.0 ? scores[i] * 100 : scores[i];
+            topicsHtml += `
+                <div style="margin-bottom: 1.5rem;">
+                    <div class="result-header">
+                        <span style="font-weight: 500; font-size: 0.875rem; color: var(--text-secondary);">Predicted Topic ${labels.length > 1 ? i + 1 : ''}</span>
+                        <span class="topic-badge">${labels[i]}</span>
+                    </div>
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.75rem; color: var(--text-secondary);">
+                            <span>Confidence</span>
+                            <span>${confPercent.toFixed(1)}%</span>
+                        </div>
+                        <div class="confidence-bar-container">
+                            <div class="confidence-bar" style="width: ${confPercent}%"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
         resultsContent.innerHTML = `
-            <div class="result-item" style="animation: fadeIn 0.3s ease-out forwards;">
-                <div class="result-header">
-                    <span style="font-weight: 500; font-size: 0.875rem;">Predicted Topic</span>
-                    <span class="topic-badge">${topic}</span>
+            <div class="result-item" style="animation: fadeInUp 0.4s ease-out;">
+                ${topicsHtml}
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                    <span style="font-weight: 500; font-size: 0.875rem; color: var(--text-secondary);">Detected Language</span>
+                    <span class="topic-badge" style="background-color: var(--accent-color); color: white;">${language || 'unknown'}</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: -0.5rem; margin-bottom: 0.5rem;">
-                    <span style="font-weight: 500; font-size: 0.875rem;">Detected Language</span>
-                    <span class="topic-badge" style="background-color: hsl(var(--accent)); color: hsl(var(--accent-foreground)); border: 1px solid hsl(var(--border));">${language || 'unknown'}</span>
-                </div>
-                <div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.75rem; color: hsl(var(--muted-foreground));">
-                        <span>Confidence</span>
-                        <span>${confPercent.toFixed(1)}%</span>
-                    </div>
-                    <div class="confidence-bar-container">
-                        <div class="confidence-bar" style="width: ${confPercent}%"></div>
-                    </div>
-                </div>
-                <p style="font-size: 0.75rem; color: hsl(var(--muted-foreground)); margin-top: 0.5rem;">
+                <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 1rem;">
                     Analysis completed using ${modelSelect.options[modelSelect.selectedIndex].text}.
                 </p>
             </div>

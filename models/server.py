@@ -1,12 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from transformers import pipeline
 import joblib
 import os
 
-# Import configuration
+# Import configuration and specialized models
 from config import MODEL_CONFIGS, CANDIDATE_LABELS
+from bart_classifier import BartClassifier
 
 app = FastAPI(title="Multilingual NLP Server")
 
@@ -19,36 +19,34 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Dictionary to hold loaded pipelines (lazy loading)
-loaded_models = {}
-
-def get_model(model_id):
-    if model_id not in loaded_models:
-        if model_id not in MODEL_CONFIGS:
-            raise ValueError(f"Model {model_id} is not configured in config.py")
-            
-        print(f"Loading {model_id} model ({MODEL_CONFIGS[model_id]})...")
-        loaded_models[model_id] = pipeline("zero-shot-classification", model=MODEL_CONFIGS[model_id])
-    return loaded_models[model_id]
-
 # Resolve paths
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 LANGUAGE_MODEL_PATH = os.path.join(BASE_DIR, 'pkl', 'language_identifer.pkl')
 
-# Load Language Detector at startup
-print("Initializing Language Detector...")
+# --- Startup Initialization ---
+print("Initializing System...")
+
+# 1. Load Language Detector
 try:
     language_model = joblib.load(LANGUAGE_MODEL_PATH)
     print("Language model loaded!")
 except Exception as e:
-    print(f"Warning: Could not load language model from {LANGUAGE_MODEL_PATH}: {e}")
+    print(f"Warning: Could not load language model: {e}")
     language_model = None
+
+# 2. Load Classification Models (all at once)
+print("Loading NLP models...")
+models = {
+    "bart": BartClassifier(MODEL_CONFIGS["bart"]),
+    # Add future models here:
+    # "new_model": NewModelClassifier(MODEL_CONFIGS["new_model"])
+}
 
 print("System ready!")
 
 class ClassifyRequest(BaseModel):
     text: str
-    model: str = "bart" # Default model
+    model: str = "bart"
 
 @app.get("/labels")
 def get_labels():
@@ -70,18 +68,29 @@ def classify_text(req: ClassifyRequest):
         }
     
     # 2. Topic Classification
+    if req.model not in models:
+        return {"error": f"Model '{req.model}' is not initialized on the server."}
+        
     try:
-        classifier = get_model(req.model)
-        result = classifier(req.text, candidate_labels=CANDIDATE_LABELS)
-        return {
-            "label": result['labels'][0], 
-            "score": result['scores'][0], 
-            "language": detected_lang
-        }
+        classifier = models[req.model]
+        result = classifier.classify(req.text, candidate_labels=CANDIDATE_LABELS)
+        
+        if 'labels' in result:
+            return {
+                "labels": result['labels'],
+                "scores": result['scores'],
+                "language": detected_lang
+            }
+        else:
+            return {
+                "label": result['label'],
+                "score": result['score'],
+                "language": detected_lang
+            }
     except Exception as e:
         return {"error": str(e)}
 
 if __name__ == "__main__":
     import uvicorn
-    # Note: We use "server:app" here
-    uvicorn.run("server:app", host="127.0.0.1", port=8000, reload=True)
+    # app_dir=BASE_DIR tells uvicorn to look for "server.py" inside the "models" folder
+    uvicorn.run("server:app", host="127.0.0.1", port=8000, reload=True, app_dir=BASE_DIR)
