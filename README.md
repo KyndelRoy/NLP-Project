@@ -3,13 +3,10 @@
 A professional topic classification system that integrates zero-shot classification with multilingual language detection.
 
 ## Project Structure
-- `index.html`: The frontend user interface.
-- `style.css`: Modern styling for the application.
-- `script.js`: Frontend logic for interacting with the backend API.
-- `models/server.py`: The main FastAPI backend server.
-- `models/config.py`: Central configuration for model paths and labels.
+- `models/server.py`: The main backend server.
+- `models/config.py`: configuration for model paths and labels.
 - `models/language.detect.py`: Script to train the language detection model.
-- `dataset/`: Contains the datasets used for training.
+- `models/bart_classifier.py`: facebook/bart-large-mnli model for classification.
 - `models/pkl/`: Contains the trained language detection model (`language_identifer.pkl`).
 
 ## How to Run
@@ -39,9 +36,3 @@ The server will start at `http://127.0.0.1:8000`.
 ### 4. Launch the Frontend
 Open `index.html` in your favorite web browser.
 - **Note**: The backend server must be running for the classification to work.
-
-## Features
-- **Multilingual Detection**: Automatically detects if the input is Tagalog, Cebuano, or English.
-- **Language Filtering**: If the language is not supported (detected as "other"), topic modeling is skipped to save resources.
-- **Multi-Model Support**: Easily switch between different classification models (like BART, DistilRoBERTa, etc.) from a single backend instance.
-- **Dynamic Labels**: Candidate labels are fetched from the backend and can be updated without touching the frontend.
