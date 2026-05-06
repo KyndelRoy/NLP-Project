@@ -42,5 +42,5 @@ Open `index.html` in your favorite web browser.
 ## Features
 - **Multilingual Detection**: Automatically detects if the input is Tagalog, Cebuano, or English.
 - **Language Filtering**: If the language is not supported (detected as "other"), topic modeling is skipped to save resources.
-- **Zero-Shot Classification**: Uses the `facebook/bart-large-mnli` model for high-accuracy topic prediction.
+- **Multi-Model Support**: Easily switch between different classification models (like BART, DistilRoBERTa, etc.) from a single backend instance.
 - **Dynamic Labels**: Candidate labels are fetched from the backend and can be updated without touching the frontend.
