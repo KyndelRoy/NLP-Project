@@ -5,7 +5,10 @@ from transformers import pipeline
 import joblib
 import os
 
-app = FastAPI()
+# Import configuration
+from config import MODEL_CONFIGS, CANDIDATE_LABELS
+
+app = FastAPI(title="Multilingual NLP Server")
 
 # Enable CORS
 app.add_middleware(
@@ -16,46 +19,40 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Configuration for available models
-# You can add more models to this dictionary as you go
-MODEL_CONFIGS = {
-    "bart": "facebook/bart-large-mnli",
-    "fast": "cross-encoder/nli-distilroberta-base", # A lighter/faster alternative
-    "specialized": "facebook/bart-large-mnli" # Placeholder for specialized model
-}
-
-# Dictionary to hold loaded pipelines
+# Dictionary to hold loaded pipelines (lazy loading)
 loaded_models = {}
 
 def get_model(model_id):
     if model_id not in loaded_models:
+        if model_id not in MODEL_CONFIGS:
+            raise ValueError(f"Model {model_id} is not configured in config.py")
+            
         print(f"Loading {model_id} model ({MODEL_CONFIGS[model_id]})...")
         loaded_models[model_id] = pipeline("zero-shot-classification", model=MODEL_CONFIGS[model_id])
     return loaded_models[model_id]
 
-# Load default model and language detector at startup
+# Resolve paths
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-print("Initializing system...")
-default_classifier = get_model("bart")
+LANGUAGE_MODEL_PATH = os.path.join(BASE_DIR, 'pkl', 'language_identifer.pkl')
 
-language_model_path = os.path.join(BASE_DIR, 'pkl', 'language_identifer.pkl')
+# Load Language Detector at startup
+print("Initializing Language Detector...")
 try:
-    language_model = joblib.load(language_model_path)
+    language_model = joblib.load(LANGUAGE_MODEL_PATH)
     print("Language model loaded!")
 except Exception as e:
-    print(f"Warning: Could not load language model: {e}")
+    print(f"Warning: Could not load language model from {LANGUAGE_MODEL_PATH}: {e}")
     language_model = None
 
-candidate_labels = ["lifestyle", "food", "sports", "news", "laws", "school", "unrelated to the list"]
 print("System ready!")
 
 class ClassifyRequest(BaseModel):
     text: str
-    model: str = "bart" # Default to bart
+    model: str = "bart" # Default model
 
 @app.get("/labels")
 def get_labels():
-    return {"labels": candidate_labels}
+    return {"labels": CANDIDATE_LABELS}
 
 @app.post("/classify")
 def classify_text(req: ClassifyRequest):
@@ -72,17 +69,19 @@ def classify_text(req: ClassifyRequest):
             "message": "Language not supported for topic modeling."
         }
     
-    # 2. Topic Classification with selected model
+    # 2. Topic Classification
     try:
         classifier = get_model(req.model)
-        result = classifier(req.text, candidate_labels=candidate_labels)
-        label = result['labels'][0]
-        score = result['scores'][0]
-        return {"label": label, "score": score, "language": detected_lang}
+        result = classifier(req.text, candidate_labels=CANDIDATE_LABELS)
+        return {
+            "label": result['labels'][0], 
+            "score": result['scores'][0], 
+            "language": detected_lang
+        }
     except Exception as e:
         return {"error": str(e)}
 
 if __name__ == "__main__":
     import uvicorn
-    # Use 0.0.0.0 to make it accessible if needed, or stick to 127.0.0.1
-    uvicorn.run("bart_model:app", host="127.0.0.1", port=8000, reload=True)
+    # Note: We use "server:app" here
+    uvicorn.run("server:app", host="127.0.0.1", port=8000, reload=True)

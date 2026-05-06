@@ -1,0 +1,10 @@
+# Configuration for available models
+# Add more HuggingFace model paths here to expand the system
+MODEL_CONFIGS = {
+    "bart": "facebook/bart-large-mnli",
+    "fast": "cross-encoder/nli-distilroberta-base",
+    "specialized": "facebook/bart-large-mnli" 
+}
+
+# Default candidate labels for classification
+CANDIDATE_LABELS = ["lifestyle", "food", "sports", "news", "laws", "school", "unrelated to the list"]

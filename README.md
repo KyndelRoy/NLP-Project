@@ -6,7 +6,8 @@ A professional topic classification system that integrates zero-shot classificat
 - `index.html`: The frontend user interface.
 - `style.css`: Modern styling for the application.
 - `script.js`: Frontend logic for interacting with the backend API.
-- `models/bart_model.py`: FastAPI backend that runs the classification models.
+- `models/server.py`: The main FastAPI backend server.
+- `models/config.py`: Central configuration for model paths and labels.
 - `models/language.detect.py`: Script to train the language detection model.
 - `dataset/`: Contains the datasets used for training.
 - `models/pkl/`: Contains the trained language detection model (`language_identifer.pkl`).
@@ -31,7 +32,7 @@ This will save a new `language_identifer.pkl` in `models/pkl/`.
 ### 3. Start the Backend API
 Run the FastAPI server to handle classification requests:
 ```bash
-python models/bart_model.py
+python models/server.py
 ```
 The server will start at `http://127.0.0.1:8000`.
 
