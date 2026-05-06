@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic Classifier | Advanced AI Text Analysis</title>
+    <meta name="description" content="A professional topic classification interface for multilingual text analysis.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="header-content">
+            <h1 id="app-title">TOPIC CLASSIFIER</h1>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="selection-area">
+            <h2 id="section-title">Choose a Model</h2>
+            <div class="controls">
+                <select id="model-select" aria-label="Select Classification Model">
+                    <option value="general">Facebook/BART-Large-MNLI</option>
+                    <option value="specialized">Specialized Multilingual Model</option>
+                    <option value="fast">Fast Classification Model</option>
+                </select>
+                <button id="send-btn" type="button">Send</button>
+            </div>
+            <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-secondary, #f4f4f5); border-radius: 0.5rem; border: 1px solid var(--border, #e4e4e7);">
+                <h3 style="font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-primary);">Candidate Labels</h3>
+                <div id="labels-container" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    <span style="font-size: 0.875rem; color: var(--text-muted, #71717a);">Loading labels...</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="input-area">
+            <div class="textarea-wrapper">
+                <textarea id="text-input" placeholder="Enter text to classify..."
+                    aria-label="Text to classify"></textarea>
+                <div class="char-count"><span id="current-chars">0</span> characters</div>
+            </div>
+        </section>
+
+        <section class="results-area">
+            <div class="results-card">
+                <div class="card-header">
+                    <h3>Results</h3>
+                </div>
+                <div id="results-content" class="card-body">
+                    <div class="empty-state">
+                        <p class="muted-foreground">Classifier results will appear here after analysis.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <nav class="footer-nav">
+            <a href="#" id="link-about">About</a>
+            <a href="#" id="link-terms">Terms</a>
+        </nav>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
