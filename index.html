@@ -26,24 +26,30 @@
 
         <div class="prompt-wrapper">
             <div class="prompt-bar">
-                <textarea id="text-input" placeholder="Enter text to classify..." aria-label="Text to classify"></textarea>
+                <textarea id="text-input" placeholder="Enter text to classify..."
+                    aria-label="Text to classify"></textarea>
                 <div class="prompt-footer">
                     <div class="model-picker">
-                    <div class="custom-dropdown" id="model-dropdown">
-                        <div class="dropdown-trigger">
-                            <span id="selected-model-text">BART-Large-MNLI</span>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                        <div class="custom-dropdown" id="model-dropdown">
+                            <div class="dropdown-trigger">
+                                <span id="selected-model-text">BART-Large-MNLI</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="m6 9 6 6 6-6" />
+                                </svg>
+                            </div>
+                            <div class="dropdown-options" id="dropdown-options">
+                                <div class="option active" data-value="bart">BART-Large-MNLI</div>
+                                <div class="option" data-value="specialized">Latent Dirichlet Allocation</div>
+                                <div class="option" data-value="fast">Fast Classification</div>
+                            </div>
+                            <input type="hidden" id="model-select" value="bart">
                         </div>
-                        <div class="dropdown-options" id="dropdown-options">
-                            <div class="option active" data-value="bart">BART-Large-MNLI</div>
-                            <div class="option" data-value="specialized">Specialized Multilingual</div>
-                            <div class="option" data-value="fast">Fast Classification</div>
-                        </div>
-                        <input type="hidden" id="model-select" value="bart">
-                    </div>
                     </div>
                     <button id="send-btn" type="button" title="Send Analysis" disabled>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(45deg); margin-right: 2px; margin-top: -2px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                            style="transform: rotate(45deg); margin-right: 2px; margin-top: -2px;">
                             <line x1="22" y1="2" x2="11" y2="13"></line>
                             <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                         </svg>

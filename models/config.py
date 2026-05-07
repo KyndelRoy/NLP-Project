@@ -7,4 +7,4 @@ MODEL_CONFIGS = {
 }
 
 # Default candidate labels for classification
-CANDIDATE_LABELS = ["lifestyle", "food", "sports", "news", "laws", "school"]
+CANDIDATE_LABELS = ["food", "sports", "news", "laws", "education"]
