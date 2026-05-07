@@ -6,5 +6,5 @@ MODEL_CONFIGS = {
     "specialized": "facebook/bart-large-mnli" 
 }
 
-# Default candidate labels for classification
+# Default candidate labels for classification in BART
 CANDIDATE_LABELS = ["food", "sports", "news", "laws", "education"]

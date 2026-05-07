@@ -150,6 +150,7 @@ body {
   justify-content: space-between;
   gap: 0.75rem;
   transition: all 0.2s ease;
+  user-select: none;
 }
 
 .dropdown-trigger:hover {
@@ -182,6 +183,7 @@ body {
   color: var(--text-primary);
   cursor: pointer;
   transition: background 0.2s;
+  user-select: none;
 }
 
 .option:hover {

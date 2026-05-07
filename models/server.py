@@ -24,12 +24,12 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 LANGUAGE_MODEL_PATH = os.path.join(BASE_DIR, 'pkl', 'language_identifer.pkl')
 
 # --- Startup Initialization ---
-print("Initializing System...")
+print("Starting System...")
 
 # 1. Load Language Detector
 try:
     language_model = joblib.load(LANGUAGE_MODEL_PATH)
-    print("Language model loaded!")
+    print("Language model loaded")
 except Exception as e:
     print(f"Warning: Could not load language model: {e}")
     language_model = None
