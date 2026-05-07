@@ -6,3 +6,4 @@ pydantic
 scikit-learn
 pandas
 joblib
+nltk
