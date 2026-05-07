@@ -41,7 +41,6 @@ bitaw
 by
 cairo
 called
-cebuano
 corina
 dahil
 dana
@@ -63,7 +62,7 @@ diri
 do
 does
 eh
-english
+elisa
 for
 from
 ganito
@@ -155,8 +154,14 @@ mana
 mao
 maria
 mary
+marys
 mas
 may
+ginas 
+sallys
+robertos
+roberto
+gratiles
 meron
 mga
 mi
@@ -257,6 +262,7 @@ to
 tom
 tomas
 tra
+esmeraldos
 tulad
 ug
 uli
