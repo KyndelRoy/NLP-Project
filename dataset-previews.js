@@ -22,9 +22,9 @@ window.DATASET_PREVIEWS = {
         alternateButtonLabel: 'View Original 3-Column Dataset'
     },
     original: {
-        title: 'Original 3-Column Dataset',
-        source: 'dataset/clean_dataset.csv',
-        note: 'Original cleaned dataset with Tagalog, English, and Cebuano columns.',
+        title: 'Original Language Dataset',
+        source: 'dataset/original_dataset.csv',
+        note: 'Original dataset used as the source for the melted language detection dataset.',
         alternateDatasetKey: 'language',
         alternateButtonLabel: 'View Melted Language Dataset'
     }

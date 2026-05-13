@@ -446,10 +446,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (datasetKey === 'language') {
             return `
                 <div class="dataset-context">
-                    <strong>Language distribution:</strong>
+                    <strong>Data Information:</strong>
+                    <span>Total rows: 50,000</span>
                     <span>English: 10,000</span>
                     <span>Tagalog: 10,000</span>
-                    <span>Cebuano: 9,999</span>
+                    <span>Cebuano: 10,000</span>
                     <span>Other: 20,000</span>
                 </div>
             `;
@@ -458,9 +459,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (datasetKey === 'original' || datasetKey === 'specialized' || datasetKey === 'fast') {
             return `
                 <div class="dataset-context">
-                    <strong>Dataset shape:</strong>
+                    <strong>Dataset Information:</strong>
                     <span>${Number(dataset.totalRows || 0).toLocaleString()} rows</span>
-                    <span>Columns: tagalog, english, cebuano</span>
+                    <span>English: 10,000</span>
+                    <span>Tagalog: 10,000</span>
+                    <span>Cebuano: 9,999</span>
+                    <span>Other: 20,000</span>
                 </div>
             `;
         }
