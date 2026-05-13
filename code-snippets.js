@@ -70,18 +70,10 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 
-# Locate and load the multilingual dataset.
+# Locate and load the long-format language detection dataset.
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-csv_path = os.path.join(os.path.dirname(BASE_DIR), 'dataset', 'extended_dataset.csv')
-df = pd.read_csv(csv_path)
-
-# Convert language columns into one training table: text + language label.
-df_reshaped = pd.melt(
-    df,
-    value_vars=['cebuano', 'tagalog', 'english', 'other'],
-    var_name='language',
-    value_name='text'
-).dropna()
+csv_path = os.path.join(os.path.dirname(BASE_DIR), 'dataset', 'language_detection_dataset.csv')
+df_reshaped = pd.read_csv(csv_path).dropna()
 
 # Split examples so the model can be trained and evaluated separately.
 X_train, X_test, y_train, y_test = train_test_split(

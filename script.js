@@ -9,11 +9,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectedModelText = document.getElementById('selected-model-text');
     const options = document.querySelectorAll('.option');
     const viewCodeBtn = document.getElementById('view-code-btn');
+    const viewDatasetBtn = document.getElementById('view-dataset-btn');
     const codeViewer = document.getElementById('code-viewer');
     const codeViewerTitle = document.getElementById('code-viewer-title');
     const codeViewerContent = document.getElementById('code-viewer-content');
+    const datasetViewerContent = document.getElementById('dataset-viewer-content');
     const closeCodeBtn = document.getElementById('close-code-btn');
+    const modalDatasetSwitchBtn = document.getElementById('modal-dataset-switch-btn');
     const codeSnippets = window.CODE_SNIPPETS || {};
+    const datasetPreviews = window.DATASET_PREVIEWS || {};
+    const datasetCache = {};
+    const DATASET_PREVIEW_LIMIT = 50;
+    let activeViewerMode = 'code';
+    let activeDatasetKey = null;
 
     // Custom Dropdown Logic
     dropdownTrigger.addEventListener('click', (e) => {
@@ -39,7 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
             opt.classList.add('active');
 
             dropdownOptions.classList.remove('show');
-            updateCodeViewer();
+            activeDatasetKey = null;
+            updateActiveViewer();
         });
     });
 
@@ -196,37 +205,90 @@ document.addEventListener('DOMContentLoaded', () => {
     sendBtn.addEventListener('click', submitAnalysis);
 
     viewCodeBtn.addEventListener('click', () => {
-        const shouldShow = codeViewer.hidden;
-        if (shouldShow) {
-            openCodeViewer();
+        if (codeViewer.hidden || activeViewerMode !== 'code') {
+            openViewer('code');
         } else {
-            closeCodeViewer();
+            closeViewer();
         }
     });
 
-    closeCodeBtn.addEventListener('click', closeCodeViewer);
+    viewDatasetBtn.addEventListener('click', () => {
+        if (codeViewer.hidden || activeViewerMode !== 'dataset') {
+            openViewer('dataset');
+        } else {
+            closeViewer();
+        }
+    });
+
+    closeCodeBtn.addEventListener('click', closeViewer);
+
+    modalDatasetSwitchBtn.addEventListener('click', () => {
+        updateDatasetViewer(modalDatasetSwitchBtn.getAttribute('data-dataset-key'));
+    });
 
     codeViewer.addEventListener('click', (event) => {
         if (event.target.hasAttribute('data-close-code')) {
-            closeCodeViewer();
+            closeViewer();
         }
     });
 
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' && !codeViewer.hidden) {
-            closeCodeViewer();
+            closeViewer();
         }
     });
 
     updateInputState();
-    updateCodeViewer();
+    updateActiveViewer();
+
+    async function updateActiveViewer() {
+        if (activeViewerMode === 'dataset') {
+            await updateDatasetViewer();
+            return;
+        }
+
+        updateCodeViewer();
+    }
 
     function updateCodeViewer() {
         const selectedSnippet = codeSnippets[modelSelect.value] || codeSnippets.bart;
         if (!selectedSnippet) return;
 
+        codeViewerContent.parentElement.hidden = false;
+        datasetViewerContent.hidden = true;
+        modalDatasetSwitchBtn.hidden = true;
         codeViewerTitle.textContent = selectedSnippet.title;
         codeViewerContent.innerHTML = highlightSnippet(selectedSnippet.code);
+    }
+
+    async function updateDatasetViewer(datasetKey = activeDatasetKey || modelSelect.value) {
+        activeDatasetKey = datasetKey;
+        const selectedDataset = datasetPreviews[datasetKey] || datasetPreviews.bart;
+        if (!selectedDataset) return;
+
+        codeViewerContent.parentElement.hidden = true;
+        datasetViewerContent.hidden = false;
+        updateHeaderDatasetSwitch(selectedDataset);
+        codeViewerTitle.textContent = selectedDataset.title;
+        datasetViewerContent.innerHTML = '<div class="dataset-loading">Loading dataset preview...</div>';
+
+        if (!selectedDataset.source || !selectedDataset.source.endsWith('.csv')) {
+            datasetViewerContent.innerHTML = renderDatasetInfo(selectedDataset);
+            return;
+        }
+
+        try {
+            const parsedDataset = await loadDatasetPreview(datasetKey, selectedDataset);
+            datasetViewerContent.innerHTML = renderDatasetPreview(parsedDataset, selectedDataset);
+        } catch (error) {
+            console.error(error);
+            datasetViewerContent.innerHTML = `
+                <div class="dataset-empty-state">
+                    <p class="dataset-meta"><strong>Source:</strong> ${escapeHtml(selectedDataset.source)}</p>
+                    <p>Unable to load this CSV. Serve the app through a local web server instead of opening it directly as a file.</p>
+                </div>
+            `;
+        }
     }
 
     function escapeHtml(value) {
@@ -249,16 +311,177 @@ document.addEventListener('DOMContentLoaded', () => {
             .join('\n');
     }
 
-    function openCodeViewer() {
-        updateCodeViewer();
-        codeViewer.hidden = false;
-        viewCodeBtn.classList.add('active');
-        document.body.classList.add('modal-open');
+    function updateHeaderDatasetSwitch(dataset) {
+        if (dataset.alternateDatasetKey && (activeDatasetKey === 'language' || activeDatasetKey === 'original')) {
+            modalDatasetSwitchBtn.hidden = false;
+            modalDatasetSwitchBtn.textContent = dataset.alternateButtonLabel || 'View Related Dataset';
+            modalDatasetSwitchBtn.setAttribute('data-dataset-key', dataset.alternateDatasetKey);
+            return;
+        }
+
+        modalDatasetSwitchBtn.hidden = true;
+        modalDatasetSwitchBtn.removeAttribute('data-dataset-key');
     }
 
-    function closeCodeViewer() {
+    async function loadDatasetPreview(datasetKey, metadata) {
+        if (datasetCache[datasetKey]) {
+            return datasetCache[datasetKey];
+        }
+
+        const response = await fetch(metadata.source);
+        if (!response.ok) {
+            throw new Error(`Unable to load ${metadata.source}`);
+        }
+
+        const csvText = await response.text();
+        const parsedRows = parseCsv(csvText);
+        const columns = parsedRows[0] || [];
+        const dataRows = parsedRows.slice(1);
+        const previewRows = dataRows.slice(0, DATASET_PREVIEW_LIMIT).map(row => {
+            const rowObject = {};
+            columns.forEach((column, index) => {
+                rowObject[column] = row[index] || '';
+            });
+            return rowObject;
+        });
+
+        datasetCache[datasetKey] = {
+            columns,
+            rows: previewRows,
+            totalRows: dataRows.length
+        };
+
+        return datasetCache[datasetKey];
+    }
+
+    function parseCsv(csvText) {
+        const rows = [];
+        let row = [];
+        let value = '';
+        let insideQuotes = false;
+
+        for (let i = 0; i < csvText.length; i++) {
+            const char = csvText[i];
+            const nextChar = csvText[i + 1];
+
+            if (char === '"' && insideQuotes && nextChar === '"') {
+                value += '"';
+                i++;
+            } else if (char === '"') {
+                insideQuotes = !insideQuotes;
+            } else if (char === ',' && !insideQuotes) {
+                row.push(value);
+                value = '';
+            } else if ((char === '\n' || char === '\r') && !insideQuotes) {
+                if (char === '\r' && nextChar === '\n') i++;
+                row.push(value);
+                if (row.some(cell => cell !== '')) rows.push(row);
+                row = [];
+                value = '';
+            } else {
+                value += char;
+            }
+        }
+
+        if (value || row.length) {
+            row.push(value);
+            if (row.some(cell => cell !== '')) rows.push(row);
+        }
+
+        return rows;
+    }
+
+    function renderDatasetInfo(dataset) {
+        const source = escapeHtml(dataset.source || 'No local source');
+
+        return `
+            <div class="dataset-empty-state">
+                <p class="dataset-meta"><strong>Source:</strong> ${source}</p>
+            </div>
+        `;
+    }
+
+    function renderDatasetPreview(dataset, metadata) {
+        const hasRows = Array.isArray(dataset.rows) && dataset.rows.length > 0;
+        const source = escapeHtml(metadata.source || 'No local source');
+        const contextHtml = getDatasetContextHtml(activeDatasetKey, dataset);
+
+        if (!hasRows) {
+            return `
+                <div class="dataset-empty-state">
+                    <p class="dataset-meta"><strong>Source:</strong> ${source}</p>
+                </div>
+            `;
+        }
+
+        const columns = dataset.columns || Object.keys(dataset.rows[0]);
+        const headerHtml = columns
+            .map(column => `<th>${escapeHtml(column)}</th>`)
+            .join('');
+        const rowsHtml = dataset.rows
+            .map(row => `
+                <tr>
+                    ${columns.map(column => `<td>${escapeHtml(row[column] || '')}</td>`).join('')}
+                </tr>
+            `)
+            .join('');
+
+        return `
+            <div class="dataset-summary">
+                <span><strong>Source:</strong> ${source}</span>
+            </div>
+            ${contextHtml}
+            <div class="dataset-table-wrap">
+                <table class="dataset-table">
+                    <thead>
+                        <tr>${headerHtml}</tr>
+                    </thead>
+                    <tbody>${rowsHtml}</tbody>
+                </table>
+            </div>
+        `;
+    }
+
+    function getDatasetContextHtml(datasetKey, dataset) {
+        if (datasetKey === 'language') {
+            return `
+                <div class="dataset-context">
+                    <strong>Language distribution:</strong>
+                    <span>English: 10,000</span>
+                    <span>Tagalog: 10,000</span>
+                    <span>Cebuano: 9,999</span>
+                    <span>Other: 20,000</span>
+                </div>
+            `;
+        }
+
+        if (datasetKey === 'original' || datasetKey === 'specialized' || datasetKey === 'fast') {
+            return `
+                <div class="dataset-context">
+                    <strong>Dataset shape:</strong>
+                    <span>${Number(dataset.totalRows || 0).toLocaleString()} rows</span>
+                    <span>Columns: tagalog, english, cebuano</span>
+                </div>
+            `;
+        }
+
+        return '';
+    }
+
+    function openViewer(mode) {
+        activeViewerMode = mode;
+        if (mode === 'dataset') activeDatasetKey = modelSelect.value;
+        codeViewer.hidden = false;
+        viewCodeBtn.classList.toggle('active', mode === 'code');
+        viewDatasetBtn.classList.toggle('active', mode === 'dataset');
+        document.body.classList.add('modal-open');
+        updateActiveViewer();
+    }
+
+    function closeViewer() {
         codeViewer.hidden = true;
         viewCodeBtn.classList.remove('active');
+        viewDatasetBtn.classList.remove('active');
         document.body.classList.remove('modal-open');
     }
 

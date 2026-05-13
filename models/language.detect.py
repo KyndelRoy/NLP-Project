@@ -1,18 +1,10 @@
 import pandas as pd
 
 import os
-# Load your translation dataset
+# Load the long-format language detection dataset
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-csv_path = os.path.join(os.path.dirname(BASE_DIR), 'dataset', 'extended_dataset.csv')
-df = pd.read_csv(csv_path)
-
-# Reshape from wide to long format (Text and Language)
-# This will stack all language columns into a single column
-df_reshaped = pd.melt(df, value_vars=['cebuano', 'tagalog', 'english','other'], 
-                    var_name='language', value_name='text')
-
-# Drop any empty rows just in case
-df_reshaped = df_reshaped.dropna()
+csv_path = os.path.join(os.path.dirname(BASE_DIR), 'dataset', 'language_detection_dataset.csv')
+df_reshaped = pd.read_csv(csv_path).dropna()
 
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
