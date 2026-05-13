@@ -9,6 +9,10 @@
   --radius-prompt: 28px;
   --radius-item: 16px;
   --card-bg: #1a1a1a;
+  --topic-badge-bg: #2a2a2a;
+  --topic-badge-text: #e3e3e3;
+  --confidence-track: #333333;
+  --confidence-fill: linear-gradient(90deg, #4b90ff, #6fb1ff);
   --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
@@ -20,6 +24,10 @@
   --accent-color: #2563eb;
   --border-color: #e2e8f0;
   --card-bg: #ffffff;
+  --topic-badge-bg: #e8edf5;
+  --topic-badge-text: #1f2937;
+  --confidence-track: #dbe3ef;
+  --confidence-fill: linear-gradient(90deg, #2563eb, #60a5fa);
   --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
@@ -264,8 +272,8 @@ body {
 }
 
 .topic-badge {
-  background-color: #2a2a2a;
-  color: var(--text-primary);
+  background-color: var(--topic-badge-bg);
+  color: var(--topic-badge-text);
   padding: 0.3rem 0.8rem;
   border-radius: 12px;
   font-size: 0.875rem;
@@ -293,7 +301,7 @@ body {
 }
 
 .confidence-bar-container {
-  background-color: #333;
+  background-color: var(--confidence-track);
   height: 8px;
   border-radius: 4px;
   overflow: hidden;
@@ -301,7 +309,7 @@ body {
 }
 
 .confidence-bar {
-  background: linear-gradient(90deg, #4b90ff, #6fb1ff);
+  background: var(--confidence-fill);
   height: 100%;
   transition: width 1s ease-out;
 }

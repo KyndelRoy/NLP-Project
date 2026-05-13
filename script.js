@@ -23,15 +23,15 @@ document.addEventListener('DOMContentLoaded', () => {
         opt.addEventListener('click', () => {
             const val = opt.getAttribute('data-value');
             const text = opt.textContent;
-            
+
             // Update hidden input and UI
             modelSelect.value = val;
             selectedModelText.textContent = text;
-            
+
             // Update active state
             options.forEach(o => o.classList.remove('active'));
             opt.classList.add('active');
-            
+
             dropdownOptions.classList.remove('show');
         });
     });
@@ -39,6 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const labelsContainer = document.getElementById('labels-container');
     const themeBtns = document.querySelectorAll('.theme-btn');
     const htmlElement = document.documentElement;
+    const MIN_WORDS = 4;
+    let isSubmitting = false;
 
     // Theme Switcher Logic
     let savedTheme = localStorage.getItem('app-theme') || 'dark';
@@ -55,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function setTheme(theme) {
         htmlElement.setAttribute('data-theme', theme);
         localStorage.setItem('app-theme', theme);
-        
+
         // Update active class
         themeBtns.forEach(btn => {
             if (btn.getAttribute('data-theme') === theme) {
@@ -96,33 +98,37 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchLabels();
     setInterval(fetchLabels, 2000);
 
-    // Update character count and button state
-    textInput.addEventListener('input', () => {
+    function getWordCount() {
+        const text = textInput.value.trim();
+        return text ? text.split(/\s+/).length : 0;
+    }
+
+    function updateInputState() {
         const length = textInput.value.trim().length;
         charCount.textContent = length.toLocaleString();
-        
-        // Toggle send button
-        sendBtn.disabled = length === 0;
-        
-        // Add subtle animation when typing
+
+        sendBtn.disabled = isSubmitting || getWordCount() < MIN_WORDS;
+
         charCount.style.transform = 'scale(1.1)';
         setTimeout(() => {
             charCount.style.transform = 'scale(1)';
         }, 100);
-    });
+    }
 
-    // Handle Send button click
-    sendBtn.addEventListener('click', async () => {
+    async function submitAnalysis() {
+        if (isSubmitting) return;
+
         const text = textInput.value.trim();
         const model = modelSelect.value;
 
-        if (!text) {
-            alert('Please enter some text to classify.');
+        if (getWordCount() < MIN_WORDS) {
+            alert('Please enter at least 4 words to classify.');
             textInput.focus();
             return;
         }
 
         // UI Loading State
+        isSubmitting = true;
         sendBtn.disabled = true;
         sendBtn.style.opacity = "0.5";
         resultsContent.innerHTML = `
@@ -138,9 +144,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ 
+                body: JSON.stringify({
                     text: text,
-                    model: model 
+                    model: model
                 })
             });
 
@@ -149,15 +155,72 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const data = await response.json();
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            if (data.type === 'language_detection') {
+                displayLanguageDetectionResult(data.language, data.score);
+                return;
+            }
+
             displayResults(data.labels || data.label, data.scores || data.score, data.language, data.message);
         } catch (error) {
             console.error(error);
-            resultsContent.innerHTML = `<p style="color: #ef4444;">Error analyzing text. Is the backend running at ${API_URL}?</p>`;
+            resultsContent.innerHTML = `<p style="color: #ef4444;">${error.message || `Error analyzing text. Is the backend running at ${API_URL}?`}</p>`;
         } finally {
-            sendBtn.disabled = false;
+            isSubmitting = false;
+            updateInputState();
             sendBtn.style.opacity = "1";
         }
+    }
+
+    // Update character count and button state
+    textInput.addEventListener('input', updateInputState);
+
+    textInput.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' || event.shiftKey) return;
+
+        event.preventDefault();
+        submitAnalysis();
     });
+
+    // Handle Send button click
+    sendBtn.addEventListener('click', submitAnalysis);
+
+    updateInputState();
+
+    function formatLanguageName(language) {
+        if (!language) return 'Unknown';
+        return language.charAt(0).toUpperCase() + language.slice(1);
+    }
+
+    function displayLanguageDetectionResult(language, score) {
+        const safeLanguage = language || 'unknown';
+        const confidence = typeof score === 'number' ? score : 0;
+        const confidencePercent = confidence <= 1.0 ? confidence * 100 : confidence;
+
+        resultsContent.innerHTML = `
+            <div class="result-item" style="animation: fadeInUp 0.4s ease-out;">
+                <div class="result-header">
+                    <span style="font-weight: 500; font-size: 0.875rem; color: var(--text-secondary);">Detected Language</span>
+                    <span class="topic-badge badge-${safeLanguage.toLowerCase()}">${formatLanguageName(safeLanguage)}</span>
+                </div>
+                <div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.75rem; color: var(--text-secondary);">
+                        <span>Confidence</span>
+                        <span>${confidencePercent.toFixed(1)}%</span>
+                    </div>
+                    <div class="confidence-bar-container">
+                        <div class="confidence-bar" style="width: ${Math.min(confidencePercent, 100)}%"></div>
+                    </div>
+                </div>
+                <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 1rem;">
+                    Analysis completed using Logistic Regression.
+                </p>
+            </div>
+        `;
+    }
 
     function displayResults(labels, scores, language, message) {
         if (language === 'other' || (Array.isArray(language) && language[0] === 'other')) {
@@ -177,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
             labels = [labels];
             scores = [scores];
         }
-        
+
         let topicsHtml = '';
         for (let i = 0; i < labels.length; i++) {
             let confPercent = scores[i] <= 1.0 ? scores[i] * 100 : scores[i];
@@ -203,13 +266,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Handle multiple languages
         let langList = Array.isArray(language) ? language : [language];
         let languageHtml = '';
-        
+
         langList.forEach(lang => {
             if (!lang) return;
-            const displayLang = lang.charAt(0).toUpperCase() + lang.slice(1);
+            const displayLang = formatLanguageName(lang);
             languageHtml += `<span class="topic-badge badge-${lang.toLowerCase()}">${displayLang}</span>`;
         });
-        
+
         resultsContent.innerHTML = `
             <div class="result-item" style="animation: fadeInUp 0.4s ease-out;">
                 ${topicsHtml}
@@ -220,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
                 <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 1rem;">
-                    Analysis completed using ${selectedModelText.textContent}.
+                    Analysis completed using Logistic Regression.
                 </p>
             </div>
         `;

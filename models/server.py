@@ -48,6 +48,56 @@ class ClassifyRequest(BaseModel):
     text: str
     model: str = "bart"
 
+def detect_language(text: str):
+    if not language_model:
+        return {
+            "primary_language": "unknown",
+            "primary_score": 0.0,
+            "topic_languages": "unknown",
+            "ranked_languages": []
+        }
+
+    if hasattr(language_model, "predict_proba"):
+        probas = language_model.predict_proba([text])[0]
+        classes = language_model.classes_
+
+        lang_probs = {cls.lower(): float(prob) for cls, prob in zip(classes, probas)}
+        sorted_langs = sorted(lang_probs.items(), key=lambda x: x[1], reverse=True)
+        primary_lang, primary_prob = sorted_langs[0]
+
+        if primary_lang == 'other' and primary_prob > 0.5:
+            topic_languages = 'other'
+        else:
+            significant_langs = []
+            for lang, prob in sorted_langs:
+                if lang == 'other':
+                    continue
+                if prob >= 0.25:
+                    significant_langs.append(lang)
+
+            if not significant_langs:
+                for lang, prob in sorted_langs:
+                    if lang != 'other':
+                        significant_langs.append(lang)
+                        break
+
+            topic_languages = significant_langs
+
+        return {
+            "primary_language": primary_lang,
+            "primary_score": primary_prob,
+            "topic_languages": topic_languages,
+            "ranked_languages": sorted_langs
+        }
+
+    lang = language_model.predict([text])[0].lower()
+    return {
+        "primary_language": lang,
+        "primary_score": 1.0,
+        "topic_languages": [lang],
+        "ranked_languages": [(lang, 1.0)]
+    }
+
 @app.get("/labels")
 def get_labels():
     return {"labels": CANDIDATE_LABELS}
@@ -55,38 +105,18 @@ def get_labels():
 @app.post("/classify")
 def classify_text(req: ClassifyRequest):
     # 1. Language Detection
-    detected_lang = "unknown"
-    if language_model:
-        if hasattr(language_model, "predict_proba"):
-            probas = language_model.predict_proba([req.text])[0]
-            classes = language_model.classes_
-            
-            lang_probs = {cls: prob for cls, prob in zip(classes, probas)}
-            sorted_langs = sorted(lang_probs.items(), key=lambda x: x[1], reverse=True)
-            primary_lang, primary_prob = sorted_langs[0]
-            
-            if primary_lang == 'other' and primary_prob > 0.5:
-                detected_lang = 'other'
-            else:
-                significant_langs = []
-                for lang, prob in sorted_langs:
-                    if lang == 'other':
-                        continue
-                    if prob >= 0.25:
-                        significant_langs.append(lang.capitalize())
-                
-                if not significant_langs:
-                    for lang, prob in sorted_langs:
-                        if lang != 'other':
-                            significant_langs.append(lang.lower())
-                            break
-                else:
-                    significant_langs = [lang.lower() for lang in significant_langs]
-                            
-                detected_lang = significant_langs
-        else:
-            lang = language_model.predict([req.text])[0]
-            detected_lang = [lang.lower()]
+    language_result = detect_language(req.text)
+    detected_lang = language_result["topic_languages"]
+
+    if req.model == "language":
+        if not language_model:
+            return {"error": "Language detection model is not initialized on the server."}
+
+        return {
+            "type": "language_detection",
+            "language": language_result["primary_language"],
+            "score": language_result["primary_score"]
+        }
         
     # Check if 'other' is in the list and it's the only one
     if isinstance(detected_lang, list) and len(detected_lang) == 1 and detected_lang[0] == 'other':
