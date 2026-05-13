@@ -8,6 +8,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const dropdownOptions = document.getElementById('dropdown-options');
     const selectedModelText = document.getElementById('selected-model-text');
     const options = document.querySelectorAll('.option');
+    const viewCodeBtn = document.getElementById('view-code-btn');
+    const codeViewer = document.getElementById('code-viewer');
+    const codeViewerTitle = document.getElementById('code-viewer-title');
+    const codeViewerContent = document.getElementById('code-viewer-content');
+    const closeCodeBtn = document.getElementById('close-code-btn');
+    const codeSnippets = window.CODE_SNIPPETS || {};
 
     // Custom Dropdown Logic
     dropdownTrigger.addEventListener('click', (e) => {
@@ -33,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
             opt.classList.add('active');
 
             dropdownOptions.classList.remove('show');
+            updateCodeViewer();
         });
     });
 
@@ -188,7 +195,72 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle Send button click
     sendBtn.addEventListener('click', submitAnalysis);
 
+    viewCodeBtn.addEventListener('click', () => {
+        const shouldShow = codeViewer.hidden;
+        if (shouldShow) {
+            openCodeViewer();
+        } else {
+            closeCodeViewer();
+        }
+    });
+
+    closeCodeBtn.addEventListener('click', closeCodeViewer);
+
+    codeViewer.addEventListener('click', (event) => {
+        if (event.target.hasAttribute('data-close-code')) {
+            closeCodeViewer();
+        }
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && !codeViewer.hidden) {
+            closeCodeViewer();
+        }
+    });
+
     updateInputState();
+    updateCodeViewer();
+
+    function updateCodeViewer() {
+        const selectedSnippet = codeSnippets[modelSelect.value] || codeSnippets.bart;
+        if (!selectedSnippet) return;
+
+        codeViewerTitle.textContent = selectedSnippet.title;
+        codeViewerContent.innerHTML = highlightSnippet(selectedSnippet.code);
+    }
+
+    function escapeHtml(value) {
+        return value
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+    }
+
+    function highlightSnippet(code) {
+        return code
+            .split('\n')
+            .map(line => {
+                const escapedLine = escapeHtml(line);
+                if (line.trim().startsWith('#')) {
+                    return `<span class="code-comment">${escapedLine}</span>`;
+                }
+                return escapedLine;
+            })
+            .join('\n');
+    }
+
+    function openCodeViewer() {
+        updateCodeViewer();
+        codeViewer.hidden = false;
+        viewCodeBtn.classList.add('active');
+        document.body.classList.add('modal-open');
+    }
+
+    function closeCodeViewer() {
+        codeViewer.hidden = true;
+        viewCodeBtn.classList.remove('active');
+        document.body.classList.remove('modal-open');
+    }
 
     function formatLanguageName(language) {
         if (!language) return 'Unknown';
@@ -283,7 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
                 <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 1rem;">
-                    Analysis completed using Logistic Regression.
+                    Analysis completed using ${selectedModelText.textContent}.
                 </p>
             </div>
         `;
