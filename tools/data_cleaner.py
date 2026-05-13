@@ -26,7 +26,7 @@ def clean_text(text, stop_words):
 
 def main():
     # Paths
-    input_file = '/home/roy/Desktop/UMTC/ml2/dataset/extended_dataset.csv'
+    input_file = '/home/roy/Desktop/UMTC/ml2/dataset/original_dataset.csv'
     stopwords_file = '/home/roy/Desktop/UMTC/ml2/dataset/filipino_stopwords.txt'
     output_file = '/home/roy/Desktop/UMTC/ml2/dataset/clean_dataset.csv'
     
