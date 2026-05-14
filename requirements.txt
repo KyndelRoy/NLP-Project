@@ -1,9 +1,16 @@
+# Core ML
 transformers
 torch
+sentence-transformers
+bertopic
+scikit-learn
+
+# Server
 fastapi
 uvicorn
 pydantic
-scikit-learn
+
+# Data
 pandas
 joblib
 nltk

@@ -1,38 +1,89 @@
 # Multilingual Topic Classifier
 
-A professional topic classification system that integrates zero-shot classification with multilingual language detection.
+Topic classification and language detection for English, Tagalog, and Cebuano.
 
 ## Project Structure
-- `models/server.py`: The main backend server.
-- `models/config.py`: configuration for model paths and labels.
-- `models/language.detect.py`: Script to train the language detection model.
-- `models/bart_classifier.py`: facebook/bart-large-mnli model for classification.
-- `models/pkl/`: Contains the trained language detection model (`language_identifer.pkl`).
 
-## How to Run
+```
+ml2/
+├── index.html                  # Frontend UI
+├── style.css
+├── script.js
+├── code-snippets.js
+├── dataset-previews.js
+├── requirements.txt
+│
+├── models/                     # Backend
+│   ├── server.py               # FastAPI server (main entry point)
+│   ├── config.py               # Model configs and labels
+│   ├── bart_classifier.py      # BART zero-shot classifier
+│   ├── bertopic_classifier.py  # BERTopic classifier wrapper
+│   ├── language.detect.py      # Train language detection model
+│   └── pkl/                    # Saved language model (auto-generated)
+│
+├── bertopic_classifier/        # BERTopic models
+│   ├── base.py                 # Shared logic (DRY)
+│   ├── topic_english.py        # English-only model
+│   ├── topic_english_tagalog.py# EN + TL model
+│   ├── topic_trilingual.py     # EN + TL + CB model
+│   ├── test_models.py          # Test suite
+│   ├── bertopic_dataset.csv    # Training data (10k rows)
+│   ├── filipino_stopwords.txt
+│   └── models/                 # Saved BERTopic models (auto-generated)
+│
+├── dataset/                    # Datasets
+│   ├── clean_dataset.csv
+│   ├── original_dataset.csv
+│   ├── language_detection_dataset.csv
+│   ├── filipino_stopwords.txt
+│   └── filipino_names.txt
+│
+└── tools/                      # Data preparation scripts
+```
 
-### 1. Set Up the Environment
-First, ensure you have a virtual environment set up and all dependencies installed:
+## Setup
+
+### 1. Create virtual environment
+
 ```bash
 python3 -m venv venv
-source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+source venv/bin/activate
+```
+
+### 2. Install dependencies
+
+```bash
 pip install -r requirements.txt
 ```
 
-### 2. (Optional) Retrain Language Detection
-If you want to update or retrain the language detection model based on the dataset:
-```bash
-python3 models/language.detect.py
-```
-This will save a new `language_identifer.pkl` in `models/pkl/`.
+### 3. Train the language detection model
 
-### 3. Start the Backend API
-Run the FastAPI server to handle classification requests:
+```bash
+python models/language.detect.py
+```
+
+This saves `language_identifer.pkl` in `models/pkl/`.
+
+### 4. Start the server
+
 ```bash
 python models/server.py
 ```
-The server will start at `http://127.0.0.1:8000`.
 
-### 4. Launch the Frontend
-Open `index.html` in your favorite web browser.
-- **Note**: The backend server must be running for the classification to work.
+On first run, the server will automatically train and save the 3 BERTopic models. This takes a few minutes. Subsequent starts load from cache instantly.
+
+The server runs at `http://127.0.0.1:8000`.
+
+### 5. Open the frontend
+
+Open `index.html` in a browser. The backend must be running.
+
+## Available Models
+
+| Dropdown Option | Model | Key |
+|----------------|-------|-----|
+| BART-Large-MNLI | Zero-shot classification | `bart` |
+| BERTopic (English) | English-only topic model | `bertopic_en` |
+| BERTopic (EN + TL) | English + Tagalog topic model | `bertopic_en_tl` |
+| BERTopic (Trilingual) | EN + TL + Cebuano topic model | `bertopic_tri` |
+| Language Detection | Logistic Regression language detector | `language` |

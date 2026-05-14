@@ -25,3 +25,4 @@ Thumbs.db
 
 # Generated model artifacts
 bertopic_classifier/models/
+models/pkl/
