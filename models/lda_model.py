@@ -151,13 +151,6 @@ def build_topic_label_map_from_training_data(lda_model, document_topic_matrix, l
     return topic_label_map
 
 
-def artifacts_exist():
-    return all(
-        os.path.exists(path)
-        for path in (VECTORIZER_PATH, LDA_MODEL_PATH, LDA_METADATA_PATH)
-    )
-
-
 def train_lda(dataset_path, stopwords_path, n_components=10):
     print("Loading stopwords...")
     stopwords = load_stopwords(stopwords_path)
@@ -205,12 +198,9 @@ def train_lda(dataset_path, stopwords_path, n_components=10):
 
 
 class LDAClassifier:
-    def __init__(self, verbose=False, auto_train=True):
-        if not artifacts_exist():
-            if auto_train and os.path.exists(DEFAULT_DATASET_PATH):
-                train_lda(DEFAULT_DATASET_PATH, DEFAULT_STOPWORDS_PATH, n_components=20)
-            else:
-                raise Exception("LDA model or vectorizer not found. Please train first.")
+    def __init__(self, verbose=False):
+        if not os.path.exists(VECTORIZER_PATH) or not os.path.exists(LDA_MODEL_PATH):
+            raise Exception("LDA model or vectorizer not found. Please train first.")
 
         self.vectorizer = joblib.load(VECTORIZER_PATH)
         self.lda = joblib.load(LDA_MODEL_PATH)
