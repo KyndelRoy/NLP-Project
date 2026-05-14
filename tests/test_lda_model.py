@@ -71,6 +71,27 @@ class LdaModelTests(unittest.TestCase):
             self.assertTrue(model_path.exists())
             self.assertTrue(metadata_path.exists())
 
+    def test_classifier_auto_trains_from_default_dataset_when_artifacts_are_missing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            pkl_dir = tmp_path / "pkl"
+            vectorizer_path = pkl_dir / "lda_vectorizer.pkl"
+            model_path = pkl_dir / "lda_model.pkl"
+            metadata_path = pkl_dir / "lda_metadata.pkl"
+
+            with patch.object(lda_model, "PKL_DIR", str(pkl_dir)), patch.object(
+                lda_model, "VECTORIZER_PATH", str(vectorizer_path)
+            ), patch.object(lda_model, "LDA_MODEL_PATH", str(model_path)), patch.object(
+                lda_model, "LDA_METADATA_PATH", str(metadata_path)
+            ):
+                classifier = lda_model.LDAClassifier()
+                result = classifier.classify("Nanalo ang koponan sa basketball")
+
+            self.assertEqual(len(result["labels"]), 3)
+            self.assertTrue(vectorizer_path.exists())
+            self.assertTrue(model_path.exists())
+            self.assertTrue(metadata_path.exists())
+
 
 if __name__ == "__main__":
     unittest.main()
