@@ -90,6 +90,12 @@ body.modal-open {
   font-weight: 600;
   color: var(--text-primary);
   line-height: 1.2;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.greeting-title.updating {
+  opacity: 0;
+  transform: translateY(-10px);
 }
 
 .support-note {

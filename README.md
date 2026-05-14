@@ -22,7 +22,7 @@ pip install -r requirements.txt
 ### 2. (Optional) Retrain Language Detection
 If you want to update or retrain the language detection model based on the dataset:
 ```bash
-python models/language.detect.py
+python3 models/language.detect.py
 ```
 This will save a new `language_identifer.pkl` in `models/pkl/`.
 

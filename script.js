@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const dropdownOptions = document.getElementById('dropdown-options');
     const selectedModelText = document.getElementById('selected-model-text');
     const options = document.querySelectorAll('.option');
+    const greetingTitle = document.getElementById('greeting-title');
+
     const viewCodeBtn = document.getElementById('view-code-btn');
     const viewDatasetBtn = document.getElementById('view-dataset-btn');
     const codeViewer = document.getElementById('code-viewer');
@@ -48,6 +50,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
             dropdownOptions.classList.remove('show');
             activeDatasetKey = null;
+            
+            // Update Header Title based on model
+            if (greetingTitle) {
+                greetingTitle.classList.add('updating');
+                setTimeout(() => {
+                    if (val === 'language') {
+                        greetingTitle.innerHTML = 'Low Resource Language<br>Language detector';
+                    } else {
+                        greetingTitle.innerHTML = 'Low Resource Language<br>Topic Detector';
+                    }
+                    greetingTitle.classList.remove('updating');
+                }, 150);
+            }
+
             updateActiveViewer();
         });
     });
