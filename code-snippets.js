@@ -1,67 +1,85 @@
 window.CODE_SNIPPETS = {
     bart: {
         title: 'BART-Large-MNLI Code',
-        code: `# BART-Large-MNLI is used for zero-shot topic classification.
-# It compares the input text against candidate topic labels without retraining.
+        code: `# Zero-shot topic classification using BART-Large-MNLI.
+# Compares input text against candidate labels without retraining.
 from transformers import pipeline
 
 class BartClassifier:
     def __init__(self, model_path="facebook/bart-large-mnli"):
-        print(f"Loading BART model ({model_path})...")
-
-        # Hugging Face pipeline handles tokenization, model inference, and scoring.
         self.classifier = pipeline("zero-shot-classification", model=model_path)
-        print("BART model loaded!")
 
     def classify(self, text, candidate_labels):
-        # multi_label=True allows more than one topic to be returned for one text.
         result = self.classifier(text, candidate_labels=candidate_labels, multi_label=True)
 
-        # Keep topics that pass the confidence threshold.
         present_topics = []
         for label, score in zip(result['labels'], result['scores']):
             if score > 0.5:
                 present_topics.append({"label": label, "score": score})
 
-        # If every score is low, still return the strongest topic.
         if not present_topics:
             present_topics.append({"label": result['labels'][0], "score": result['scores'][0]})
 
-        # Limit output to the top three topics for a cleaner presentation.
-        present_topics = present_topics[:3]
-
         return {
-            "labels": [t["label"] for t in present_topics],
-            "scores": [t["score"] for t in present_topics]
+            "labels": [t["label"] for t in present_topics[:3]],
+            "scores": [t["score"] for t in present_topics[:3]]
         }`
     },
     specialized: {
         title: 'Latent Dirichlet Allocation Code',
-        code: `# LDA model placeholder for presentation
-# lda_model.py is currently empty in this project.
-
-# Intended implementation outline:
-# 1. Clean and tokenize training text.
-# 2. Vectorize tokens with CountVectorizer.
-# 3. Fit sklearn.decomposition.LatentDirichletAllocation.
-# 4. Transform input text into topic probabilities.
-# 5. Return the highest-scoring topic and confidence.`
+        code: `# LDA model placeholder
+# Intended implementation:
+# 1. Tokenize and vectorize training text with CountVectorizer.
+# 2. Fit sklearn LatentDirichletAllocation.
+# 3. Transform input text into topic probabilities.
+# 4. Return the highest-scoring topic.`
     },
-    fast: {
-        title: 'BERTopic Code',
-        code: `# BERTopic model placeholder for presentation
-# BERTopic is listed in the UI but is not initialized in models/server.py yet.
+    bertopic_en: {
+        title: 'BERTopic (English) Code',
+        code: `# BERTopic English-only model.
+# Trains on the English column using all-MiniLM-L6-v2 embeddings.
+from base import load_or_train, predict_topic
 
-# Intended implementation outline:
-# 1. Load or train a BERTopic model.
-# 2. Run topic_model.transform([text]).
-# 3. Map the predicted topic id to a readable label.
-# 4. Return the label and probability score.`
+DATASET = "bertopic_dataset.csv"
+MODEL_DIR = "models/topic_english"
+EMBEDDING_MODEL = "all-MiniLM-L6-v2"
+COLUMNS = ["english"]
+
+model = load_or_train(MODEL_DIR, DATASET, COLUMNS, EMBEDDING_MODEL)
+name, topic_id, prob = predict_topic(model, "i want to cook chicken")`
+    },
+    bertopic_en_tl: {
+        title: 'BERTopic (EN + TL) Code',
+        code: `# BERTopic English + Tagalog model.
+# Trains on concatenated EN|TL pairs using multilingual embeddings.
+from base import load_or_train, predict_topic
+
+DATASET = "bertopic_dataset.csv"
+MODEL_DIR = "models/topic_english_tagalog"
+EMBEDDING_MODEL = "paraphrase-multilingual-MiniLM-L12-v2"
+COLUMNS = ["english", "tagalog"]
+
+model = load_or_train(MODEL_DIR, DATASET, COLUMNS, EMBEDDING_MODEL, "filipino_stopwords.txt")
+name, topic_id, prob = predict_topic(model, "gusto kong kumain ng manok")`
+    },
+    bertopic_tri: {
+        title: 'BERTopic (Trilingual) Code',
+        code: `# BERTopic Trilingual model (English + Tagalog + Cebuano).
+# Trains on concatenated EN|TL|CB triplets using multilingual embeddings.
+from base import load_or_train, predict_topic
+
+DATASET = "bertopic_dataset.csv"
+MODEL_DIR = "models/topic_trilingual"
+EMBEDDING_MODEL = "paraphrase-multilingual-MiniLM-L12-v2"
+COLUMNS = ["english", "tagalog", "cebuano"]
+
+model = load_or_train(MODEL_DIR, DATASET, COLUMNS, EMBEDDING_MODEL, "filipino_stopwords.txt")
+name, topic_id, prob = predict_topic(model, "ganahan ko magluto og manok")`
     },
     language: {
         title: 'Language Detection Code',
         code: `# Logistic Regression language detector.
-# The model learns character patterns for Cebuano, Tagalog, English, and Other.
+# Character-level TF-IDF for Cebuano, Tagalog, English, and Other.
 import pandas as pd
 import os
 import joblib
@@ -70,12 +88,10 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 
-# Locate and load the long-format language detection dataset.
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 csv_path = os.path.join(os.path.dirname(BASE_DIR), 'dataset', 'language_detection_dataset.csv')
 df_reshaped = pd.read_csv(csv_path).dropna()
 
-# Split examples so the model can be trained and evaluated separately.
 X_train, X_test, y_train, y_test = train_test_split(
     df_reshaped['text'],
     df_reshaped['language'],
@@ -83,17 +99,13 @@ X_train, X_test, y_train, y_test = train_test_split(
     random_state=42
 )
 
-# Character-level TF-IDF works well for short multilingual text.
-# Logistic Regression then learns which character patterns indicate each language.
 model = Pipeline([
     ('tfidf', TfidfVectorizer(analyzer='char', ngram_range=(1, 3))),
     ('clf', LogisticRegression(max_iter=1000))
 ])
 
-# Train the detector.
 model.fit(X_train, y_train)
 
-# Save the trained pipeline so the FastAPI server can load it later.
 model_dir = os.path.join(BASE_DIR, 'pkl')
 os.makedirs(model_dir, exist_ok=True)
 model_path = os.path.join(model_dir, 'language_identifer.pkl')

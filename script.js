@@ -472,7 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }
 
-        if (datasetKey === 'original' || datasetKey === 'specialized' || datasetKey === 'fast') {
+        if (datasetKey === 'original' || datasetKey === 'specialized' || datasetKey.startsWith('bertopic_')) {
             return `
                 <div class="dataset-context">
                     <strong>Dataset Information:</strong>

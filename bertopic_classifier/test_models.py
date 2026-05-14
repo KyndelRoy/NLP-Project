@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Test all three BERTopic models with diverse inputs and report results."""
 
+from base import predict_topic
 from bertopic import BERTopic
 
 MODEL_EN = "models/topic_english"
@@ -82,24 +83,13 @@ TEST_CASES_TAGALOG_ON_TRI = [
 ]
 
 
-def predict(model, text):
-    topics, _ = model.transform([text])
-    topic_id = topics[0]
-    if topic_id == -1:
-        return topic_id, "No clear topic (outlier)"
-    info = model.get_topic_info()
-    match = info[info["Topic"] == topic_id]
-    name = match.iloc[0]["Name"] if not match.empty else f"Topic {topic_id}"
-    return topic_id, name
-
-
 def run_keyword_test(model, test_cases, label):
     print(f"\n{'='*70}")
     print(f"  {label}")
     print(f"{'='*70}")
     hits, total = 0, len(test_cases)
     for text, keyword in test_cases:
-        tid, name = predict(model, text)
+        name, topic_id, prob = predict_topic(model, text)
         matched = keyword.lower() in name.lower()
         if matched:
             hits += 1
@@ -116,8 +106,8 @@ def run_assignment_test(model, test_cases, label):
     print(f"{'='*70}")
     outliers = 0
     for text, desc in test_cases:
-        tid, name = predict(model, text)
-        is_outlier = tid == -1
+        name, topic_id, prob = predict_topic(model, text)
+        is_outlier = topic_id == -1
         if is_outlier:
             outliers += 1
         status = "✗ OUTLIER" if is_outlier else "✓"
@@ -131,13 +121,11 @@ def run_assignment_test(model, test_cases, label):
 def main():
     results = []
 
-    # English-only model
     print("\nLoading English model...")
     m_en = BERTopic.load(MODEL_EN)
     h, t = run_keyword_test(m_en, TEST_CASES_ENGLISH, "English Model — English Input (keyword match)")
     results.append(("EN model → EN input", h, t))
 
-    # Bilingual model
     print("\nLoading Bilingual model...")
     m_pair = BERTopic.load(MODEL_PAIR)
     h, t = run_assignment_test(m_pair, TEST_CASES_TAGALOG, "Bilingual Model — Tagalog Input (assignment)")
@@ -145,7 +133,6 @@ def main():
     h, t = run_keyword_test(m_pair, TEST_CASES_ENGLISH_ON_PAIR, "Bilingual Model — English Input (keyword match)")
     results.append(("EN-TL model → EN input", h, t))
 
-    # Trilingual model
     print("\nLoading Trilingual model...")
     m_tri = BERTopic.load(MODEL_TRI)
     h, t = run_keyword_test(m_tri, TEST_CASES_ENGLISH_ON_TRI, "Trilingual Model — English Input (keyword match)")
