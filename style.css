@@ -344,21 +344,60 @@ body.modal-open {
   margin-left: auto;
 }
 
-.close-code-btn {
+.tools-code-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.tools-code-tabs[hidden] {
+  display: none;
+}
+
+.tool-code-tab {
   background: var(--code-bg);
   color: var(--text-secondary);
   border: 1px solid var(--code-border);
   border-radius: 16px;
-  padding: 0.45rem 0.9rem;
-  font-size: 0.9rem;
-  font-weight: 600;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.tool-code-tab:hover,
+.tool-code-tab.active {
+  color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.close-code-btn {
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex: 0 0 auto;
 }
 
 .close-code-btn:hover {
   color: var(--text-primary);
-  border-color: var(--accent-color);
+  background: rgba(127, 127, 127, 0.16);
+}
+
+.close-code-btn:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
 }
 
 .code-block {
@@ -512,6 +551,21 @@ body.modal-open {
 
 .dataset-meta {
   margin-bottom: 0.75rem;
+}
+
+.dataset-labels {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 1rem;
+}
+
+.dataset-labels span {
+  padding: 0;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  background: transparent;
 }
 
 /* Results Area */

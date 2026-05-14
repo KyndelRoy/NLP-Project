@@ -36,6 +36,12 @@ class BartClassifier:
     },
     bertopic_en: {
         title: 'BERTopic (English) Code',
+        tabs: [
+            { key: 'model', label: 'Model Script', title: 'topic_english.py', source: 'bertopic_classifier/topic_english.py' },
+            { key: 'base', label: 'Load + Predict', title: 'base.py', source: 'bertopic_classifier/base.py' },
+            { key: 'wrapper', label: 'Server Wrapper', title: 'bertopic_classifier.py', source: 'models/bertopic_classifier.py' },
+            { key: 'config', label: 'Config', title: 'config.py', source: 'models/config.py' }
+        ],
         code: `# BERTopic English-only model.
 # Trains on the English column using all-MiniLM-L6-v2 embeddings.
 from base import load_or_train, predict_topic
@@ -50,6 +56,12 @@ name, topic_id, prob = predict_topic(model, "i want to cook chicken")`
     },
     bertopic_en_tl: {
         title: 'BERTopic (EN + TL) Code',
+        tabs: [
+            { key: 'model', label: 'Model Script', title: 'topic_english_tagalog.py', source: 'bertopic_classifier/topic_english_tagalog.py' },
+            { key: 'base', label: 'Load + Predict', title: 'base.py', source: 'bertopic_classifier/base.py' },
+            { key: 'wrapper', label: 'Server Wrapper', title: 'bertopic_classifier.py', source: 'models/bertopic_classifier.py' },
+            { key: 'config', label: 'Config', title: 'config.py', source: 'models/config.py' }
+        ],
         code: `# BERTopic English + Tagalog model.
 # Trains on concatenated EN|TL pairs using multilingual embeddings.
 from base import load_or_train, predict_topic
@@ -64,6 +76,12 @@ name, topic_id, prob = predict_topic(model, "gusto kong kumain ng manok")`
     },
     bertopic_tri: {
         title: 'BERTopic (Trilingual) Code',
+        tabs: [
+            { key: 'model', label: 'Model Script', title: 'topic_trilingual.py', source: 'bertopic_classifier/topic_trilingual.py' },
+            { key: 'base', label: 'Load + Predict', title: 'base.py', source: 'bertopic_classifier/base.py' },
+            { key: 'wrapper', label: 'Server Wrapper', title: 'bertopic_classifier.py', source: 'models/bertopic_classifier.py' },
+            { key: 'config', label: 'Config', title: 'config.py', source: 'models/config.py' }
+        ],
         code: `# BERTopic Trilingual model (English + Tagalog + Cebuano).
 # Trains on concatenated EN|TL|CB triplets using multilingual embeddings.
 from base import load_or_train, predict_topic
@@ -110,5 +128,28 @@ model_dir = os.path.join(BASE_DIR, 'pkl')
 os.makedirs(model_dir, exist_ok=True)
 model_path = os.path.join(model_dir, 'language_identifer.pkl')
 joblib.dump(model, model_path)`
+    }
+};
+
+window.TOOL_SNIPPETS = {
+    translate_data: {
+        label: 'Translate',
+        title: 'translate_data.py',
+        source: 'tools/translate_data.py'
+    },
+    create_language_detection_dataset: {
+        label: 'Language Dataset',
+        title: 'create_language_detection_dataset.py',
+        source: 'tools/create_language_detection_dataset.py'
+    },
+    clean_dataset: {
+        label: 'Clean Dataset',
+        title: 'clean_dataset.py',
+        source: 'tools/clean_dataset.py'
+    },
+    deep_cleaner: {
+        label: 'Deep Cleaner',
+        title: 'deep_cleaner.py',
+        source: 'tools/deep_cleaner.py'
     }
 };

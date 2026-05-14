@@ -15,6 +15,7 @@
 <body>
     <main class="main-content">
         <div class="theme-toggle-container">
+            <button id="view-tools-btn" class="theme-btn" type="button">Tools</button>
             <button class="theme-btn" data-theme="light">Light Mode</button>
             <button class="theme-btn active" data-theme="dark">Dark Mode</button>
         </div>
@@ -71,11 +72,18 @@
                 <div class="code-viewer-header">
                     <h3 id="code-viewer-title">BART-Large-MNLI Code</h3>
                     <div class="code-viewer-actions">
+                        <div id="tools-code-tabs" class="tools-code-tabs" hidden></div>
                         <button id="modal-dataset-switch-btn" class="dataset-switch-btn" type="button" hidden>
                             View Original 3-Column Dataset
                         </button>
                         <button id="close-code-btn" class="close-code-btn" type="button"
-                            aria-label="Close code viewer">Close</button>
+                            aria-label="Exit code viewer">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M18 6 6 18"></path>
+                                <path d="m6 6 12 12"></path>
+                            </svg>
+                        </button>
                     </div>
                 </div>
                 <pre class="code-block"><code id="code-viewer-content"></code></pre>

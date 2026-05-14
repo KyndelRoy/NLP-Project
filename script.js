@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const options = document.querySelectorAll('.option');
     const greetingTitle = document.getElementById('greeting-title');
 
+    const viewToolsBtn = document.getElementById('view-tools-btn');
     const viewCodeBtn = document.getElementById('view-code-btn');
     const viewDatasetBtn = document.getElementById('view-dataset-btn');
     const codeViewer = document.getElementById('code-viewer');
@@ -18,12 +19,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const datasetViewerContent = document.getElementById('dataset-viewer-content');
     const closeCodeBtn = document.getElementById('close-code-btn');
     const modalDatasetSwitchBtn = document.getElementById('modal-dataset-switch-btn');
+    const toolsCodeTabs = document.getElementById('tools-code-tabs');
     const codeSnippets = window.CODE_SNIPPETS || {};
+    const toolSnippets = window.TOOL_SNIPPETS || {};
     const datasetPreviews = window.DATASET_PREVIEWS || {};
     const datasetCache = {};
+    const toolCodeCache = {};
+    const codeFileCache = {};
     const DATASET_PREVIEW_LIMIT = 50;
     let activeViewerMode = 'code';
     let activeDatasetKey = null;
+    let activeToolKey = Object.keys(toolSnippets)[0] || null;
+    let activeCodeTabKey = null;
 
     // Custom Dropdown Logic
     dropdownTrigger.addEventListener('click', (e) => {
@@ -50,18 +57,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
             dropdownOptions.classList.remove('show');
             activeDatasetKey = null;
+            activeCodeTabKey = null;
             
             // Update Header Title based on model
             if (greetingTitle) {
+                const nextTitle = val === 'language'
+                    ? 'Low Resource Language<br>Language detector'
+                    : 'Low Resource Language<br>Topic Detector';
+
+                if (greetingTitle.innerHTML !== nextTitle) {
                 greetingTitle.classList.add('updating');
                 setTimeout(() => {
-                    if (val === 'language') {
-                        greetingTitle.innerHTML = 'Low Resource Language<br>Language detector';
-                    } else {
-                        greetingTitle.innerHTML = 'Low Resource Language<br>Topic Detector';
-                    }
+                    greetingTitle.innerHTML = nextTitle;
                     greetingTitle.classList.remove('updating');
                 }, 150);
+                }
             }
 
             updateActiveViewer();
@@ -69,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const labelsContainer = document.getElementById('labels-container');
-    const themeBtns = document.querySelectorAll('.theme-btn');
+    const themeBtns = document.querySelectorAll('.theme-btn[data-theme]');
     const htmlElement = document.documentElement;
     const MIN_WORDS = 4;
     let isSubmitting = false;
@@ -220,6 +230,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle Send button click
     sendBtn.addEventListener('click', submitAnalysis);
 
+    viewToolsBtn.addEventListener('click', () => {
+        if (codeViewer.hidden || activeViewerMode !== 'tools') {
+            openViewer('tools');
+        } else {
+            closeViewer();
+        }
+    });
+
     viewCodeBtn.addEventListener('click', () => {
         if (codeViewer.hidden || activeViewerMode !== 'code') {
             openViewer('code');
@@ -240,6 +258,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     modalDatasetSwitchBtn.addEventListener('click', () => {
         updateDatasetViewer(modalDatasetSwitchBtn.getAttribute('data-dataset-key'));
+    });
+
+    toolsCodeTabs.addEventListener('click', (event) => {
+        const tab = event.target.closest('[data-tool-key], [data-code-tab-key]');
+        if (!tab) return;
+
+        if (tab.hasAttribute('data-tool-key')) {
+            activeToolKey = tab.getAttribute('data-tool-key');
+            updateToolsViewer();
+            return;
+        }
+
+        activeCodeTabKey = tab.getAttribute('data-code-tab-key');
+        updateCodeViewer();
     });
 
     codeViewer.addEventListener('click', (event) => {
@@ -263,18 +295,75 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        updateCodeViewer();
+        if (activeViewerMode === 'tools') {
+            await updateToolsViewer();
+            return;
+        }
+
+        await updateCodeViewer();
     }
 
-    function updateCodeViewer() {
+    async function updateCodeViewer() {
         const selectedSnippet = codeSnippets[modelSelect.value] || codeSnippets.bart;
         if (!selectedSnippet) return;
 
         codeViewerContent.parentElement.hidden = false;
         datasetViewerContent.hidden = true;
         modalDatasetSwitchBtn.hidden = true;
+
+        if (Array.isArray(selectedSnippet.tabs) && selectedSnippet.tabs.length > 0) {
+            await updateTabbedCodeViewer(selectedSnippet);
+            return;
+        }
+
+        toolsCodeTabs.hidden = true;
         codeViewerTitle.textContent = selectedSnippet.title;
         codeViewerContent.innerHTML = highlightSnippet(selectedSnippet.code);
+    }
+
+    async function updateTabbedCodeViewer(snippetGroup) {
+        if (!snippetGroup.tabs.some(tab => tab.key === activeCodeTabKey)) {
+            activeCodeTabKey = snippetGroup.tabs[0].key;
+        }
+
+        const selectedTab = snippetGroup.tabs.find(tab => tab.key === activeCodeTabKey);
+        toolsCodeTabs.hidden = false;
+        codeViewerTitle.textContent = selectedTab.title;
+        renderCodeTabs(snippetGroup.tabs);
+        codeViewerContent.textContent = 'Loading code...';
+
+        try {
+            const code = await loadCodeFile(selectedTab.source);
+            codeViewerContent.innerHTML = highlightSnippet(code);
+        } catch (error) {
+            console.error(error);
+            codeViewerTitle.textContent = snippetGroup.title;
+            codeViewerContent.innerHTML = highlightSnippet(snippetGroup.code);
+        }
+    }
+
+    async function updateToolsViewer() {
+        if (!toolSnippets[activeToolKey]) {
+            activeToolKey = Object.keys(toolSnippets)[0] || null;
+        }
+
+        const selectedSnippet = toolSnippets[activeToolKey];
+        if (!selectedSnippet) return;
+
+        codeViewerContent.parentElement.hidden = false;
+        datasetViewerContent.hidden = true;
+        toolsCodeTabs.hidden = false;
+        modalDatasetSwitchBtn.hidden = true;
+        codeViewerTitle.textContent = selectedSnippet.title;
+        renderToolsTabs();
+
+        try {
+            const code = await loadToolCode(activeToolKey, selectedSnippet);
+            codeViewerContent.innerHTML = highlightSnippet(code);
+        } catch (error) {
+            console.error(error);
+            codeViewerContent.textContent = `Unable to load ${selectedSnippet.source}. Serve the app through a local web server instead of opening it directly as a file.`;
+        }
     }
 
     async function updateDatasetViewer(datasetKey = activeDatasetKey || modelSelect.value) {
@@ -284,6 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         codeViewerContent.parentElement.hidden = true;
         datasetViewerContent.hidden = false;
+        toolsCodeTabs.hidden = true;
         updateHeaderDatasetSwitch(selectedDataset);
         codeViewerTitle.textContent = selectedDataset.title;
         datasetViewerContent.innerHTML = '<div class="dataset-loading">Loading dataset preview...</div>';
@@ -328,6 +418,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateHeaderDatasetSwitch(dataset) {
+        toolsCodeTabs.hidden = true;
+
         if (dataset.alternateDatasetKey && (activeDatasetKey === 'language' || activeDatasetKey === 'original')) {
             modalDatasetSwitchBtn.hidden = false;
             modalDatasetSwitchBtn.textContent = dataset.alternateButtonLabel || 'View Related Dataset';
@@ -409,10 +501,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderDatasetInfo(dataset) {
         const source = escapeHtml(dataset.source || 'No local source');
+        const labelsHtml = Array.isArray(dataset.candidateLabels)
+            ? `
+                <div class="dataset-labels">
+                    <strong>Candidate Labels:</strong>
+                    <span>${dataset.candidateLabels.map(escapeHtml).join(', ')}</span>
+                </div>
+            `
+            : '';
 
         return `
             <div class="dataset-empty-state">
                 <p class="dataset-meta"><strong>Source:</strong> ${source}</p>
+                ${labelsHtml}
             </div>
         `;
     }
@@ -488,10 +589,59 @@ document.addEventListener('DOMContentLoaded', () => {
         return '';
     }
 
+    function renderToolsTabs() {
+        toolsCodeTabs.innerHTML = Object.entries(toolSnippets)
+            .map(([key, snippet]) => `
+                <button class="tool-code-tab${key === activeToolKey ? ' active' : ''}" type="button" data-tool-key="${key}">
+                    ${escapeHtml(snippet.label)}
+                </button>
+            `)
+            .join('');
+    }
+
+    function renderCodeTabs(tabs) {
+        toolsCodeTabs.innerHTML = tabs
+            .map(tab => `
+                <button class="tool-code-tab${tab.key === activeCodeTabKey ? ' active' : ''}" type="button" data-code-tab-key="${tab.key}">
+                    ${escapeHtml(tab.label)}
+                </button>
+            `)
+            .join('');
+    }
+
+    async function loadCodeFile(source) {
+        if (codeFileCache[source]) {
+            return codeFileCache[source];
+        }
+
+        const response = await fetch(source);
+        if (!response.ok) {
+            throw new Error(`Unable to load ${source}`);
+        }
+
+        codeFileCache[source] = await response.text();
+        return codeFileCache[source];
+    }
+
+    async function loadToolCode(toolKey, metadata) {
+        if (toolCodeCache[toolKey]) {
+            return toolCodeCache[toolKey];
+        }
+
+        const response = await fetch(metadata.source);
+        if (!response.ok) {
+            throw new Error(`Unable to load ${metadata.source}`);
+        }
+
+        toolCodeCache[toolKey] = await response.text();
+        return toolCodeCache[toolKey];
+    }
+
     function openViewer(mode) {
         activeViewerMode = mode;
         if (mode === 'dataset') activeDatasetKey = modelSelect.value;
         codeViewer.hidden = false;
+        viewToolsBtn.classList.toggle('active', mode === 'tools');
         viewCodeBtn.classList.toggle('active', mode === 'code');
         viewDatasetBtn.classList.toggle('active', mode === 'dataset');
         document.body.classList.add('modal-open');
@@ -500,8 +650,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function closeViewer() {
         codeViewer.hidden = true;
+        viewToolsBtn.classList.remove('active');
         viewCodeBtn.classList.remove('active');
         viewDatasetBtn.classList.remove('active');
+        toolsCodeTabs.hidden = true;
         document.body.classList.remove('modal-open');
     }
 

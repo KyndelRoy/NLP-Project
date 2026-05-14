@@ -2,6 +2,7 @@ window.DATASET_PREVIEWS = {
     bart: {
         title: 'BART-Large-MNLI Dataset',
         source: 'Pretrained model + candidate labels',
+        candidateLabels: ["food", "sports", "news", "laws", "education"],
         note: 'BART-Large-MNLI is used as a pretrained zero-shot classifier. This app does not train it on a local CSV dataset.'
     },
     specialized: {
