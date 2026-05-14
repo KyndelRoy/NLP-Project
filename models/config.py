@@ -1,8 +1,7 @@
 # Configuration for available models
 
 MODEL_CONFIGS = {
-    "bart": "facebook/bart-large-mnli",
-    "specialized": "facebook/bart-large-mnli"
+    "bart": "facebook/bart-large-mnli"
 }
 
 # BERTopic model configurations

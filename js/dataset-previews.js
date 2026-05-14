@@ -5,10 +5,10 @@ window.DATASET_PREVIEWS = {
         candidateLabels: ["food", "sports", "news", "laws", "education"],
         note: 'BART-Large-MNLI is used as a pretrained zero-shot classifier. This app does not train it on a local CSV dataset.'
     },
-    specialized: {
-        title: 'Clean Topic Dataset',
-        source: 'dataset/clean_dataset.csv',
-        note: 'Original 3-column dataset with Tagalog, English, and Cebuano text used for topic-modeling previews.'
+    lda: {
+        title: 'LDA Training Dataset',
+        source: 'dataset/lda_training_dataset.csv',
+        note: 'Balanced Tagalog topic dataset with food, sports, news, laws, and education labels for the LDA baseline.'
     },
     bertopic_en: {
         title: 'BERTopic English Dataset',

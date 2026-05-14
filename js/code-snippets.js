@@ -25,14 +25,19 @@ class BartClassifier:
             "scores": [t["score"] for t in present_topics[:3]]
         }`
     },
-    specialized: {
+    lda: {
         title: 'Latent Dirichlet Allocation Code',
-        code: `# LDA model placeholder
-# Intended implementation:
-# 1. Tokenize and vectorize training text with CountVectorizer.
-# 2. Fit sklearn LatentDirichletAllocation.
-# 3. Transform input text into topic probabilities.
-# 4. Return the highest-scoring topic.`
+        code: `# Lightweight LDA baseline trained from dataset/lda_training_dataset.csv.
+from models.lda_model import LDAClassifier, train_lda
+
+train_lda(
+    "dataset/lda_training_dataset.csv",
+    "dataset/filipino_stopwords.txt",
+    n_components=20,
+)
+
+classifier = LDAClassifier()
+result = classifier.classify("Nag-aaral ang estudyante sa paaralan.")`
     },
     bertopic_en: {
         title: 'BERTopic (English) Code',

@@ -307,7 +307,7 @@ window.createViewerController = function createViewerController({
             `;
         }
 
-        if (datasetKey === 'original' || datasetKey === 'specialized' || datasetKey.startsWith('bertopic_')) {
+        if (datasetKey === 'original' || datasetKey === 'lda' || datasetKey.startsWith('bertopic_')) {
             return `
                 <div class="dataset-context">
                     <strong>Dataset Information:</strong>
