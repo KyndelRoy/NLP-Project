@@ -40,7 +40,7 @@ def main():
         
     print(f"Read {len(lines)} lines from {input_file}.")
     
-    header = lines[0] # Usually ['tagalog']
+    header = lines[0] # tagalog
     data = [row[0] for row in lines[1:]]
     
     print("Starting translation...")
