@@ -7,6 +7,7 @@ import os
 from config import MODEL_CONFIGS, BERTOPIC_CONFIGS, CANDIDATE_LABELS
 from bart_classifier import BartClassifier
 from bertopic_classifier import BertopicClassifier
+from lda_model import LDAClassifier
 
 app = FastAPI(title="Multilingual NLP Server")
 
@@ -44,6 +45,12 @@ for key, config in BERTOPIC_CONFIGS.items():
         models[key] = BertopicClassifier(config)
     except Exception as e:
         print(f"Warning: Could not load BERTopic model '{key}': {e}")
+
+# Load LDA model
+try:
+    models["lda"] = LDAClassifier()
+except Exception as e:
+    print(f"Warning: Could not load LDA model: {e}")
 
 print(f"System ready! Loaded models: {list(models.keys())}")
 
@@ -156,7 +163,7 @@ def classify_text(req: ClassifyRequest):
                 "language": detected_lang
             }
 
-        # BART / zero-shot models use candidate labels
+        # BART / LDA models use candidate labels
         result = classifier.classify(req.text, candidate_labels=CANDIDATE_LABELS)
 
         if 'labels' in result:

@@ -64,7 +64,19 @@ python models/language.detect.py
 
 This saves `language_identifer.pkl` in `models/pkl/`.
 
-### 4. Start the server
+### 4. Train the LDA topic model
+
+The repo includes a small balanced LDA training set at
+`dataset/lda_training_dataset.csv`, derived from the larger local corpus with
+`tools/create_lda_training_dataset.py`.
+
+```bash
+python models/lda_model.py
+```
+
+This saves `lda_vectorizer.pkl` and `lda_model.pkl` in `models/pkl/`.
+
+### 5. Start the server
 
 ```bash
 python models/server.py
@@ -86,4 +98,5 @@ Open `index.html` in a browser. The backend must be running.
 | BERTopic (English) | English-only topic model | `bertopic_en` |
 | BERTopic (EN + TL) | English + Tagalog topic model | `bertopic_en_tl` |
 | BERTopic (Trilingual) | EN + TL + Cebuano topic model | `bertopic_tri` |
+| LDA Topic Model | Lightweight LDA baseline trained from `dataset/lda_training_dataset.csv` | `lda` |
 | Language Detection | Logistic Regression language detector | `language` |
