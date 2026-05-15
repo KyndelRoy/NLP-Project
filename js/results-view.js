@@ -6,28 +6,84 @@ window.createResultsView = function createResultsView({ resultsContent, selected
         return confidence <= 1.0 ? confidence * 100 : confidence;
     }
 
-    function clampPercent(percent) {
-        return Math.min(Math.max(percent, 0), 100);
-    }
-
     function languageClassSuffix(language) {
         return String(language || 'unknown').toLowerCase().replace(/[^a-z0-9_-]/g, '-');
     }
 
-    function createConfidenceBlock(confidencePercent) {
+    function getConfidenceStatus(confidencePercent) {
+        if (confidencePercent >= 75) {
+            return {
+                className: 'confidence-good',
+                label: 'High confidence',
+                symbol: '✓'
+            };
+        }
+
+        if (confidencePercent > 50) {
+            return {
+                className: 'confidence-caution',
+                label: 'Moderate confidence',
+                symbol: '!'
+            };
+        }
+
+        return {
+            className: 'confidence-low',
+            label: 'Low confidence',
+            symbol: '!'
+        };
+    }
+
+    function createConfidenceBadge(confidencePercent) {
         const displayValue = confidencePercent.toFixed(1);
+        const status = getConfidenceStatus(confidencePercent);
 
         return `
-            <div class="confidence-block">
-                <div class="metric-row">
-                    <span class="metric-label">Confidence</span>
-                    <span class="metric-value">${displayValue}%</span>
-                </div>
-                <div class="confidence-bar-container" aria-label="Confidence ${displayValue}%">
-                    <div class="confidence-bar" style="width: ${clampPercent(confidencePercent)}%"></div>
-                </div>
+            <div class="confidence-badge ${status.className}" aria-label="${status.label}: ${displayValue}%">
+                <span class="confidence-icon" aria-hidden="true">${status.symbol}</span>
+                <span class="confidence-percent">${displayValue}%</span>
+                <span class="confidence-label">${status.label}</span>
             </div>
         `;
+    }
+
+    function getRelevantTopics(labels, scores) {
+        const labelsList = Array.isArray(labels) ? labels : [labels];
+        const scoresList = Array.isArray(scores) ? scores : [scores];
+        const uniqueTopics = [];
+        const seen = new Set();
+
+        labelsList.forEach((label, index) => {
+            const normalizedLabel = String(label || 'Unknown').trim();
+            const key = normalizedLabel.toLowerCase();
+            if (seen.has(key)) return;
+
+            seen.add(key);
+            uniqueTopics.push({
+                label: normalizedLabel,
+                confidence: normalizeScore(scoresList[index])
+            });
+        });
+
+        uniqueTopics.sort((a, b) => b.confidence - a.confidence);
+        if (uniqueTopics.length <= 1) return uniqueTopics;
+
+        const selectedTopics = [uniqueTopics[0]];
+        const topConfidence = uniqueTopics[0].confidence;
+
+        for (const topic of uniqueTopics.slice(1)) {
+            if (selectedTopics.length >= 3) break;
+
+            const gapFromTop = topConfidence - topic.confidence;
+            const gapFromPrevious = selectedTopics[selectedTopics.length - 1].confidence - topic.confidence;
+            const isCompetitive = gapFromTop <= 18 || (topConfidence < 60 && gapFromPrevious <= 12);
+
+            if (topic.confidence >= 25 && isCompetitive) {
+                selectedTopics.push(topic);
+            }
+        }
+
+        return selectedTopics;
     }
 
     function createLanguageBadges(language) {
@@ -47,7 +103,7 @@ window.createResultsView = function createResultsView({ resultsContent, selected
         const safeLanguage = language || 'unknown';
         const languageName = formatLanguageName(safeLanguage);
         const confidencePercent = normalizeScore(score);
-        const badgeClassName = languageClassSuffix(safeLanguage);
+        const modelName = 'Logistic Regression';
 
         resultsContent.innerHTML = `
             <div class="result-item result-card-enter">
@@ -56,12 +112,13 @@ window.createResultsView = function createResultsView({ resultsContent, selected
                         <p class="result-kicker">Detected Language</p>
                         <h3 class="result-title">${escapeHtml(languageName)}</h3>
                     </div>
-                    <span class="topic-badge badge-${escapeHtml(badgeClassName)}">${escapeHtml(languageName)}</span>
+                    ${createConfidenceBadge(confidencePercent)}
                 </div>
 
-                ${createConfidenceBlock(confidencePercent)}
-
-                <p class="result-footnote">Analysis completed using Logistic Regression.</p>
+                <div class="result-meta">
+                    <span class="metric-label">Model used</span>
+                    <span class="model-used">${escapeHtml(modelName)}</span>
+                </div>
             </div>
         `;
     }
@@ -79,12 +136,11 @@ window.createResultsView = function createResultsView({ resultsContent, selected
             return;
         }
 
-        const labelsList = Array.isArray(labels) ? labels : [labels];
-        const scoresList = Array.isArray(scores) ? scores : [scores];
-        const topicsHtml = labelsList.map((label, index) => {
-            const confidencePercent = normalizeScore(scoresList[index]);
-            const resultLabel = labelsList.length > 1 ? `Predicted Topic ${index + 1}` : 'Predicted Topic';
-            const safeLabel = escapeHtml(label || 'Unknown');
+        const topics = getRelevantTopics(labels, scores);
+        const topicModelName = selectedModelText.textContent;
+        const topicsHtml = topics.map((topic, index) => {
+            const resultLabel = topics.length > 1 ? `Predicted Topic ${index + 1}` : 'Predicted Topic';
+            const safeLabel = escapeHtml(topic.label);
 
             return `
                 <div class="topic-result">
@@ -93,9 +149,8 @@ window.createResultsView = function createResultsView({ resultsContent, selected
                             <p class="result-kicker">${resultLabel}</p>
                             <h3 class="result-title">${safeLabel}</h3>
                         </div>
-                        <span class="topic-badge">${safeLabel}</span>
+                        ${createConfidenceBadge(topic.confidence)}
                     </div>
-                    ${createConfidenceBlock(confidencePercent)}
                 </div>
             `;
         }).join('');
@@ -107,13 +162,19 @@ window.createResultsView = function createResultsView({ resultsContent, selected
                 </div>
 
                 <div class="result-meta">
-                    <span class="metric-label">Detected Language</span>
+                    <div>
+                        <span class="metric-label">Detected Language</span>
+                        <p class="result-source">Model used: Logistic Regression</p>
+                    </div>
                     <div class="language-badges">
                         ${createLanguageBadges(language)}
                     </div>
                 </div>
 
-                <p class="result-footnote">Analysis completed using ${escapeHtml(selectedModelText.textContent)}.</p>
+                <div class="result-meta compact-meta">
+                    <span class="metric-label">Topic Model used</span>
+                    <span class="model-used">${escapeHtml(topicModelName)}</span>
+                </div>
             </div>
         `;
     }
