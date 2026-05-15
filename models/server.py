@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from contextlib import asynccontextmanager
 import joblib
 import os
 
@@ -9,7 +10,57 @@ from bart_classifier import BartClassifier
 from bertopic_classifier import BertopicClassifier
 from lda_model import LDAClassifier
 
-app = FastAPI(title="Multilingual NLP Server")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+LANGUAGE_MODEL_PATH = os.path.join(BASE_DIR, 'pkl', 'language_identifer.pkl')
+
+language_model = None
+models = {}
+models_loaded = False
+
+
+def load_models():
+    global language_model, models, models_loaded
+
+    if models_loaded:
+        return
+
+    print("Starting System...")
+
+    try:
+        language_model = joblib.load(LANGUAGE_MODEL_PATH)
+        print("Language model loaded")
+    except Exception as e:
+        print(f"Warning: Could not load language model: {e}")
+        language_model = None
+
+    print("Loading NLP models...")
+    loaded_models = {
+        "bart": BartClassifier(MODEL_CONFIGS["bart"]),
+    }
+
+    for key, config in BERTOPIC_CONFIGS.items():
+        try:
+            loaded_models[key] = BertopicClassifier(config)
+        except Exception as e:
+            print(f"Warning: Could not load BERTopic model '{key}': {e}")
+
+    try:
+        loaded_models["lda"] = LDAClassifier()
+    except Exception as e:
+        print(f"Warning: Could not load LDA model: {e}")
+
+    models = loaded_models
+    models_loaded = True
+    print(f"System ready! Loaded models: {list(models.keys())}")
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    load_models()
+    yield
+
+
+app = FastAPI(title="Multilingual NLP Server", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -18,41 +69,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-LANGUAGE_MODEL_PATH = os.path.join(BASE_DIR, 'pkl', 'language_identifer.pkl')
-
-# --- Startup ---
-print("Starting System...")
-
-# Load Language Detector
-try:
-    language_model = joblib.load(LANGUAGE_MODEL_PATH)
-    print("Language model loaded")
-except Exception as e:
-    print(f"Warning: Could not load language model: {e}")
-    language_model = None
-
-# Load BART model
-print("Loading NLP models...")
-models = {
-    "bart": BartClassifier(MODEL_CONFIGS["bart"]),
-}
-
-# Load BERTopic models
-for key, config in BERTOPIC_CONFIGS.items():
-    try:
-        models[key] = BertopicClassifier(config)
-    except Exception as e:
-        print(f"Warning: Could not load BERTopic model '{key}': {e}")
-
-# Load LDA model
-try:
-    models["lda"] = LDAClassifier()
-except Exception as e:
-    print(f"Warning: Could not load LDA model: {e}")
-
-print(f"System ready! Loaded models: {list(models.keys())}")
 
 
 class ClassifyRequest(BaseModel):
@@ -118,6 +134,8 @@ def get_labels():
 
 @app.post("/classify")
 def classify_text(req: ClassifyRequest):
+    load_models()
+
     # Language Detection mode
     language_result = detect_language(req.text)
     detected_lang = language_result["topic_languages"]

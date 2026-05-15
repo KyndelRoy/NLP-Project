@@ -2,44 +2,6 @@
 
 Topic classification and language detection for English, Tagalog, and Cebuano.
 
-## Project Structure
-
-```
-ml2/
-├── index.html                  # Frontend UI
-├── style.css
-├── script.js
-├── code-snippets.js
-├── dataset-previews.js
-├── requirements.txt
-│
-├── models/                     # Backend
-│   ├── server.py               # FastAPI server (main entry point)
-│   ├── config.py               # Model configs and labels
-│   ├── bart_classifier.py      # BART zero-shot classifier
-│   ├── bertopic_classifier.py  # BERTopic classifier wrapper
-│   ├── language.detect.py      # Train language detection model
-│   └── pkl/                    # Saved language model (auto-generated)
-│
-├── bertopic_classifier/        # BERTopic models
-│   ├── base.py                 # Shared logic (DRY)
-│   ├── topic_english.py        # English-only model
-│   ├── topic_english_tagalog.py# EN + TL model
-│   ├── topic_trilingual.py     # EN + TL + CB model
-│   ├── test_models.py          # Test suite
-│   ├── bertopic_dataset.csv    # Training data (10k rows)
-│   ├── filipino_stopwords.txt
-│   └── models/                 # Saved BERTopic models (auto-generated)
-│
-├── dataset/                    # Datasets
-│   ├── clean_dataset.csv
-│   ├── original_dataset.csv
-│   ├── language_detection_dataset.csv
-│   ├── filipino_stopwords.txt
-│   └── filipino_names.txt
-│
-└── tools/                      # Data preparation scripts
-```
 
 ## Setup
 
