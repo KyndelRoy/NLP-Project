@@ -134,6 +134,7 @@ def map_topics_to_labels(lda_model, vectorizer, candidate_labels):
 
 
 def build_topic_label_map_from_training_data(lda_model, document_topic_matrix, labels):
+    """Map unsupervised LDA topics back to training labels by accumulated weight."""
     topic_label_scores = {
         topic_idx: {}
         for topic_idx in range(lda_model.n_components)
@@ -177,6 +178,7 @@ def train_lda(dataset_path, stopwords_path, n_components=10):
     print("Training LDA model...")
     lda = LatentDirichletAllocation(n_components=n_components, random_state=42, n_jobs=-1)
     lda.fit(X)
+    # Store a supervised topic-label map so predictions can return app labels.
     topic_label_map = build_topic_label_map_from_training_data(
         lda,
         lda.transform(X),

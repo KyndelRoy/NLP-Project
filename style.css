@@ -454,6 +454,12 @@ body.modal-open {
   margin-bottom: 1rem;
 }
 
+.dataset-summary a,
+.dataset-empty-state a {
+  color: var(--accent-color);
+  overflow-wrap: anywhere;
+}
+
 .dataset-context {
   display: flex;
   flex-wrap: wrap;
@@ -685,6 +691,12 @@ body.modal-open {
   font-weight: 700;
   line-height: 1.1;
   white-space: nowrap;
+}
+
+.language-badge-large {
+  min-height: 2.45rem;
+  padding: 0.45rem 1rem;
+  font-size: 1.05rem;
 }
 
 .badge-english {

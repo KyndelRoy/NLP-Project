@@ -12,6 +12,7 @@ DEFAULT_OUTPUT_PATH = ROOT_DIR / "dataset" / "lda_training_dataset.csv"
 ROWS_PER_LABEL = 150
 MAX_TEXT_CHARS = 1200
 
+# Keyword buckets sample a small balanced labeled set from a larger corpus.
 LABEL_KEYWORDS = {
     "food": [
         "pagkain", "kain", "kumain", "ulam", "kanin", "luto", "lutong",
@@ -61,6 +62,7 @@ def keyword_score(text, keywords):
 
 
 def build_balanced_dataset(source_path, output_path, rows_per_label=ROWS_PER_LABEL):
+    """Build the compact labeled CSV consumed by the LDA baseline."""
     df = pd.read_csv(source_path)
     required = {"text", "source", "language"}
     missing = required - set(df.columns)
@@ -86,6 +88,7 @@ def build_balanced_dataset(source_path, output_path, rows_per_label=ROWS_PER_LAB
 
             candidates.append((score, len(text), idx, row))
 
+        # Prefer strong keyword matches, then shorter excerpts for cleaner training rows.
         candidates.sort(key=lambda item: (-item[0], item[1]))
         if len(candidates) < rows_per_label:
             raise ValueError(

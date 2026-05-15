@@ -48,6 +48,7 @@ def clean_dataset(
     names_path: Path,
     min_words_per_row: int,
 ) -> dict[str, int]:
+    """Clean the source CSV and return drop/keep counts for review."""
     names = load_names(names_path)
 
     stats = {
@@ -67,6 +68,7 @@ def clean_dataset(
             for index, column_name in enumerate(header)
             if column_name.strip().lower() != "other"
         ]
+        # Keep only language columns used by downstream topic models.
         output_header = [header[index] for index in columns_to_keep]
 
         output_path.parent.mkdir(parents=True, exist_ok=True)

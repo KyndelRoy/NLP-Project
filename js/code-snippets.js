@@ -1,6 +1,12 @@
+// Metadata for the View Code modal; file-backed tabs load source at runtime.
 window.CODE_SNIPPETS = {
     bart: {
         title: 'BART-Large-MNLI Code',
+        tabs: [
+            { key: 'classifier', label: 'Classifier', title: 'bart_classifier.py', source: 'models/bart_classifier.py' },
+            { key: 'server', label: 'API Route', title: 'server.py', source: 'models/server.py' },
+            { key: 'config', label: 'Config', title: 'config.py', source: 'models/config.py' }
+        ],
         code: `# Zero-shot topic classification using BART-Large-MNLI.
 # Compares input text against candidate labels without retraining.
 from transformers import pipeline
@@ -27,6 +33,11 @@ class BartClassifier:
     },
     lda: {
         title: 'Latent Dirichlet Allocation Code',
+        tabs: [
+            { key: 'model', label: 'Model Script', title: 'lda_model.py', source: 'models/lda_model.py' },
+            { key: 'server', label: 'API Route', title: 'server.py', source: 'models/server.py' },
+            { key: 'config', label: 'Config', title: 'config.py', source: 'models/config.py' }
+        ],
         code: `# Lightweight LDA baseline trained from dataset/lda_training_dataset.csv.
 from models.lda_model import LDAClassifier, train_lda
 
@@ -45,6 +56,7 @@ result = classifier.classify("Nag-aaral ang estudyante sa paaralan.")`
             { key: 'model', label: 'Model Script', title: 'topic_english.py', source: 'bertopic_classifier/topic_english.py' },
             { key: 'base', label: 'Load + Predict', title: 'base.py', source: 'bertopic_classifier/base.py' },
             { key: 'wrapper', label: 'Server Wrapper', title: 'bertopic_classifier.py', source: 'models/bertopic_classifier.py' },
+            { key: 'server', label: 'API Route', title: 'server.py', source: 'models/server.py' },
             { key: 'config', label: 'Config', title: 'config.py', source: 'models/config.py' }
         ],
         code: `# BERTopic English-only model.
@@ -65,6 +77,7 @@ name, topic_id, prob = predict_topic(model, "i want to cook chicken")`
             { key: 'model', label: 'Model Script', title: 'topic_english_tagalog.py', source: 'bertopic_classifier/topic_english_tagalog.py' },
             { key: 'base', label: 'Load + Predict', title: 'base.py', source: 'bertopic_classifier/base.py' },
             { key: 'wrapper', label: 'Server Wrapper', title: 'bertopic_classifier.py', source: 'models/bertopic_classifier.py' },
+            { key: 'server', label: 'API Route', title: 'server.py', source: 'models/server.py' },
             { key: 'config', label: 'Config', title: 'config.py', source: 'models/config.py' }
         ],
         code: `# BERTopic English + Tagalog model.
@@ -85,6 +98,7 @@ name, topic_id, prob = predict_topic(model, "gusto kong kumain ng manok")`
             { key: 'model', label: 'Model Script', title: 'topic_trilingual.py', source: 'bertopic_classifier/topic_trilingual.py' },
             { key: 'base', label: 'Load + Predict', title: 'base.py', source: 'bertopic_classifier/base.py' },
             { key: 'wrapper', label: 'Server Wrapper', title: 'bertopic_classifier.py', source: 'models/bertopic_classifier.py' },
+            { key: 'server', label: 'API Route', title: 'server.py', source: 'models/server.py' },
             { key: 'config', label: 'Config', title: 'config.py', source: 'models/config.py' }
         ],
         code: `# BERTopic Trilingual model (English + Tagalog + Cebuano).
@@ -101,38 +115,24 @@ name, topic_id, prob = predict_topic(model, "ganahan ko magluto og manok")`
     },
     language: {
         title: 'Language Detection Code',
+        tabs: [
+            { key: 'training', label: 'Training', title: 'language.detect.py', source: 'models/language.detect.py' },
+            { key: 'server', label: 'API Route', title: 'server.py', source: 'models/server.py' },
+            { key: 'config', label: 'Config', title: 'config.py', source: 'models/config.py' }
+        ],
         code: `# Logistic Regression language detector.
 # Character-level TF-IDF for Cebuano, Tagalog, English, and Other.
 import pandas as pd
-import os
-import joblib
-from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-csv_path = os.path.join(os.path.dirname(BASE_DIR), 'dataset', 'language_detection_dataset.csv')
-df_reshaped = pd.read_csv(csv_path).dropna()
-
-X_train, X_test, y_train, y_test = train_test_split(
-    df_reshaped['text'],
-    df_reshaped['language'],
-    test_size=0.15,
-    random_state=42
-)
-
+df = pd.read_csv("dataset/language_detection_dataset.csv").dropna()
 model = Pipeline([
-    ('tfidf', TfidfVectorizer(analyzer='char', ngram_range=(1, 3))),
-    ('clf', LogisticRegression(max_iter=1000))
+    ("tfidf", TfidfVectorizer(analyzer="char", ngram_range=(1, 3))),
+    ("clf", LogisticRegression(max_iter=1000)),
 ])
-
-model.fit(X_train, y_train)
-
-model_dir = os.path.join(BASE_DIR, 'pkl')
-os.makedirs(model_dir, exist_ok=True)
-model_path = os.path.join(model_dir, 'language_identifer.pkl')
-joblib.dump(model, model_path)`
+model.fit(df["text"], df["language"])`
     }
 };
 

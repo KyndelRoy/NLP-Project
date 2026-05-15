@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Main browser entrypoint: wires UI controls to the local FastAPI backend.
     const textInput = document.getElementById('text-input');
     const charCount = document.getElementById('current-chars');
     const sendBtn = document.getElementById('send-btn');
@@ -38,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         datasetPreviews: window.DATASET_PREVIEWS || {}
     });
 
+    // Keep the custom dropdown and hidden form value in sync for API requests.
     dropdownTrigger.addEventListener('click', (event) => {
         event.stopPropagation();
         dropdownOptions.classList.toggle('show');
@@ -62,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Startup work: restore UI state, warm the label list, then bind input events.
     initializeTheme();
     fetchLabels();
     setInterval(fetchLabels, 2000);
@@ -117,6 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!labelsContainer) return;
 
         try {
+            // Polling keeps displayed labels aligned with backend config changes.
             const response = await fetch(`${API_URL}/labels`);
             if (!response.ok) return;
 
@@ -174,6 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
         try {
+            // The backend uses one endpoint for topic models and language-only mode.
             const response = await fetch(`${API_URL}/classify`, {
                 method: 'POST',
                 headers: {

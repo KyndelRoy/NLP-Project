@@ -13,8 +13,10 @@ MODEL_PATH = os.path.join(MODEL_DIR, 'language_identifer.pkl')
 
 
 def train_language_detector(csv_path=DATASET_PATH, model_path=MODEL_PATH):
+    """Train the language detector artifact loaded by the FastAPI server."""
     df_reshaped = pd.read_csv(csv_path).dropna()
 
+    # Character n-grams work better for short multilingual text and spelling variants.
     X_train, _, y_train, _ = train_test_split(
         df_reshaped['text'],
         df_reshaped['language'],

@@ -21,6 +21,7 @@ LANGUAGE_MODEL_PATH = os.path.join(BASE_DIR, 'pkl', 'language_identifer.pkl')
 language_model = None
 models = {}
 models_loaded = False
+# Model loading is guarded because reload mode and concurrent requests can overlap.
 models_lock = Lock()
 
 
@@ -34,6 +35,7 @@ def env_flag(name, default=False):
 def load_models():
     global language_model, models, models_loaded
 
+    # Load heavyweight models once, then reuse them for every /classify request.
     if models_loaded:
         return
 
@@ -95,6 +97,7 @@ class ClassifyRequest(BaseModel):
 
 def detect_language(text: str):
     if not language_model:
+        # Topic models can still run if the language detector artifact is missing.
         return {
             "primary_language": "unknown",
             "primary_score": 0.0,
@@ -110,6 +113,7 @@ def detect_language(text: str):
         sorted_langs = sorted(lang_probs.items(), key=lambda x: x[1], reverse=True)
         primary_lang, primary_prob = sorted_langs[0]
 
+        # A confident "other" blocks topic modeling; mixed low-confidence results do not.
         if primary_lang == 'other' and primary_prob > 0.5:
             topic_languages = 'other'
         else:
@@ -153,7 +157,7 @@ def get_labels():
 def classify_text(req: ClassifyRequest):
     load_models()
 
-    # Language Detection mode
+    # Language is always detected first so topic models can reject unsupported text.
     language_result = detect_language(req.text)
     detected_lang = language_result["topic_languages"]
 
@@ -182,7 +186,7 @@ def classify_text(req: ClassifyRequest):
             "message": "Language not supported for topic modeling."
         }
 
-    # Check model exists
+    # Missing optional models are reported per request instead of failing startup.
     if req.model not in models:
         return {"error": f"Model '{req.model}' is not initialized on the server."}
 

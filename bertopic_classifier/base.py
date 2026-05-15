@@ -27,6 +27,7 @@ def load_docs(csv_path: str, columns: list[str]) -> list[str]:
     with open(csv_path, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
+            # Joining parallel translations gives multilingual models aligned context.
             parts = [row[col].strip() for col in columns]
             if all(parts):
                 docs.append(" | ".join(parts))
@@ -57,6 +58,7 @@ def load_or_train(
     model_path = Path(model_dir)
 
     if model_path.exists():
+        # Saved BERTopic directories are reused to avoid retraining on each startup.
         print(f"Loading saved model from {model_dir}...")
         return BERTopic.load(model_dir)
 

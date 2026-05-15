@@ -8,6 +8,7 @@ class BartClassifier:
         print("BART model loaded!")
 
     def classify(self, text, candidate_labels):
+        # Multi-label mode lets multiple candidate topics appear for one text.
         result = self.classifier(text, candidate_labels=candidate_labels, multi_label=True)
 
         present_topics = []

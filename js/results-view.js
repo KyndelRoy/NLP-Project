@@ -2,6 +2,7 @@ window.createResultsView = function createResultsView({ resultsContent, selected
     const { escapeHtml, formatLanguageName } = window.AppUtils;
 
     function normalizeScore(score) {
+        // Backends may return confidence as 0-1 or 0-100; the UI displays percent.
         const confidence = typeof score === 'number' ? score : 0;
         return confidence <= 1.0 ? confidence * 100 : confidence;
     }
@@ -48,6 +49,7 @@ window.createResultsView = function createResultsView({ resultsContent, selected
     }
 
     function getRelevantTopics(labels, scores) {
+        // Show only distinct topics that are strong enough or close to the top hit.
         const labelsList = Array.isArray(labels) ? labels : [labels];
         const scoresList = Array.isArray(scores) ? scores : [scores];
         const uniqueTopics = [];
@@ -92,7 +94,7 @@ window.createResultsView = function createResultsView({ resultsContent, selected
             .filter(Boolean)
             .map(lang => {
                 const safeLang = languageClassSuffix(lang);
-                return `<span class="topic-badge badge-${escapeHtml(safeLang)}">${escapeHtml(formatLanguageName(lang))}</span>`;
+                return `<span class="topic-badge language-badge-large badge-${escapeHtml(safeLang)}">${escapeHtml(formatLanguageName(lang))}</span>`;
             })
             .join('');
 
@@ -124,6 +126,7 @@ window.createResultsView = function createResultsView({ resultsContent, selected
     }
 
     function displayResults(labels, scores, language, message) {
+        // Unsupported language responses skip topic rendering and show guidance only.
         if (language === 'other' || (Array.isArray(language) && language[0] === 'other')) {
             resultsContent.innerHTML = `
                 <div class="result-item result-card-enter">
@@ -162,6 +165,11 @@ window.createResultsView = function createResultsView({ resultsContent, selected
                 </div>
 
                 <div class="result-meta">
+                    <span class="metric-label">Topic Model used</span>
+                    <span class="model-used">${escapeHtml(topicModelName)}</span>
+                </div>
+
+                <div class="result-meta compact-meta">
                     <div>
                         <span class="metric-label">Detected Language</span>
                         <p class="result-source">Model used: Logistic Regression</p>
@@ -169,11 +177,6 @@ window.createResultsView = function createResultsView({ resultsContent, selected
                     <div class="language-badges">
                         ${createLanguageBadges(language)}
                     </div>
-                </div>
-
-                <div class="result-meta compact-meta">
-                    <span class="metric-label">Topic Model used</span>
-                    <span class="model-used">${escapeHtml(topicModelName)}</span>
                 </div>
             </div>
         `;

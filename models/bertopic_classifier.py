@@ -5,6 +5,7 @@ import os
 
 
 def load_bertopic_helpers():
+    # Import by file path because the standalone BERTopic scripts live outside models/.
     helper_path = os.path.join(
         os.path.dirname(os.path.abspath(__file__)),
         '..',
@@ -25,6 +26,7 @@ load_or_train, predict_topic = load_bertopic_helpers()
 
 class BertopicClassifier:
     def __init__(self, config: dict):
+        # Config entries are relative to bertopic_classifier/ for standalone reuse.
         base_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
         bertopic_dir = os.path.join(base_dir, 'bertopic_classifier')
 
@@ -45,7 +47,7 @@ class BertopicClassifier:
     def classify(self, text: str) -> dict:
         name, topic_id, prob = predict_topic(self.model, text)
 
-        # Clean up the topic name (remove the "0_word1_word2" prefix format)
+        # BERTopic names include numeric prefixes; strip them for user-facing labels.
         clean_name = name
         parts = name.split("_")
         if len(parts) > 1 and parts[0].lstrip("-").isdigit():

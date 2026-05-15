@@ -5,7 +5,7 @@ import json
 import time
 from concurrent.futures import ThreadPoolExecutor
 
-# this is used for the translation of the dataset
+# Utility for creating English translations from a Tagalog CSV column.
 
 def translate_text(text):
     if not text.strip():
@@ -20,7 +20,7 @@ def translate_text(text):
         return ""
     except Exception as e:
         time.sleep(1)
-        # retry once
+        # Retry once because the unofficial translation endpoint can throttle.
         try:
             response = urllib.request.urlopen(req, timeout=10)
             data = json.loads(response.read().decode('utf-8'))
@@ -40,7 +40,7 @@ def main():
         
     print(f"Read {len(lines)} lines from {input_file}.")
     
-    header = lines[0] # tagalog
+    header = lines[0] # Expected source header: tagalog
     data = [row[0] for row in lines[1:]]
     
     print("Starting translation...")

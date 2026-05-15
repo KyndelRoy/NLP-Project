@@ -1,3 +1,6 @@
+// Dataset metadata for the preview modal; CSV sources are fetched client-side.
+const HUGGING_FACE_DATASET_SOURCE = 'https://huggingface.co/datasets/youdiniplays/tagalog-cebuano_translation';
+
 window.DATASET_PREVIEWS = {
     bart: {
         title: 'BART-Large-MNLI Dataset',
@@ -13,21 +16,25 @@ window.DATASET_PREVIEWS = {
     bertopic_en: {
         title: 'BERTopic English Dataset',
         source: 'bertopic_classifier/bertopic_dataset.csv',
+        externalSource: HUGGING_FACE_DATASET_SOURCE,
         note: 'Parallel trilingual dataset — English column used for training.'
     },
     bertopic_en_tl: {
         title: 'BERTopic EN + TL Dataset',
         source: 'bertopic_classifier/bertopic_dataset.csv',
+        externalSource: HUGGING_FACE_DATASET_SOURCE,
         note: 'Parallel trilingual dataset — English and Tagalog columns concatenated for training.'
     },
     bertopic_tri: {
         title: 'BERTopic Trilingual Dataset',
         source: 'bertopic_classifier/bertopic_dataset.csv',
+        externalSource: HUGGING_FACE_DATASET_SOURCE,
         note: 'Parallel trilingual dataset — all three columns concatenated for training.'
     },
     language: {
         title: 'Language Detection Dataset',
         source: 'dataset/language_detection_dataset.csv',
+        externalSource: HUGGING_FACE_DATASET_SOURCE,
         note: 'Long-format dataset used by the TF-IDF + Logistic Regression language detector.',
         alternateDatasetKey: 'original',
         alternateButtonLabel: 'View Original 3-Column Dataset'
@@ -35,6 +42,7 @@ window.DATASET_PREVIEWS = {
     original: {
         title: 'Original Language Dataset',
         source: 'dataset/original_dataset.csv',
+        externalSource: HUGGING_FACE_DATASET_SOURCE,
         note: 'Original dataset used as the source for the melted language detection dataset.',
         alternateDatasetKey: 'language',
         alternateButtonLabel: 'View Melted Language Dataset'

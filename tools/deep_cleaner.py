@@ -5,6 +5,7 @@ from nltk.corpus import stopwords
 import os
 
 def clean_text(text, stop_words):
+    """Apply the older broad cleanup pass used for clean_dataset.csv."""
     if not isinstance(text, str):
         return ""
     
@@ -25,7 +26,7 @@ def clean_text(text, stop_words):
     return " ".join(cleaned_words)
 
 def main():
-    # Paths
+    # This script uses fixed local paths because it is a one-off corpus cleanup tool.
     input_file = '/home/roy/Desktop/UMTC/ml2/dataset/original_dataset.csv'
     stopwords_file = '/home/roy/Desktop/UMTC/ml2/dataset/filipino_stopwords.txt'
     output_file = '/home/roy/Desktop/UMTC/ml2/dataset/clean_dataset.csv'
@@ -40,7 +41,7 @@ def main():
     print(f"Loading dataset from {input_file}...")
     df = pd.read_csv(input_file)
     
-    # Drop columns
+    # Drop languages that are not supported by the current app models.
     cols_to_drop = ['kapampangan', 'bicolano', 'other']
     existing_cols_to_drop = [col for col in cols_to_drop if col in df.columns]
     df = df.drop(columns=existing_cols_to_drop)

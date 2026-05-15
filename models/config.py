@@ -1,4 +1,4 @@
-# Configuration for available models
+# Central registry used by the FastAPI server and the View Code modal.
 
 MODEL_CONFIGS = {
     "bart": "facebook/bart-large-mnli"

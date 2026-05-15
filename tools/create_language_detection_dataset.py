@@ -4,6 +4,7 @@ import pandas as pd
 
 
 def main():
+    # Convert the wide language columns into text/language rows for classifier training.
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     input_file = os.path.join(base_dir, "dataset", "original_dataset.csv")
     output_file = os.path.join(base_dir, "dataset", "language_detection_dataset.csv")

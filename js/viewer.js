@@ -16,6 +16,7 @@ window.createViewerController = function createViewerController({
 }) {
     const { escapeHtml, highlightSnippet, parseCsv } = window.AppUtils;
     const DATASET_PREVIEW_LIMIT = 50;
+    // Fetch caches prevent repeated file reads while users switch tabs/modes.
     const datasetCache = {};
     const toolCodeCache = {};
     const codeFileCache = {};
@@ -24,6 +25,7 @@ window.createViewerController = function createViewerController({
     let activeToolKey = Object.keys(toolSnippets)[0] || null;
     let activeCodeTabKey = null;
 
+    // The modal has three modes that share one shell: code, dataset, and tools.
     viewToolsBtn.addEventListener('click', () => {
         if (codeViewer.hidden || activeViewerMode !== 'tools') {
             openViewer('tools');
@@ -81,6 +83,7 @@ window.createViewerController = function createViewerController({
     });
 
     async function updateActiveViewer() {
+        // Route each open-state refresh through the currently selected modal mode.
         if (activeViewerMode === 'dataset') {
             await updateDatasetViewer();
             return;
@@ -113,6 +116,7 @@ window.createViewerController = function createViewerController({
     }
 
     async function updateTabbedCodeViewer(snippetGroup) {
+        // File-backed snippets show the current source code when served locally.
         if (!snippetGroup.tabs.some(tab => tab.key === activeCodeTabKey)) {
             activeCodeTabKey = snippetGroup.tabs[0].key;
         }
@@ -181,7 +185,7 @@ window.createViewerController = function createViewerController({
             console.error(error);
             datasetViewerContent.innerHTML = `
                 <div class="dataset-empty-state">
-                    <p class="dataset-meta"><strong>Source:</strong> ${escapeHtml(selectedDataset.source)}</p>
+                    ${renderDatasetSources(selectedDataset)}
                     <p>Unable to load this CSV. Serve the app through a local web server instead of opening it directly as a file.</p>
                 </div>
             `;
@@ -207,6 +211,7 @@ window.createViewerController = function createViewerController({
             return datasetCache[datasetKey];
         }
 
+        // CSV previews load only the first rows to keep the modal responsive.
         const response = await fetch(metadata.source);
         if (!response.ok) {
             throw new Error(`Unable to load ${metadata.source}`);
@@ -227,14 +232,29 @@ window.createViewerController = function createViewerController({
         datasetCache[datasetKey] = {
             columns,
             rows: previewRows,
-            totalRows: dataRows.length
+            totalRows: dataRows.length,
+            counts: getDatasetCounts(columns, dataRows)
         };
 
         return datasetCache[datasetKey];
     }
 
+    function getDatasetCounts(columns, rows) {
+        const counts = {};
+
+        columns.forEach((column, index) => {
+            counts[column] = {};
+            rows.forEach(row => {
+                const value = (row[index] || '').trim();
+                if (!value) return;
+                counts[column][value] = (counts[column][value] || 0) + 1;
+            });
+        });
+
+        return counts;
+    }
+
     function renderDatasetInfo(dataset) {
-        const source = escapeHtml(dataset.source || 'No local source');
         const labelsHtml = Array.isArray(dataset.candidateLabels)
             ? `
                 <div class="dataset-labels">
@@ -246,7 +266,7 @@ window.createViewerController = function createViewerController({
 
         return `
             <div class="dataset-empty-state">
-                <p class="dataset-meta"><strong>Source:</strong> ${source}</p>
+                ${renderDatasetSources(dataset)}
                 ${labelsHtml}
             </div>
         `;
@@ -254,13 +274,12 @@ window.createViewerController = function createViewerController({
 
     function renderDatasetPreview(dataset, metadata) {
         const hasRows = Array.isArray(dataset.rows) && dataset.rows.length > 0;
-        const source = escapeHtml(metadata.source || 'No local source');
         const contextHtml = getDatasetContextHtml(activeDatasetKey, dataset);
 
         if (!hasRows) {
             return `
                 <div class="dataset-empty-state">
-                    <p class="dataset-meta"><strong>Source:</strong> ${source}</p>
+                    ${renderDatasetSources(metadata)}
                 </div>
             `;
         }
@@ -279,7 +298,7 @@ window.createViewerController = function createViewerController({
 
         return `
             <div class="dataset-summary">
-                <span><strong>Source:</strong> ${source}</span>
+                ${renderDatasetSources(metadata)}
             </div>
             ${contextHtml}
             <div class="dataset-table-wrap">
@@ -293,29 +312,68 @@ window.createViewerController = function createViewerController({
         `;
     }
 
+    function renderDatasetSources(metadata) {
+        const localSource = escapeHtml(metadata.source || 'No local source');
+        const externalSource = metadata.externalSource
+            ? `
+                <span>
+                    <strong>Original source:</strong>
+                    <a href="${escapeHtml(metadata.externalSource)}" target="_blank" rel="noopener noreferrer">
+                        ${escapeHtml(metadata.externalSource)}
+                    </a>
+                </span>
+            `
+            : '';
+
+        return `
+            <span><strong>Local source:</strong> ${localSource}</span>
+            ${externalSource}
+        `;
+    }
+
     function getDatasetContextHtml(datasetKey, dataset) {
-        if (datasetKey === 'language') {
-            return `
-                <div class="dataset-context">
-                    <strong>Data Information:</strong>
-                    <span>Total rows: 50,000</span>
-                    <span>English: 10,000</span>
-                    <span>Tagalog: 10,000</span>
-                    <span>Cebuano: 10,000</span>
-                    <span>Other: 20,000</span>
-                </div>
-            `;
+        const totalRows = Number(dataset.totalRows || 0).toLocaleString();
+        const languageLabels = {
+            english: 'English',
+            tagalog: 'Tagalog',
+            cebuano: 'Cebuano',
+            other: 'Other',
+            tl: 'Tagalog',
+            en: 'English',
+            ceb: 'Cebuano',
+        };
+
+        const chips = [];
+        const appendCounts = (counts, labels = {}) => {
+            Object.entries(counts || {}).forEach(([key, value]) => {
+                const label = labels[key] || key;
+                chips.push(`<span>${escapeHtml(label)}: ${Number(value).toLocaleString()}</span>`);
+            });
+        };
+
+        chips.push(`<span>${totalRows} rows</span>`);
+
+        if (datasetKey === 'lda') {
+            appendCounts(dataset.counts?.label);
+            appendCounts(dataset.counts?.language, languageLabels);
+        } else if (datasetKey === 'language') {
+            appendCounts(dataset.counts?.language, languageLabels);
+        } else if (datasetKey === 'original' || datasetKey.startsWith('bertopic_')) {
+            const columnCounts = {};
+            ['english', 'tagalog', 'cebuano', 'other'].forEach(column => {
+                if (dataset.counts?.[column]) {
+                    columnCounts[column] = Object.values(dataset.counts[column])
+                        .reduce((sum, count) => sum + count, 0);
+                }
+            });
+            appendCounts(columnCounts, languageLabels);
         }
 
-        if (datasetKey === 'original' || datasetKey === 'lda' || datasetKey.startsWith('bertopic_')) {
+        if (chips.length > 1) {
             return `
                 <div class="dataset-context">
                     <strong>Dataset Information:</strong>
-                    <span>${Number(dataset.totalRows || 0).toLocaleString()} rows</span>
-                    <span>English: 10,000</span>
-                    <span>Tagalog: 10,000</span>
-                    <span>Cebuano: 9,999</span>
-                    <span>Other: 20,000</span>
+                    ${chips.join('')}
                 </div>
             `;
         }
@@ -392,6 +450,7 @@ window.createViewerController = function createViewerController({
     }
 
     function resetForModelChange() {
+        // Switching models should reopen code/dataset tabs at that model's default.
         activeDatasetKey = null;
         activeCodeTabKey = null;
         updateActiveViewer();

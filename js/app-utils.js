@@ -1,3 +1,4 @@
+// Shared browser helpers used by the result renderer and modal viewers.
 window.AppUtils = {
     escapeHtml(value) {
         return String(value)
@@ -22,6 +23,7 @@ window.AppUtils = {
     },
 
     parseCsv(csvText) {
+        // Small CSV parser for preview tables; handles quoted commas/newlines.
         const rows = [];
         let row = [];
         let value = '';
