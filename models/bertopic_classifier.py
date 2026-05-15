@@ -1,12 +1,26 @@
 """BERTopic classifier wrapper for the FastAPI server."""
 
-import sys
+import importlib.util
 import os
 
-# Add bertopic_classifier directory to path so we can import base.py
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'bertopic_classifier'))
 
-from base import load_or_train, predict_topic
+def load_bertopic_helpers():
+    helper_path = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        '..',
+        'bertopic_classifier',
+        'base.py',
+    )
+    spec = importlib.util.spec_from_file_location('bertopic_helpers', helper_path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Could not load BERTopic helpers from {helper_path}")
+
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.load_or_train, module.predict_topic
+
+
+load_or_train, predict_topic = load_bertopic_helpers()
 
 
 class BertopicClassifier:

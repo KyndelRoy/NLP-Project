@@ -277,6 +277,12 @@ body.modal-open {
   transform: none !important;
 }
 
+.send-icon {
+  margin-right: 2px;
+  margin-top: -2px;
+  transform: rotate(45deg);
+}
+
 .char-count {
   position: absolute;
   bottom: -25px;
@@ -578,6 +584,16 @@ body.modal-open {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+}
+
+.loading-state {
+  color: var(--text-secondary);
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.error-message {
+  color: #ef4444;
 }
 
 .result-item {

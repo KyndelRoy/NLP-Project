@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeBtns = document.querySelectorAll('.theme-btn[data-theme]');
     const htmlElement = document.documentElement;
     const MIN_WORDS = 4;
-    const API_URL = 'http://127.0.0.1:8000';
+    const API_URL = window.API_URL || 'http://127.0.0.1:8000';
     let isSubmitting = false;
 
     const resultsView = window.createResultsView({
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sendBtn.disabled = true;
         sendBtn.style.opacity = '0.5';
         resultsContent.innerHTML = `
-            <div class="loading-state" style="text-align: center; color: var(--text-secondary); margin-top: 2rem;">
+            <div class="loading-state">
                 <p class="loading-dots">Analyzing with ${model}</p>
             </div>
         `;
@@ -199,7 +199,8 @@ document.addEventListener('DOMContentLoaded', () => {
             resultsView.displayResults(data.labels || data.label, data.scores || data.score, data.language, data.message);
         } catch (error) {
             console.error(error);
-            resultsContent.innerHTML = `<p style="color: #ef4444;">${error.message || `Error analyzing text. Is the backend running at ${API_URL}?`}</p>`;
+            const message = error.message || `Error analyzing text. Is the backend running at ${API_URL}?`;
+            resultsContent.innerHTML = `<p class="error-message">${window.AppUtils.escapeHtml(message)}</p>`;
         } finally {
             isSubmitting = false;
             updateInputState();

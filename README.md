@@ -62,3 +62,7 @@ Open `index.html` in a browser. The backend must be running.
 | BERTopic (Trilingual) | EN + TL + Cebuano topic model | `bertopic_tri` |
 | LDA Topic Model | Lightweight LDA baseline trained from `dataset/lda_training_dataset.csv` | `lda` |
 | Language Detection | Logistic Regression language detector | `language` |
+
+## Additional Documentation
+
+See [PROJECT_DOCUMENTATION.md](PROJECT_DOCUMENTATION.md) for architecture, model lifecycle, API reference, development workflow, and quality checks.

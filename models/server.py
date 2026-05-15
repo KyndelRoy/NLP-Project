@@ -1,14 +1,19 @@
+from contextlib import asynccontextmanager
+import logging
+import os
+from threading import Lock
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from contextlib import asynccontextmanager
 import joblib
-import os
 
 from config import MODEL_CONFIGS, BERTOPIC_CONFIGS, CANDIDATE_LABELS
 from bart_classifier import BartClassifier
 from bertopic_classifier import BertopicClassifier
 from lda_model import LDAClassifier
+
+logger = logging.getLogger("uvicorn.error")
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 LANGUAGE_MODEL_PATH = os.path.join(BASE_DIR, 'pkl', 'language_identifer.pkl')
@@ -16,6 +21,14 @@ LANGUAGE_MODEL_PATH = os.path.join(BASE_DIR, 'pkl', 'language_identifer.pkl')
 language_model = None
 models = {}
 models_loaded = False
+models_lock = Lock()
+
+
+def env_flag(name, default=False):
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
 
 
 def load_models():
@@ -24,38 +37,42 @@ def load_models():
     if models_loaded:
         return
 
-    print("Starting System...")
+    with models_lock:
+        if models_loaded:
+            return
 
-    try:
-        language_model = joblib.load(LANGUAGE_MODEL_PATH)
-        print("Language model loaded")
-    except Exception as e:
-        print(f"Warning: Could not load language model: {e}")
-        language_model = None
+        logger.info("Starting system...")
 
-    print("Loading NLP models...")
-    loaded_models = {
-        "bart": BartClassifier(MODEL_CONFIGS["bart"]),
-    }
-
-    for key, config in BERTOPIC_CONFIGS.items():
         try:
-            loaded_models[key] = BertopicClassifier(config)
+            language_model = joblib.load(LANGUAGE_MODEL_PATH)
+            logger.info("Language model loaded")
         except Exception as e:
-            print(f"Warning: Could not load BERTopic model '{key}': {e}")
+            logger.warning("Could not load language model: %s", e)
+            language_model = None
 
-    try:
-        loaded_models["lda"] = LDAClassifier()
-    except Exception as e:
-        print(f"Warning: Could not load LDA model: {e}")
+        logger.info("Loading NLP models...")
+        loaded_models = {
+            "bart": BartClassifier(MODEL_CONFIGS["bart"]),
+        }
 
-    models = loaded_models
-    models_loaded = True
-    print(f"System ready! Loaded models: {list(models.keys())}")
+        for key, config in BERTOPIC_CONFIGS.items():
+            try:
+                loaded_models[key] = BertopicClassifier(config)
+            except Exception as e:
+                logger.warning("Could not load BERTopic model '%s': %s", key, e)
+
+        try:
+            loaded_models["lda"] = LDAClassifier()
+        except Exception as e:
+            logger.warning("Could not load LDA model: %s", e)
+
+        models = loaded_models
+        models_loaded = True
+        logger.info("System ready. Loaded models: %s", list(models.keys()))
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(_app: FastAPI):
     load_models()
     yield
 
@@ -202,4 +219,12 @@ def classify_text(req: ClassifyRequest):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("server:app", host="127.0.0.1", port=8000, reload=True, app_dir=BASE_DIR)
+
+    logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO").upper())
+    uvicorn.run(
+        "server:app",
+        host=os.getenv("HOST", "127.0.0.1"),
+        port=int(os.getenv("PORT", "8000")),
+        reload=env_flag("RELOAD", default=True),
+        app_dir=BASE_DIR,
+    )

@@ -12,6 +12,7 @@ LDA_MODEL_PATH = os.path.join(PKL_DIR, 'lda_model.pkl')
 LDA_METADATA_PATH = os.path.join(PKL_DIR, 'lda_metadata.pkl')
 DEFAULT_DATASET_PATH = os.path.join(BASE_DIR, '..', 'dataset', 'lda_training_dataset.csv')
 DEFAULT_STOPWORDS_PATH = os.path.join(BASE_DIR, '..', 'dataset', 'filipino_stopwords.txt')
+DEFAULT_N_COMPONENTS = 20
 
 # ---------------------------------------------------------------------------
 # Seed keywords for each candidate label.
@@ -199,8 +200,17 @@ def train_lda(dataset_path, stopwords_path, n_components=10):
 
 class LDAClassifier:
     def __init__(self, verbose=False):
-        if not os.path.exists(VECTORIZER_PATH) or not os.path.exists(LDA_MODEL_PATH):
-            raise Exception("LDA model or vectorizer not found. Please train first.")
+        missing_artifacts = [
+            path for path in (VECTORIZER_PATH, LDA_MODEL_PATH, LDA_METADATA_PATH)
+            if not os.path.exists(path)
+        ]
+        if missing_artifacts:
+            print("LDA artifacts missing. Training from the default dataset...")
+            train_lda(
+                DEFAULT_DATASET_PATH,
+                DEFAULT_STOPWORDS_PATH,
+                n_components=DEFAULT_N_COMPONENTS,
+            )
 
         self.vectorizer = joblib.load(VECTORIZER_PATH)
         self.lda = joblib.load(LDA_MODEL_PATH)
@@ -259,4 +269,4 @@ class LDAClassifier:
 
 
 if __name__ == "__main__":
-    train_lda(DEFAULT_DATASET_PATH, DEFAULT_STOPWORDS_PATH, n_components=20)
+    train_lda(DEFAULT_DATASET_PATH, DEFAULT_STOPWORDS_PATH, n_components=DEFAULT_N_COMPONENTS)
