@@ -1,29 +1,59 @@
 window.createResultsView = function createResultsView({ resultsContent, selectedModelText }) {
     const { formatLanguageName } = window.AppUtils;
 
+    function normalizeScore(score) {
+        const confidence = typeof score === 'number' ? score : 0;
+        return confidence <= 1.0 ? confidence * 100 : confidence;
+    }
+
+    function clampPercent(percent) {
+        return Math.min(Math.max(percent, 0), 100);
+    }
+
+    function createConfidenceBlock(confidencePercent) {
+        const displayValue = confidencePercent.toFixed(1);
+
+        return `
+            <div class="confidence-block">
+                <div class="metric-row">
+                    <span class="metric-label">Confidence</span>
+                    <span class="metric-value">${displayValue}%</span>
+                </div>
+                <div class="confidence-bar-container" aria-label="Confidence ${displayValue}%">
+                    <div class="confidence-bar" style="width: ${clampPercent(confidencePercent)}%"></div>
+                </div>
+            </div>
+        `;
+    }
+
+    function createLanguageBadges(language) {
+        const langList = Array.isArray(language) ? language : [language];
+        const languageHtml = langList
+            .filter(Boolean)
+            .map(lang => `<span class="topic-badge badge-${lang.toLowerCase()}">${formatLanguageName(lang)}</span>`)
+            .join('');
+
+        return languageHtml || '<span class="topic-badge">Unknown</span>';
+    }
+
     function displayLanguageDetectionResult(language, score) {
         const safeLanguage = language || 'unknown';
-        const confidence = typeof score === 'number' ? score : 0;
-        const confidencePercent = confidence <= 1.0 ? confidence * 100 : confidence;
+        const languageName = formatLanguageName(safeLanguage);
+        const confidencePercent = normalizeScore(score);
 
         resultsContent.innerHTML = `
-            <div class="result-item" style="animation: fadeInUp 0.4s ease-out;">
-                <div class="result-header">
-                    <span style="font-weight: 500; font-size: 0.875rem; color: var(--text-secondary);">Detected Language</span>
-                    <span class="topic-badge badge-${safeLanguage.toLowerCase()}">${formatLanguageName(safeLanguage)}</span>
-                </div>
-                <div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.75rem; color: var(--text-secondary);">
-                        <span>Confidence</span>
-                        <span>${confidencePercent.toFixed(1)}%</span>
+            <div class="result-item result-card-enter">
+                <div class="result-summary">
+                    <div>
+                        <p class="result-kicker">Detected Language</p>
+                        <h3 class="result-title">${languageName}</h3>
                     </div>
-                    <div class="confidence-bar-container">
-                        <div class="confidence-bar" style="width: ${Math.min(confidencePercent, 100)}%"></div>
-                    </div>
+                    <span class="topic-badge badge-${safeLanguage.toLowerCase()}">${languageName}</span>
                 </div>
-                <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 1rem;">
-                    Analysis completed using Logistic Regression.
-                </p>
+
+                ${createConfidenceBlock(confidencePercent)}
+
+                <p class="result-footnote">Analysis completed using Logistic Regression.</p>
             </div>
         `;
     }
@@ -31,10 +61,10 @@ window.createResultsView = function createResultsView({ resultsContent, selected
     function displayResults(labels, scores, language, message) {
         if (language === 'other' || (Array.isArray(language) && language[0] === 'other')) {
             resultsContent.innerHTML = `
-                <div class="result-item" style="animation: fadeInUp 0.4s ease-out;">
-                    <div style="padding: 1rem; background: rgba(239, 68, 68, 0.1); border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.2);">
-                        <h4 style="color: #ef4444; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.25rem;">Unsupported Language</h4>
-                        <p style="font-size: 0.875rem; color: rgba(239, 68, 68, 0.8);">${message}</p>
+                <div class="result-item result-card-enter">
+                    <div class="unsupported-card">
+                        <h4>Unsupported Language</h4>
+                        <p>${message}</p>
                     </div>
                 </div>
             `;
@@ -44,44 +74,37 @@ window.createResultsView = function createResultsView({ resultsContent, selected
         const labelsList = Array.isArray(labels) ? labels : [labels];
         const scoresList = Array.isArray(scores) ? scores : [scores];
         const topicsHtml = labelsList.map((label, index) => {
-            const confPercent = scoresList[index] <= 1.0 ? scoresList[index] * 100 : scoresList[index];
+            const confidencePercent = normalizeScore(scoresList[index]);
+            const resultLabel = labelsList.length > 1 ? `Predicted Topic ${index + 1}` : 'Predicted Topic';
+
             return `
-                <div style="margin-bottom: 1.5rem;">
+                <div class="topic-result">
                     <div class="result-header">
-                        <span style="font-weight: 500; font-size: 0.875rem; color: var(--text-secondary);">Predicted Topic ${labelsList.length > 1 ? index + 1 : ''}</span>
+                        <div>
+                            <p class="result-kicker">${resultLabel}</p>
+                            <h3 class="result-title">${label}</h3>
+                        </div>
                         <span class="topic-badge">${label}</span>
                     </div>
-                    <div>
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.75rem; color: var(--text-secondary);">
-                            <span>Confidence</span>
-                            <span>${confPercent.toFixed(1)}%</span>
-                        </div>
-                        <div class="confidence-bar-container">
-                            <div class="confidence-bar" style="width: ${confPercent}%"></div>
-                        </div>
-                    </div>
+                    ${createConfidenceBlock(confidencePercent)}
                 </div>
             `;
         }).join('');
 
-        const langList = Array.isArray(language) ? language : [language];
-        const languageHtml = langList
-            .filter(Boolean)
-            .map(lang => `<span class="topic-badge badge-${lang.toLowerCase()}">${formatLanguageName(lang)}</span>`)
-            .join('');
-
         resultsContent.innerHTML = `
-            <div class="result-item" style="animation: fadeInUp 0.4s ease-out;">
-                ${topicsHtml}
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
-                    <span style="font-weight: 500; font-size: 0.875rem; color: var(--text-secondary);">Detected Language</span>
-                    <div style="display: flex; gap: 0.5rem;">
-                        ${languageHtml || '<span class="topic-badge">Unknown</span>'}
+            <div class="result-item result-card-enter">
+                <div class="topic-results-list">
+                    ${topicsHtml}
+                </div>
+
+                <div class="result-meta">
+                    <span class="metric-label">Detected Language</span>
+                    <div class="language-badges">
+                        ${createLanguageBadges(language)}
                     </div>
                 </div>
-                <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 1rem;">
-                    Analysis completed using ${selectedModelText.textContent}.
-                </p>
+
+                <p class="result-footnote">Analysis completed using ${selectedModelText.textContent}.</p>
             </div>
         `;
     }
