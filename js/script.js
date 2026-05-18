@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         viewToolsBtn: document.getElementById('view-tools-btn'),
         viewCodeBtn: document.getElementById('view-code-btn'),
         viewDatasetBtn: document.getElementById('view-dataset-btn'),
+        viewEvaluationBtn: document.getElementById('view-evaluation-btn'),
         codeViewer: document.getElementById('code-viewer'),
         codeViewerTitle: document.getElementById('code-viewer-title'),
         codeViewerContent: document.getElementById('code-viewer-content'),

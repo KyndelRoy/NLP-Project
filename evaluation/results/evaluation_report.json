@@ -1,0 +1,1377 @@
+{
+  "generated_at": "2026-05-18T22:37:16+00:00",
+  "one_shot_cache": true,
+  "report_path": "evaluation/results/evaluation_report.json",
+  "summary_csv": "evaluation/results/evaluation_summary.csv",
+  "sample_sets": {
+    "lda": "evaluation/sample_sets/lda_test_set.csv",
+    "language": "evaluation/sample_sets/language_detection_test_set.csv",
+    "bart": "evaluation/sample_sets/bart_test_set.csv",
+    "bertopic": "evaluation/sample_sets/bertopic_sample_checks.csv"
+  },
+  "artifact_guard": {
+    "checked": true,
+    "unchanged": true,
+    "before": {
+      "models/pkl/language_identifer.pkl": {
+        "exists": true,
+        "mtime": 1778735346.808021,
+        "size": 3005516
+      },
+      "models/pkl/lda_vectorizer.pkl": {
+        "exists": true,
+        "mtime": 1778853669.7231884,
+        "size": 186718
+      },
+      "models/pkl/lda_model.pkl": {
+        "exists": true,
+        "mtime": 1778853669.7281168,
+        "size": 1606309
+      },
+      "models/pkl/lda_metadata.pkl": {
+        "exists": true,
+        "mtime": 1778853669.72878,
+        "size": 260
+      },
+      "bertopic_classifier/models/topic_english/topics.json": {
+        "exists": true,
+        "mtime": 1778880806.859848,
+        "size": 281142
+      },
+      "bertopic_classifier/models/topic_english_tagalog/topics.json": {
+        "exists": true,
+        "mtime": 1778881293.4634628,
+        "size": 273647
+      },
+      "bertopic_classifier/models/topic_trilingual/topics.json": {
+        "exists": true,
+        "mtime": 1778881791.0639944,
+        "size": 242952
+      }
+    },
+    "after": {
+      "models/pkl/language_identifer.pkl": {
+        "exists": true,
+        "mtime": 1778735346.808021,
+        "size": 3005516
+      },
+      "models/pkl/lda_vectorizer.pkl": {
+        "exists": true,
+        "mtime": 1778853669.7231884,
+        "size": 186718
+      },
+      "models/pkl/lda_model.pkl": {
+        "exists": true,
+        "mtime": 1778853669.7281168,
+        "size": 1606309
+      },
+      "models/pkl/lda_metadata.pkl": {
+        "exists": true,
+        "mtime": 1778853669.72878,
+        "size": 260
+      },
+      "bertopic_classifier/models/topic_english/topics.json": {
+        "exists": true,
+        "mtime": 1778880806.859848,
+        "size": 281142
+      },
+      "bertopic_classifier/models/topic_english_tagalog/topics.json": {
+        "exists": true,
+        "mtime": 1778881293.4634628,
+        "size": 273647
+      },
+      "bertopic_classifier/models/topic_trilingual/topics.json": {
+        "exists": true,
+        "mtime": 1778881791.0639944,
+        "size": 242952
+      }
+    }
+  },
+  "models": {
+    "language": {
+      "title": "Language Detection",
+      "evaluation_type": "supervised",
+      "status": "completed",
+      "sample_set": "evaluation/sample_sets/language_detection_test_set.csv",
+      "artifact": "models/pkl/language_identifer.pkl",
+      "metrics": {
+        "total_samples": 30,
+        "correct": 29,
+        "accuracy": 0.9667,
+        "per_label": {
+          "cebuano": {
+            "support": 10,
+            "precision": 1.0,
+            "recall": 0.9,
+            "f1": 0.9474
+          },
+          "english": {
+            "support": 10,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "tagalog": {
+            "support": 10,
+            "precision": 0.9091,
+            "recall": 1.0,
+            "f1": 0.9524
+          }
+        },
+        "confusion_matrix": {
+          "cebuano": {
+            "cebuano": 9,
+            "english": 0,
+            "tagalog": 1
+          },
+          "english": {
+            "cebuano": 0,
+            "english": 10,
+            "tagalog": 0
+          },
+          "tagalog": {
+            "cebuano": 0,
+            "english": 0,
+            "tagalog": 10
+          }
+        }
+      },
+      "samples": [
+        {
+          "sample_id": "lang_english_01",
+          "text": "The students reviewed their lessons before the final exam.",
+          "expected_language": "english",
+          "predicted_language": "english",
+          "score": 0.9893,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_english_02",
+          "text": "My family cooked rice and chicken for dinner tonight.",
+          "expected_language": "english",
+          "predicted_language": "english",
+          "score": 0.9916,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_english_03",
+          "text": "The mayor announced new rules during the morning briefing.",
+          "expected_language": "english",
+          "predicted_language": "english",
+          "score": 0.9931,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_english_04",
+          "text": "She plays basketball with her classmates every weekend.",
+          "expected_language": "english",
+          "predicted_language": "english",
+          "score": 0.9882,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_english_05",
+          "text": "The court explained the rights of every citizen clearly.",
+          "expected_language": "english",
+          "predicted_language": "english",
+          "score": 0.9976,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_english_06",
+          "text": "A strong storm damaged several houses near the river.",
+          "expected_language": "english",
+          "predicted_language": "english",
+          "score": 0.9144,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_english_07",
+          "text": "The teacher asked the children to read another book.",
+          "expected_language": "english",
+          "predicted_language": "english",
+          "score": 0.9993,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_english_08",
+          "text": "He bought vegetables and fresh fish from the market.",
+          "expected_language": "english",
+          "predicted_language": "english",
+          "score": 0.9961,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_english_09",
+          "text": "The police reported the incident to local officials.",
+          "expected_language": "english",
+          "predicted_language": "english",
+          "score": 0.9245,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_english_10",
+          "text": "They practiced English conversation after school.",
+          "expected_language": "english",
+          "predicted_language": "english",
+          "score": 0.8388,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_tagalog_01",
+          "text": "Nag-aral ang mga estudyante para sa kanilang pagsusulit.",
+          "expected_language": "tagalog",
+          "predicted_language": "tagalog",
+          "score": 0.9207,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_tagalog_02",
+          "text": "Nagluto kami ng kanin at manok para sa hapunan.",
+          "expected_language": "tagalog",
+          "predicted_language": "tagalog",
+          "score": 0.9736,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_tagalog_03",
+          "text": "Nagbigay ng bagong patakaran ang alkalde ngayong umaga.",
+          "expected_language": "tagalog",
+          "predicted_language": "tagalog",
+          "score": 0.9937,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_tagalog_04",
+          "text": "Naglalaro siya ng basketbol kasama ang mga kaklase.",
+          "expected_language": "tagalog",
+          "predicted_language": "tagalog",
+          "score": 0.8755,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_tagalog_05",
+          "text": "Ipinaliwanag ng korte ang karapatan ng bawat mamamayan.",
+          "expected_language": "tagalog",
+          "predicted_language": "tagalog",
+          "score": 0.9776,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_tagalog_06",
+          "text": "Sinira ng malakas na bagyo ang ilang bahay sa tabing ilog.",
+          "expected_language": "tagalog",
+          "predicted_language": "tagalog",
+          "score": 0.9726,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_tagalog_07",
+          "text": "Pinabasa ng guro ang mga bata ng isa pang aklat.",
+          "expected_language": "tagalog",
+          "predicted_language": "tagalog",
+          "score": 0.9899,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_tagalog_08",
+          "text": "Bumili siya ng gulay at sariwang isda sa palengke.",
+          "expected_language": "tagalog",
+          "predicted_language": "tagalog",
+          "score": 0.9729,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_tagalog_09",
+          "text": "Iniulat ng pulisya ang pangyayari sa mga opisyal.",
+          "expected_language": "tagalog",
+          "predicted_language": "tagalog",
+          "score": 0.8195,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_tagalog_10",
+          "text": "Nagsanay sila magsalita ng Tagalog pagkatapos ng klase.",
+          "expected_language": "tagalog",
+          "predicted_language": "tagalog",
+          "score": 0.9216,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_cebuano_01",
+          "text": "Nagtuon ang mga estudyante para sa ilang eksaminasyon.",
+          "expected_language": "cebuano",
+          "predicted_language": "tagalog",
+          "score": 0.6298,
+          "matched": false
+        },
+        {
+          "sample_id": "lang_cebuano_02",
+          "text": "Nagluto mi og kan-on ug manok para sa panihapon.",
+          "expected_language": "cebuano",
+          "predicted_language": "cebuano",
+          "score": 0.9972,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_cebuano_03",
+          "text": "Nagpahibalo ang mayor og bag-ong balaod karong buntag.",
+          "expected_language": "cebuano",
+          "predicted_language": "cebuano",
+          "score": 0.9711,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_cebuano_04",
+          "text": "Nagdula siya og basketbol kuyog ang iyang mga klasmet.",
+          "expected_language": "cebuano",
+          "predicted_language": "cebuano",
+          "score": 0.9752,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_cebuano_05",
+          "text": "Gipasabot sa korte ang katungod sa matag lungsoranon.",
+          "expected_language": "cebuano",
+          "predicted_language": "cebuano",
+          "score": 0.9838,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_cebuano_06",
+          "text": "Giguba sa kusog nga bagyo ang pipila ka balay daplin sa suba.",
+          "expected_language": "cebuano",
+          "predicted_language": "cebuano",
+          "score": 0.9768,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_cebuano_07",
+          "text": "Gipabasa sa maestro ang mga bata og laing libro.",
+          "expected_language": "cebuano",
+          "predicted_language": "cebuano",
+          "score": 0.9669,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_cebuano_08",
+          "text": "Mipamalit siya og utanon ug preskong isda sa merkado.",
+          "expected_language": "cebuano",
+          "predicted_language": "cebuano",
+          "score": 0.9945,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_cebuano_09",
+          "text": "Gisumbong sa pulis ang hitabo ngadto sa mga opisyal.",
+          "expected_language": "cebuano",
+          "predicted_language": "cebuano",
+          "score": 0.9128,
+          "matched": true
+        },
+        {
+          "sample_id": "lang_cebuano_10",
+          "text": "Nagpraktis sila og Cebuano human sa klase.",
+          "expected_language": "cebuano",
+          "predicted_language": "cebuano",
+          "score": 0.8776,
+          "matched": true
+        }
+      ]
+    },
+    "lda": {
+      "title": "Latent Dirichlet Allocation",
+      "evaluation_type": "supervised",
+      "status": "completed",
+      "sample_set": "evaluation/sample_sets/lda_test_set.csv",
+      "artifacts": [
+        "models/pkl/lda_vectorizer.pkl",
+        "models/pkl/lda_model.pkl",
+        "models/pkl/lda_metadata.pkl"
+      ],
+      "metrics": {
+        "total_samples": 50,
+        "correct": 31,
+        "accuracy": 0.62,
+        "per_label": {
+          "education": {
+            "support": 10,
+            "precision": 0.625,
+            "recall": 0.5,
+            "f1": 0.5556
+          },
+          "food": {
+            "support": 10,
+            "precision": 1.0,
+            "recall": 0.5,
+            "f1": 0.6667
+          },
+          "laws": {
+            "support": 10,
+            "precision": 0.625,
+            "recall": 0.5,
+            "f1": 0.5556
+          },
+          "news": {
+            "support": 10,
+            "precision": 0.5,
+            "recall": 0.9,
+            "f1": 0.6429
+          },
+          "sports": {
+            "support": 10,
+            "precision": 0.6364,
+            "recall": 0.7,
+            "f1": 0.6667
+          }
+        },
+        "confusion_matrix": {
+          "education": {
+            "education": 5,
+            "food": 0,
+            "laws": 2,
+            "news": 3,
+            "sports": 0
+          },
+          "food": {
+            "education": 0,
+            "food": 5,
+            "laws": 1,
+            "news": 3,
+            "sports": 1
+          },
+          "laws": {
+            "education": 0,
+            "food": 0,
+            "laws": 5,
+            "news": 3,
+            "sports": 2
+          },
+          "news": {
+            "education": 0,
+            "food": 0,
+            "laws": 0,
+            "news": 9,
+            "sports": 1
+          },
+          "sports": {
+            "education": 3,
+            "food": 0,
+            "laws": 0,
+            "news": 0,
+            "sports": 7
+          }
+        }
+      },
+      "samples": [
+        {
+          "sample_id": "lda_food_01",
+          "text": "ang adobo (mula sa kastilang : \"inatsara\" o \"kinilaw\") ay isa sa mga pinakasikat na ulam at paraan ng pagluluto sa lutuing pilipino. nilalaman ito ng karne, lamang dagat, o gulay na ibinababad sa haluan ng suka, toyo, bawang, dahon ng laurel, at paminta. ipiniprito muna ang karneng sangkap bago pakuluan sa tinimplang sabaw. natuturing ito paminsan-minsan bilang di-opisyal na pambansang lutuin ng pilipinas. kasaysayan katutubo ang lutong adobo sa pilipinas. kadalasan, iniluto o inihanda ng mga iba't ibang taong prekolonyal ang kani-kanilang pagkain sa suka at asin upang mapreserba sa klimang tropikal. ang suka ay isa sa mga pinakamahalagang sangkap sa lutuing pilipino, na may apat na klase: tuba (mula sa niyog), basi (mula sa tubo), sasa, at kaong. may koneksyon itong lahat sa tradisyonal na permentasyon ng alkohol . sa pilipinas, mayroong apat na pangunahing lutong-suka ayon sa tradisyon: kinilaw (hilaw na lamang-dagat sa suka at espesya), paksiw (sinabawang karne na may suka at espesya), sangkutsa (bahagyang pagluluto ng karne sa suka at espesya), at sa huli adobo (isang sabaw na may suka, bawang, asin/toyo, at iba pang espesya). pinaniniwalaan na nagmula ang paksiw, sangkutsa,",
+          "expected_label": "food",
+          "predicted_label": "food",
+          "score": 0.4801,
+          "top_labels": "food|laws|news",
+          "top_scores": "0.4801|0.3638|0.0797",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_food_02",
+          "text": "ang sinigang ay isang lutuin at pagkaing pilipino na kilala para sa maasim at malinamnam na lasa nito. madalas na nauugnay ito sa sampalok, ngunit maaaring gumamit ng mga ibang maaasim na prutas at dahon, katulad ng kamyas, o bayabas bilang pampaasim. isa ito sa mga pinakasikat na ulam sa lutuing pilipino. kadalasang sinasabayan ng kanin ang sabaw. noong 2021, minarkahan ng tasteatlas ang sinigang bilang ang pinakamagandang sabaw na gulay. pinagmulan nanggaling ang pangalan nito sa pandiwang sigang sa wikang tagalog. habang laganap ito sa buong bansa, inaakala na nagmula ito sa kulturang tagalog. kaya itinuturing na ibang uri ng pagkain ang mga kahawig na sabaw sa visayas at mindanao (tulad ng linarang), at nag-iiba rin ang mga ginagamit na sangkap. karaniwang nilalagyan ang sabaw ng patis bilang kondimento. mga sangkap sa modernong panahon, madalas na nauugnay ang sinigang sa sampalok, ngunit dati tumukoy ito sa anumang karne o lamang-dagat na niluto sa maasim at asidong sabaw, kahawig ng ngunit naiiba mula sa paksiw (na gumagamit ng suka). sa mga ibang baryasyon nitong ulam, kinukuha ang asim mula sa mga katutubong sangkap. kabilang sa mga pampaasim na ito ang hilaw na mangga,",
+          "expected_label": "food",
+          "predicted_label": "food",
+          "score": 0.6284,
+          "top_labels": "food|laws|sports",
+          "top_scores": "0.6284|0.2186|0.1478",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_food_03",
+          "text": "ang lutuing pilipino ay ang pinagsama samang lutuin ng iba’t ibang mga pangkat etniko ng pilipinas. naimpluwensiyahan ito ng mga lutuin ng mga tsino, kastila, at mga amerikano. ipinapakita sa lutong pilipino ang kasaysayan ng pilipinas. lumitaw ang pagiging katangi-tangi at kaiba nito mula sa pagkakaroon ng batayan ng mga sangkap na malay, intsik, hindu, kastila, at amerikano. ang katutubo talagang pagkaing pilipino ay malapit sa mga katutubong lutuin sa indonesia, malaysiya, thailand, at ibang mga bansa sa asya. isa sa nakaugaliang gawi sa pagkain ng mga pilipino ang pagkakamay o paghuhugis-bilog ng kanin sa pamamagitan ng mga daliri habang pinipisil sa plato bago isubo sa bibig. paglalarawan hindi gaanong may panimpla o pampalasa ang talagang mga katutubong lutuing pilipino bagaman maraming makukuhang mga pampalasa o panimpla sa pilipinas. pinakapayak na pagkain sa bansa ang kanin o nilutong bigas. pangunahing napagkukunan ng protina ang isda, ngunit karaniwan din ang pagkain ng karne ng baboy at manok. mayroon ding kumakain ng bibe. mayroon din karne ng baka sa bansa subalit mas mataas ang halaga ng karneng sapagkat hindi gaanong napapaunlad ang industriya nito. hindi bantog",
+          "expected_label": "food",
+          "predicted_label": "food",
+          "score": 0.5771,
+          "top_labels": "food|education|laws",
+          "top_scores": "0.5771|0.2296|0.1873",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_food_04",
+          "text": "ang ay isang lutuing hapones na binubuo ng hinandang kaning may suka (鮨飯 sushi-meshi), kadalasang may kaunting asukal at asin, kasama pa ng mga iba't ibang kasangkapan (ネタ neta), katulad ng pagkaing-dagat, gulay, at paminsan-minsan tropikal na prutas. nag-iiba ang mga estilo ng sushi at anyo ng kanyang presentasyon ngunit ang lahat ng sushi ay may \"kaning sushi\" na tinatawag na shari (しゃり) o sumeshi (酢飯). hindi na ginagamit ang salitang sushi sa kanyang orihinal na konteksto; \"maasim\" ang literal na kahulugan nito. tradisyunal na binubuo ang sushi ng kaning puti na may katamtamang butil, ngunit maaari itong ihanda gamit ang kaning kayumanggi o kaning may maikling butil. kadalasang inihahanda ito kasama ng pagkaing-dagat, katulad ng pusit, igat, yellowtail, salmon, tuna, o crab stick. pangugulayin ang mararaming sushi. madalas na inihahain ito kasama ng gari, wasabi, at toyo. tanyag na palamuti ng putahe ang daikon (takuan). ikinalilito minsan ang sushi bilang sashimi, isang kaugnay na ulam sa lutuing hapones na binubuo ng hinating isda na ihinaing hilaw, minsan karne, na ipinapares sa kanin (opsyonal). kasaysayan nagmumula ang sushi sa timong-silangang asya, kilala ngayon bilang",
+          "expected_label": "food",
+          "predicted_label": "food",
+          "score": 0.5993,
+          "top_labels": "food|education|news",
+          "top_scores": "0.5993|0.3937|0.003",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_food_05",
+          "text": "ang satay o sate (baybay ng kbbi: satai) ay ang pagkain na ginawa mula sa maliliit na piraso ng karne na tinusok sa paraang pagbutas ng mga dahon ng niyog o kawayan at pagkatapos ay inihaw gamit ang mga uling na karbon ang satay ay may iba't ibang pampalasa na umaasa sa mga pagkakaiba-iba sa mga paraan ng pagluluto ng satay. ang karne na ginamit bilang satay ay kinabibilangan ng manok, kambing, tupa, karne ng baka, karne ng baboy, kuneho, kabayo, at iba pa. ang satay ay kilala na nagmula sa java, indonesia, at matatagpuan sa kahit saan sa indonesia at itinuturing na isa sa mga lutuing pambansang indonesia. ang satay ay popular din sa iba pang mga bansa sa timog-silangang asya tulad ng malaysia, singapore, pilipinas at thailand . ang satay ay popular din sa netherlands na naiimpluwensyahan ng lutuing indones na dating kani-kanilang mga kolonya. ang satay ay isang popular na ulam sa indonesia; na may iba't ibang grupo ng etniko at tradisyon ng sining ng pagluluto (tingnan ang lutuing indonesia) ay gumawa ng iba't ibang uri ng satay. sa indonesia, ang satay ay maaaring makuha mula sa mga naglalakbay na mangangalakal ng satay, mga pedagang kaki lima sa mga kuwartel sa tabi ng daan, sa",
+          "expected_label": "food",
+          "predicted_label": "food",
+          "score": 0.5241,
+          "top_labels": "food|education|news",
+          "top_scores": "0.5241|0.4694|0.0028",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_food_06",
+          "text": "{{infobox person |name = hesus |image = stjohnsashfield stainedglass goodshepherd-frame crop.jpg|alt=jesus as good shepherd. |caption = si hesus bilang mabuting pastol (stained glass at st john's ashfield) |birth_date = 7–2 bc/bce |language = aramaiko, griyego koine |birth_place = judaea, imperyo romano |death_place = judaea, imperyo romano |death_date = 30–36 ad/ce |death_cause = pagpapako sa krus<ref name=jdunn339>'jesus remembered by james d. g. dunn 2003 isbn 0-8028-3931-2 page 339</ref> |ethnicity = hudyo |home_town = nazareth, galilee }} si hesus (griyego: ἰησοῦς iesous; 7–2 bce hanggang 30–36 ce) ang itinuturing ng maraming kristiyano na sentrong katauhan ng relihiyong kristiyanismo at ang tagapagtatag ng kristiyanismo. siya ay pinaniniwalaan ng maraming mga kristiyano na isang tagapagligtas at mesiyas ng hudaismo. ang apat na kanonikal na ebanghelyo nina mateo, marcos, lucas, at juan ang mga pangunahing sanggunian tungkol sa talambuhay at mga katuruan ni hesus. gayunpaman, pinagtatalunan pa rin ng mga skolar ng bagong tipan kung ang apat na ebanghelyong ito ay maasahang mga salaysay ng buhay ni hesus o hindi, gayundin kung sino ang mga tunay na may akda nito, kung kailan",
+          "expected_label": "food",
+          "predicted_label": "news",
+          "score": 0.9877,
+          "top_labels": "news|sports|education",
+          "top_scores": "0.9877|0.0053|0.0035",
+          "matched": false
+        },
+        {
+          "sample_id": "lda_food_07",
+          "text": "ang anapilaksis o anapilaksiya, na nakikilala sa ingles bilang anaphylaxis, ay isang seryosong reaksiyong nagdudulot ng alerhiya na biglang nagsisimula at maaaring magdulot ng kamatayan. ang anapilaksis ay karaniwang mayroong bilang ng mga sintomas na kinabibilangan ng isang makating pantal, pamamaga ng lalamunan, at mababang presyon ng dugo. ang karaniwang mga sanhi ay kinabibilangan ng mga kagat ng kulisap, mga pagkain, at mga gamot. ang anapilaksis ay sanhi ng paglabas ng mga protina mula sa ilang uri ng mga puting selula ng dugo. ang mga protinang ito ay mga bagay na maaaring mag-umpisa ng isang reaksiyong nagdurulot ng alerhiya o maaaring mas palubhain ang reaksiyon. ang kanilang paglabas ay maaaring naging sanhi ng isang reaksiyon sa sistema ng katawan na panlaban sa sakit o sa pamamagitan ng isa pang sanhi na walang kaugnayan sa sistema ng katawan na panlaban sa sakit. ang anapilaksi ay sinusuri batay sa mga palatandaan at mga sintomas ng isang tao. ang pangunahing paggamot ay ang pag-iniksiyon ng epinephrine, na kung minsan ay isinasama sa ibang mga gamot. sa buong mundo, humigit-kumulang 0.05-2% ng mga tao ay nagkaroon ng anapilaksis sa ilang pagkakataon ng kanilang",
+          "expected_label": "food",
+          "predicted_label": "laws",
+          "score": 0.9866,
+          "top_labels": "laws|news|sports",
+          "top_scores": "0.9866|0.0045|0.0045",
+          "matched": false
+        },
+        {
+          "sample_id": "lda_food_08",
+          "text": "ito ay ang talaan ng mga kabanata ng noli me tángere ni jose rizal, pati na rin ang mga buod nito. 1: isang pagtitipon sa kabanatang ito, naglalarawan si rizal ng pagbabalik ni crisostomo ibarra sa pilipinas matapos ang pitong taon niyang pag-aaral sa europa. bumalik siya upang ipagpatuloy ang kanyang mga pangarap para sa kanyang bayan. nang dumating siya sa maynila, dinala siya ni don rafael ibarra, ang kanyang ama, sa bahay ng kanilang kaibigan na si kapitan tiago. dito, ginanap ang isang malaking salu-salo sa kanyang pagbabalik. sa salu-salo, ipinakita ang kalagayan ng mga mayayamang espanyol at mga pilipinong elitista na nagmula sa mga panginoong maylupa at nasa malalayong lalawigan ng pilipinas. sa kabila nito, ipinakita rin ni rizal ang kahirapan at paghihirap ng mga magsasaka at karaniwang mamamayan. sa salu-salo, nakilala ni ibarra ang ilang mga tauhan na magiging mahalagang bahagi ng kwento, tulad ni padre damaso, ang paring franciscan na kilala sa kanyang malupit na pagtrato sa mga pilipino, at maria clara, ang anak ni kapitan tiago na nagustuhan ni ibarra. natuklasan din ni ibarra na ang kanyang ama ay namatay sa bilangguan dahil sa isang gawa-gawang kaso na isinampa",
+          "expected_label": "food",
+          "predicted_label": "news",
+          "score": 0.9917,
+          "top_labels": "news|sports|education",
+          "top_scores": "0.9917|0.0036|0.0024",
+          "matched": false
+        },
+        {
+          "sample_id": "lda_food_09",
+          "text": "ang serotonin o 5-hydroxytryptamine o 5-ht ay isang monoaminong neurotransmitter na nabubuo mula sa tryptophan. ang serotonin ay pangunahing matatagpuan sa gastrointestinal, platelet, at sa gitnang sistemang nerbiyos (cns) ng mga hayop kabilang ang mga tao. ang serotonin ay nagpapagana (activate) ng pitong reseptor na 5-ht na matatagpuan sa membrano ng mga neuron. ang pagpapaganang ito ng mga reseptor na 5 ht sa neuron ay responsable sa magandang pakiramdan at sa kasiyahan sa isang tao. ang pangunahing pinagmumulan ng serotonin sa utak ng tao ang raphe nuclei. mga tungkulin ang serotonin ay isang neurotransmitter at matatagpuan sa lahat ng mga hayop na bilateral kung saan nagsisilbing tagapamagitan ito sa pagkilos ng gut ng mga hayop at sa persepsiyon (pagtanto) ng hayop sa mahahanap na mapagkukunan (resources). sa mga pinakasimpleng mga hayop, ang mapagkukunan ay katumbas ng pagkain ngunit sa mas sulong (advanced) na mga hayop gaya ng artropoda at bertebrata, ang mapagkukunan ay maaari ring mangahulugan na pagiging dominante sa pakikisalamuha sa ibang mga tulad na hayop. bilang tugon sa natantong kasaganaan o kakulangan ng mga mapagkukunan, ang paglaki ng hayop, reproduksiyon o",
+          "expected_label": "food",
+          "predicted_label": "news",
+          "score": 0.7309,
+          "top_labels": "news|laws|sports",
+          "top_scores": "0.7309|0.2578|0.0057",
+          "matched": false
+        },
+        {
+          "sample_id": "lda_food_10",
+          "text": "ang ay isang ulam sa bansang hapon na karaniwang binubuo ng pagkaing-dagat o gulay na ibinabad sa batter at pinirito. ipinakilala ang ulam ng mga portuges sa nagasaki noong ika-16 siglo sa pamamagitan ng mga teknika ng pagluluto ng fritter. nagmula ang salitang tempura sa salitang tempora sa wikang latin, na tumutukoy sa mga oras ng pag-aayuno kung kailan idinikta ng simbahan sa mga katoliko na umiwas sa karne. paghahanda batter sinasangkapan ang batter ng malamig na tubig, itlog, at malambot na harinang trigo (pangkeyk, pampastry o panlahatan). minsan idinaragdag ang sodang panghurno o pulbos panghurno para gumaan ang fritter. kahawig ang epekto kung ginamit ang makinang na tubig sa halip na simpleng tubig. tradisyonal na hinahalo ang tempura batter sa mga maliliit na batch gamit ang tsapstiks nang iilang segundo lamang, na nag-iiwan ng mga limpak sa timpla na, kasabay ng malamig na temperatura ng batter, nagreresulta sa kakaibang lambot at lutong ng tempura kapag niluto. madalas na pinananatiling malamig ang batter sa pagdagdag ng yelo, o sa paglagay ng mangkok sa mas malaking mangkok na may yelo sa loob nito. kapag sumobra ang paghahalo ng batter, maaaktiba ang gluten ng trigo,",
+          "expected_label": "food",
+          "predicted_label": "sports",
+          "score": 0.5074,
+          "top_labels": "sports|food|news",
+          "top_scores": "0.5074|0.4843|0.0041",
+          "matched": false
+        },
+        {
+          "sample_id": "lda_sports_01",
+          "text": "ang mga palarong olimpiko ng taglamig () ay isang pangunahing pang-internasyunal na paligsahang pampalakasan na ginaganap bawat apat na taon na isinasagawa sa niyebe at yelo. ang unang palarong olimpiko sa taglamig, ang palarong olimpiko ng 1924, ay ginanap sa chamonix, pransiya. ang mga makabagong palarong olimpiko ay binigyang inspirasyon ng sinaunang palarong olimpiko, na ginanap sa olimpiya, gresya, mula ika-8 siglo bc hanggang ika-4 na siglo ad. itinatag ni baron pierre de coubertin ang pandaigdigang lupong olimpiko (ioc) noong 1894, na humantong sa unang modernong mga palarong olimpiko sa tag-init sa atenas, gresya noong 1896. ang ioc ay ang namamahalang kinatawan ng kilusang olimpiko, kasama ang olipikong charter na tumutukoy sa istruktura at awtoridad nito. ang orihinal na limang pampalaksang tampok sa winter olympic (lumawig sa siyam na disiplina) ay ang bobsleigh, curling, ice hockey, nordic skiing (binubuo ng mga disiplinang militar na patrol, cross-country skiing, pinagsamang nordic, at paglukso ng ski ), at skating (na binubuo ng mga disiplinang figure skating at mabilisang skating). ang mga palaro ay ginanap tuwing apat na taon mula 1924 hanggang 1936, nagambala",
+          "expected_label": "sports",
+          "predicted_label": "sports",
+          "score": 0.9937,
+          "top_labels": "sports|news|education",
+          "top_scores": "0.9937|0.0027|0.0018",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_sports_02",
+          "text": "ang modernong palarong olimpiko (mula ; , ) o olimpiyada (mula ) ay ang nangungunang pandaigdigang palaro. itinatampok nito ang mga palakasan sa tag-init at taglamig, at dinadaluhan ng libo-libong atleta mula sa iba't ibang panig ng mundo. kinokonsidera ito bilang isa sa mga pinakamalalaki at pinakasikat na palaro, kung saan lagpas sa 200 bansa at teritoryo ang nakikilahok kada edisyon nito. ginaganap kadalasan ang palaro tuwing apat na taon sa isang piniling lungsod, kung saan nagsasalitan kada dalawang taon ang tag-init at taglamig sa loob ng panahong ito. unang inilunsad ang palaro noong 1896 sa pangunguna ni pierre de coubertin. inspirasyon ng palaro ang sinaunang palarong olimpiko () na ginanap sa olympia, gresya mula sa ika-8 siglo hanggang sa ika-4 na siglo . ginawa ni coubertin ang pandaigdigang lupong olimpiko (, ioc) noong 1894, na nagbigay-daan upang maganap ang unang edisyon ng modernong palaro noong 1896 sa atenas. ngayon, ang ioc ay ang namamahala sa kilusang olimpiko, sa patnubay ng kartang olimpiko. nagbago ang palaro sa pagdaan ng ika-20 siglo hanggang sa pagpasok ng ika-21 siglo. kabilang sa mga pagbabagong ito ay ang pagkakaroon ng hiwalay na palaro para sa mga",
+          "expected_label": "sports",
+          "predicted_label": "sports",
+          "score": 0.725,
+          "top_labels": "sports|education|news",
+          "top_scores": "0.725|0.271|0.0024",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_sports_03",
+          "text": "ang teoriya ng laro () ang pag-aaral ng stratehikong paggawa ng desisyon. sa mas pormal na paglalarawan, ito \"ang pag-aaral ng mga modelong matematikal ng alitan at pakikipagtulungan sa pagitan ng mga matalinong makatwirang mga tagagawa ng desisyon.\" ang isang alternatibong terminong iminungkahi \"bilang isang mas deskriptibong pangalan para sa disiplina\" ang interaktibong teoriyang desisyon. ang teoriya ng laro ay pangunahing ginagamit sa ekonomika, agham pampolitika, sikolohiya gayundin sa lohika at biolohiya. ang paksang ito ay unang sumagot sa mga larong sumang-sero (zero-sum game) na ang pakinanabang ng isang tao ay eksaktong katumbas ng netong mga kawalan ng iba pang mga kalahok. gayunpaman, sa kasalukuyan, ang teoriya ng laro ay lumalapat sa isang malawak na saklaw ng mga relasyon ng klase at umunlad sa isang terminong payong para sa lohikal na panig ng agham upang isama ang parehong tao at mga hindi tao gaya ng mga kompyuter. ang mga klasikong paggamit ay kinabibilangan ng isang kahulugan ng balanse sa maraming mga laro kung saan ang bawat tao nakatuklas o nakabuo ng isang taktika na hindi matagumpay na makapagpapabuti ng mga resulta sa ibinigay na pakikitungo ng iba. ang",
+          "expected_label": "sports",
+          "predicted_label": "education",
+          "score": 0.3911,
+          "top_labels": "education|laws|news",
+          "top_scores": "0.3911|0.3546|0.133",
+          "matched": false
+        },
+        {
+          "sample_id": "lda_sports_04",
+          "text": "ang 1984 ay isang bisiyestong taon na nagsisimula sa linggo sa kalendaryong gregorian. kaganapan kapanganakan enero enero 1 paolo guerrero, putbolista ng peru michael witt, manlalaro ng liga sa australia enero 2 - kristen hager, artista sa pelikula at telebisyon sa canada enero 3 - shelby starner, amerikanong mang-aawit at manunugtog ng musika (d. 2003) enero 4 - robin sydney, artista ng amerika enero 5 shariff abdul samat, putbolista ng singapore (d. 2020) diego gómez, putbolista ng argentina-pransya enero 6 priit loog, aktor ng estonian kate mckinnon, amerikanong artista at komedyante eric trump, negosyanteng amerikano at pilantropo enero 7 - max riemelt, artista ng aleman enero 8 jeff francoeur, amerikanong baseball player steven kanumba, aktor at direktor ng tanzanian (d. 2012) kim jong-un, kataas-taasang pinuno ng hilagang korea enero 10 - kalki koechlin, aktres ng pelikulang french-indian enero 11 - mark forster, aleman na mang-aawit ng kanta enero 12 hammed namouchi, putbolista ng tunisian scott olsen, amerikanong baseball player enero 13 eleni ioannou, greek martial artist (d. 2004) nathaniel motte, amerikanong manunulat ng kanta, tagapalabas, mang-aawit, tagagawa ng",
+          "expected_label": "sports",
+          "predicted_label": "sports",
+          "score": 0.8839,
+          "top_labels": "sports|news|education",
+          "top_scores": "0.8839|0.1129|0.0016",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_sports_05",
+          "text": "ang kilala rin sa pinaikling tawag bilang toho project o project shrine maiden, ay isang serye ng mga hapon na larong bullet hell na barilan na ginawa ni junya ota na mas kilala sa palayaw na zun. ginagamit ni zun ang pangalang team shanghai alice bilang isang grupo ng isang tao na binubuo lamang niyang mag-isa. siya lamang mismo ang gumagawa ng tugtog, ng graphics at ng pagpo-program sa mga larong ito. ang istorya sa mga laro ng touhou project ay umiikot sa mga kakaiba at wirdong pangyayari sa pantasyang mundong gensokyo, isang piksyonal na dimensiyon na pinamumuhayan ng mga tao at mga youkai, mga ibang nilalang. bago ang mga laro sa istorya ay sinarahan ang gensokyo ng isang mahikang harang o ang great hakurei barrier mula sa panlabas na mundo (outside world). ang bida sa franchise ay ang shintong paring babae o shrine maiden na nagngangalang reimu hakurei na nagpapanatili sa harang at nakikipaglaban sa mga magugulong yokai. ang unang mga limang laro ay ginawa para sa hapong nec pc-9801 na mga kompyuter, ang bullet hell na barilan ay iginawa sa ikalawang laro: story of eastern wonderland. ang embodiment of scarlet devil, na inilabas sa agosto 2002 ang kauna-unahang laro sa",
+          "expected_label": "sports",
+          "predicted_label": "education",
+          "score": 0.6899,
+          "top_labels": "education|sports|laws",
+          "top_scores": "0.6899|0.2557|0.0487",
+          "matched": false
+        },
+        {
+          "sample_id": "lda_sports_06",
+          "text": "ang 1980 ay isang bisiyestong taon na nagsisimula sa martes sa kalendaryong gregorian. kaganapan kapanganakan enero enero 1 richie faulkner, british rock gitarist karina jacobsgaard, manlalaro ng tennis sa denmark mark nichols, curler ng canada elin nordegren, modelo ng suweko enero 2 mac danzig, american mixed martial artist robert rivas, politiko ng amerika enero 3 federico luzzi, italyano na manlalaro ng tennis (d. 2008) telly leung, amerikanong artista, mang-aawit at manunulat ng kanta enero 4 erin cahill, artista ng amerika greg cipes, artista ng amerikano d'arcy carden, amerikanong artista at komedyante happy salma, aktres ng indonesia, modelo, at manunulat enero 5 garette ratliff henson, artista ng amerikano bennie joppru, manlalaro ng putbol sa amerika jill krowinski, politiko ng amerika enero 6 - pascual romero, amerikanong musikero enero 7 - hele kõrve, aktres at mang-aawit sa estonia enero 8 adam goodes, namamahala sa australia ng putbolista rachel nichols, artista ng amerika sam riley, artista sa english enero 9 sergio garcía, espanyol na manlalaro ng golp wang zulan, artista ng hong kong enero 10 sarah shahi, artista ng amerika javier morales, footballer ng argentina",
+          "expected_label": "sports",
+          "predicted_label": "sports",
+          "score": 0.9937,
+          "top_labels": "sports|news|education",
+          "top_scores": "0.9937|0.0027|0.0018",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_sports_07",
+          "text": "ang 1985 ay isang karaniwang taon na nagsisimula sa martes sa kalendaryong gregorian. kaganapan kapanganakan enero enero 1 jeff carter, manlalaro ng hockey sa canada steven davis, footballer ng hilagang irlanda juliana harkavy, artista ng amerika fred the godson, american rapper at dj enero 2 teng haibin, chinese gymnast carla juri, aktres ng switzerland heather o'reilly, pambansang soccer player ng u.s. damien bodie, artista sa australia greg toler, american football cornerback enero 3 nicole beharie, artista ng amerika leah gibson, artista sa pelikula sa canada jeananne goossen, artista sa canada john david booty, american football quarterback, usc linas kleiza, manlalaro ng basketball sa lithuania colleen wolfe, talent sa pagpapakita ng amerikano enero 4 kari aalvik grimsbø, manlalaro ng handball na norwegian danielle campo, manlalangoy na paralympic sa canada al jefferson, amerikanong manlalaro ng basketball fernando rees, nagmamaneho ng kotse sa lahi ng brazil beatriz rosselló, unang ginang ng puerto rico enero 5 michael cuccione, artista ng bata at aktibista sa canada (d. 2001) lopez lomong, amerikanong amerikanong runner na ipinanganak sa sudan diego vera, uruguayan",
+          "expected_label": "sports",
+          "predicted_label": "sports",
+          "score": 0.993,
+          "top_labels": "sports|news|education",
+          "top_scores": "0.993|0.003|0.002",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_sports_08",
+          "text": "ang 1982 ay isang karaniwang taon na nagsisimula sa biyernes sa kalendaryong gregorian. kaganapan kapanganakan enero enero 1 - david nalbandian, manlalaro ng tennis sa argentina enero 3 - chisu, finnish singer-songwriter enero 4 kang hye-jung, aktres ng south korea richard logan, english footballer enero 5 janica kostelić, tagapag-isketing ng croatia vadims vasiļevskis, latvian javelin thrower enero 6 gilbert arenas, american basketball player eddie redmayne, artista sa english enero 7 &francisco rodríguez, manlalaro ng baseball sa venezuelan lauren cohan, artista ng british-american ruth negga, artista ng ireland camilo villegas, colombian golfer enero 8 jonathan cantwell, australian racing cyclist (d. 2018) gaby hoffmann, artista ng amerika enero 9 - catherine, duchess ng cambridge, prinsesa sa britain enero 10 tavoris cloud, amerikanong dating propesyonal na boksingero misato fukuen, japanese artista ng boses ana layevska, ipinanganak sa ukraine, mang-aawit at artista ng mexico josh ryan evans, amerikanong artista (d. 2002) enero 11 ashley taylor dawson, mang-aawit at artista ng ingles son ye-jin artista ng timog korea enero 13 guillermo coria, manlalaro ng tennis sa argentina",
+          "expected_label": "sports",
+          "predicted_label": "sports",
+          "score": 0.9026,
+          "top_labels": "sports|news|education",
+          "top_scores": "0.9026|0.0937|0.0019",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_sports_09",
+          "text": "ang teorya ng larong kombinatoryal ay isang sangay ng matematika at teoretikal na agham pangkompyuter na tipikal na sinisiyasat ang mga larong sekwensiyal na may perpektong impormasyon. ang pag-aaral ay karaniwang kinukulong sa mga larong dalawang manlalaro na may isang posisyon na ang mga manlalaro ay naghahalinhinan sa pagbabago. kinabibilangan ng itong mga pagbabago ang mga tiyak na paraan o tira para makagawa ng isang tiyak na panalong kondisyon. tradisyunal na, ang teorya ng larong kombinatoryal ay hindi nag-aral ng mga laro ng tsansa o na gumagamit ng imperpektong o inkumpletong impormasyon, kundi sa halip, ng mga laro na may perpektong impormasyon kung saan ang kondisyon ng laro at ang pangkat ng magagamit na mga tira ay laging alam sa parehong mga manlalaro. gayunman, habang umaabante ang mga matematikal na teknik, gayon din lumalawak ang mga uri ng laro na nasusuri, kaya laging bumabago ang mga hangganan ng sangay. nasa simula ng isang papel, heneral na ipapaliwanag ng mga iskolar kung ano ang ibig sabihin ng isang \"laro\", at madalas na nagkakaiba ang itong mga katuturan, na espesipiko sa larong sinusuri at hindi kinakatawan ang buong saklaw ng sangay. ang kombinatoryal",
+          "expected_label": "sports",
+          "predicted_label": "education",
+          "score": 0.989,
+          "top_labels": "education|sports|news",
+          "top_scores": "0.989|0.0041|0.0041",
+          "matched": false
+        },
+        {
+          "sample_id": "lda_sports_10",
+          "text": "ang 1981 ay isang karaniwang taon na nagsisimula sa huwebes sa kalendaryong gregorian. kaganapan enero pebrero marso abril mayo hunyo hulyo hulyo 9 - donkey kong, na minarkahan ang kauna-unahang donkey kong at mario smash hit arcade game na binuo ng nintendo sa japan agosto setyembre oktubre nobyembre disyembre kapanganakan enero enero 1 zsolt baumgartner, hungarian racing driver mladen petrić, manlalaro ng putbol sa croatia enero 2 - maxi rodríguez, argentine footballer enero 3 - eli manning, manlalaro ng putbol sa amerika enero 4 - silvy de bie, mang-aawit ng belgian enero 5 deadmau5 (joel zimmerman), canadian dj / tagagawa brooklyn sudano, artista ng amerika enero 6 mike jones, rapper ng amerikano rinko kikuchi, artista ng hapon jérémie renier, aktor ng belgian enero 7 - alex auld, canadian ice hockey goaltender enero 8 xie xingfang, manlalaro ng badminton ng tsino genevieve cortese, artista ng amerika enero 9 - euzebiusz smolarek, polish footballer enero 10 jared kushner, mamumuhunan sa amerika tamta, georgian-greek na mang-aawit enero 11 jamelia, mang-aawit na british tom meighan, british singer at songwriter enero 15 howie day, amerikanong mang-aawit at manunulat ng kanta el",
+          "expected_label": "sports",
+          "predicted_label": "sports",
+          "score": 0.9942,
+          "top_labels": "sports|news|education",
+          "top_scores": "0.9942|0.0025|0.0017",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_news_01",
+          "text": "africa pangulo – abdelaziz bouteflika, pangulo ng algeria (1999–kasalukuyan) punong ministro - abdelmalek sellal, punong ministro ng algeria (2014–kasalukuyan) pangulo – josé eduardo dos santos, pangulo ng angola (1979–kasalukuyan) pangulo – yayi boni, pangulo ng benin (2006–kasalukuyan) pangulo – ian khama, pangulo ng botswana (2008–kasalukuyan) pangulo - michel kafando, interim na pangulo ng burkina faso (2014–kasalukuyan) punong ministro - yacouba isaac zida, pasamantalang (acting) punong ministro ng burkina faso (2014–kasalukuyan) pangulo – pierre nkurunziza, pangulo ng burundi (2005–kasalukuyan) pangulo – paul biya, pangulo ng cameroon (1982–kasalukuyan) punong ministro – philémon yang, punong ministro ng cameroon (2009–kasalukuyan) pangulo – jorge carlos fonseca, pangulo ng cape verde (2011–kasalukuyan) punong ministro – josé maria neves, punong ministro ng cape verde (2001–kasalukuyan) pinuno ng estado - catherine samba-panza, pinuno ng estado ng transisyon ng central african republic (2014–kasalukuyan) punong ministro – mahamat kamoun, punong ministro ng central african republic (2014–kasalukuyan) pangulo – idriss déby, pangulo ng chad (1990–kasalukuyan) punong ministro –",
+          "expected_label": "news",
+          "predicted_label": "news",
+          "score": 0.9908,
+          "top_labels": "news|sports|education",
+          "top_scores": "0.9908|0.0039|0.0026",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_news_02",
+          "text": "ang panahon ng bagyo sa pasipiko ng 2020 ay isang medyo aktibong panahon sa taunang pamumuo ng mga bagyo sa hilagang-kanlurang bahagi ng karagatang pasipiko. buong taon ito, kahit na madalas nabubuo ang mga bagyo mula mayo hanggang oktubre. di natural ang katahimikan ng unang bahagi ng panahong ito, kung saan tanging 4 lamang na sistema at isang malakas na bagyo ang naitala pagsapit ng hulyo. dagdag pa rito, ito ang kauna-unahang panahon na walang naitalang ni isang bagyo sa buwan ng hulyo simula pa noong unang nagsimula ang maasahang pagtatala sa mga ito. ang unang bagyong nabuo sa rehiyon, si bagyong ambo, ay nabuo noong 8 mayo. ang pagsisimulang ito ay ang pang-anim sa pinakanahuling simula sa kasaysayan - mas maaga lang nang kaunti kaysa noong taong 1973. ito rin ang pinakanahuling simula simula pa noong 2016. mas aktibo ang karagatang atlantiko kaysa rito, na tanging nangyari lamang noong taong 2010 at 2005. bagamat di masyado aktibo ang panahon noong mga unang buwan nito, ang huling kalahati naman nito ay masyadong aktibo, na lalo pang pinalala ng pandemya ng covid-19. noong agosto, magkakasunod na binayo ng tatlong malalakas na bagyo, sina bagyong igme (bavi), julian",
+          "expected_label": "news",
+          "predicted_label": "news",
+          "score": 0.6796,
+          "top_labels": "news|education|sports",
+          "top_scores": "0.6796|0.3157|0.0028",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_news_03",
+          "text": "ang lungsod ng maynila (, espanyól: ciudad de manila, ingles: city of manila), kilala bilang maynila, ay ang punong-lungsod at ang pangalawang pinakamataong lungsod ng pilipinas. mataas ang pagkaurbanisado, ito ang lungsod na may pinakamakapal na dami ng tao sa buong mundo noong 2019. tinuturing ang maynila na isang pandaidigang lungsod at grinado bilang isang lungsod–alpha (o alpha – city) ng globalization and world cities research network (gawc). ito ang unang lungsod sa bansa na naka-karta (o may sariling saligang-batas), na itinalaga ng batas ng komisyon ng pilipinas blg. 183 ng hulyo 31, 1901. naging awtonomo ito nang napasa ang batas republika blg. 409, \"ang binagong karta ng lungsod ng maynila\", noong hunyo 18, 1949. tinuturing ang maynila bilang bahagi ng orihinal na pangkat ng mga pandaigdigang lungsod dahil lumawig ang network nitong pang-komersyo sa karagatang pasipiko at kumonekta sa asya ang kastilang mga amerika sa pamamagitan ng kalakalang galeon; nang nagawa ito, tinatakan nito ang unang pagkakataon sa kasaysayan ng mundo na naitatag ang isang hindi naabalang kadena ng ruta ng kalakalan na pumapalibot sa planeta. ito ang isa sa mga pinakamatao at pinakamabilis na",
+          "expected_label": "news",
+          "predicted_label": "news",
+          "score": 0.8074,
+          "top_labels": "news|sports|laws",
+          "top_scores": "0.8074|0.105|0.0847",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_news_04",
+          "text": "ang talaan ng mga bagyo sa pilipinas ay naka hanay na alpabeto sa bagyo sa pilipinas ito ay sumusunod sa bawat patlang ng philippine area of responsibility o (par) taong 1997 na likhain ang \"panahon ng bagyo sa hilagang-kanlurang pasipiko\". mga bagyong nag-landfall sa pilipinas buod ng bagyo listahan ng mga sunod-sunod na bagyo sa pilipinas kategorya ng bagyo super bagyo super bagyo 4 bagyo 3 bagyo 2 bagyo 1 bagyo severe tropikal bagyo tropikal bagyo tropikal depresyon 1. super bagyong yolanda (haiyan) ang super bagyong yolanda o haiyan ay ang ika-unang pinakamalakas na bagyong dumaan sa kasaysayan ng pilipinas noong nobyembre 8, 2013 na namuo sa karagatang pasipiko noong nobyembre 5, ang super bagyong haiyan ay ang ikalawang bagyo sa \"deadliest typhoon\" pagkatapos noong 1881 bagyong haiphong. ang bagyong yolanda ay maituturing na \"delubyo\" na may kasamang \"daluyong\" ito ay tumama sa silangang kabisayaan ang matinding pinuruhan nito ay mga bayan ng guiuan at lungsod tacloban matapos ang pagtawid sa bayan ng dulag, leyte, nagtaas ang pagasa ng signal #4 sa mga lalawigang dadaanan nito. kapalitan: 2. super bagyong juan (megi) ang super bagyong megi o juan ay ang ikalawang sa mga",
+          "expected_label": "news",
+          "predicted_label": "news",
+          "score": 0.9947,
+          "top_labels": "news|sports|education",
+          "top_scores": "0.9947|0.0023|0.0015",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_news_05",
+          "text": "ang panahon ng bagyo sa hilagang-kanlurang pasipiko ng 2018 isang mas mataas na panahon na nagdulot ng 29 bagyo, 13 bagyo, at 7 na bagyo. ito ay isang kaganapan sa taunang pag-ikot ng tropikal na pagbuo ng bagyo, kung saan bumubuo ang tropikal na mga bagyo sa kanlurang karagatang pasipiko. ang panahon ay tumatakbo sa buong 2018, bagaman ang karamihan sa tropikal na mga cyclone ay kadalasang bumubuo sa pagitan ng mayo at oktubre. ang unang pinangalanang bagyo ng bolaven, na binuo noong enero 3, habang ang huling tinaguriang bagyo, man-yi, ay nawala noong nobyembre 28. ang unang bagyo ng panahon, ang jelawat, ay umabot sa katayuan ng bagyo noong marso 29, at naging unang super typhoon ng ang taon sa susunod na araw. pana-panahong mga pagtataya sa panahon ng taon, maraming nasyonal na mga serbisyo sa meteorolohiko at ahensya ng agham ang nagtataya kung gaano karami ang tropikal na mga bagyo, tropikal na bagyo, at bagyo sa isang panahon at/o kung gaano karami ang mga tropikal na cyclone na nakakaapekto sa isang partikular na bansa. kabilang sa mga ahensya na ito ang tropical storm risk (tsr) consortium ng university college london, pagasa at central weather bureau ng taiwan. ang unang",
+          "expected_label": "news",
+          "predicted_label": "news",
+          "score": 0.8665,
+          "top_labels": "news|education|sports",
+          "top_scores": "0.8665|0.1292|0.0026",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_news_06",
+          "text": "napetsahan ang pinakamaagang aktibidad ng hominin sa kapuluang pilipinas ng hindi bababa sa 709,000 taon na nakalipas. nasa pulo ng luzon ang homo luzonensis, isang espesye ng sinaunang mga tao, noong mga hindi bababa sa 67,000 taon na nakalipas. nagmula sa yungib ng tabon sa palawan ang pinakamaagang kilalang makabagong anatomikong tao na nabuhay ng mga 47,000 taon nakalipas. ang mga negrito ang unang pangkat na unang nanirahan sa pilipinas bago ang naitalang kasaysayan nito. noong mga 3000 bc, naglayag ang mga austronesyo, na siyang mayorya ng kasalukuyang populasyon, mula sa taiwan patimog hanggang narating ang mga pulo na tinatawag ngayong pilipinas. ang pinakamaagang naitalang kasaysayan ng pilipinas ay matatagpuan sa inskripsiyon sa binatbat na tanso ng laguna na mayroong petsang 822 shaka (900 ad sa kalendaryong gregoryano). nilalahad sa inskripsyon ang pagpatawad sa pakakautang ng isang tao na nagngangalang namwaran, kasama ang kanyang mga anak na si dayang angkatan at bukah. ang unang tala na pagbisita na mula sa kanluran ay ang pagdating ni ferdinand magellan sa pulo ng homonhon, sa timog-silangan ng samar noong marso 16, 1521. nagtayo ng mga permanenteng paninirahan sa",
+          "expected_label": "news",
+          "predicted_label": "sports",
+          "score": 0.9911,
+          "top_labels": "sports|news|education",
+          "top_scores": "0.9911|0.0038|0.0025",
+          "matched": false
+        },
+        {
+          "sample_id": "lda_news_07",
+          "text": "ang panahon ng bagyo sa hilagang-kanlurang pasipiko ng 2009 ay walang opisyal na hangganan, ngunit karamihan ng mga bagyo (tropical cyclones) ay kadalasang nabubuo tuwing buwan ng mayo hanggang nobyembre. sa mga petsang ito kadalasan madalas mabuo ang mga bagyo sa hilagang-kanlurang pasipiko. ang saklaw ng artikulong ito ay limitado lamang sa karagatang pasipiko, hilaga ng ekwador, at kanluran ng international date line. ang mga bagyo na nabubuo sa silangan ng international date line, hilaga ng ekwador ay tinatawag na hurricane o bagyo. ang mga bagyong mabubuo sa hilagang-kanlurang pasipiko ay binibigyan ng pangalan ng japan metrological agency. ang mga bagyong na nabuo ay binibigyan ng numero na may hulapi na \"w\" ng joint typhoon warning center ng estados unidos. sa karagdagan, ang pangasiwaan ng palingkurang atmosperiko, heopisikal at astronomiko ng pilipinas (pagasa) ay nagbibigay din ng pangalan sa mga bagyo (kasama ang mga tropical depressions) na pumasok o nabuo sa pilipinas. ang mga pangalang ito ay hindi pangkaraniwang ginagamit sa labas ng pilipinas. tinatayang bilang ng bagyo simula nang taong 2000, ang laboratory for atmospheric research sa city of university sa hong",
+          "expected_label": "news",
+          "predicted_label": "news",
+          "score": 0.9511,
+          "top_labels": "news|laws|sports",
+          "top_scores": "0.9511|0.0436|0.0026",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_news_08",
+          "text": "batay sa kasaysayan ng maynila, noong ika-13 siglo, ang sinaunang lungsod ng maynila ay binubuo ng mga tindahan at opisinang tagatanggap sa may tabi ng baybayin ng ilog pasig, na nasa hilaga ng mga makalumang pamayanan. ang opisyal na pangalan na binigay ng mga malay sa lungsod ay seludong o selurung, na ginamit din sa isang rehiyon sa pulo ng luzon, at inimumungkahi na ito ang kabisera ng kaharian ng tondo. ang lungsod ay nakilala rin sa pangalan na binigay ng mga pangkat etnikong mga tagalog, ang maynila, unang nakilala bilang maynilad. ang pangalan ay mula sa salitang nila, isang uri ng halamang mabulaklak na tumutubo sa baybayin ng look, na ginagamit para gumawa ng sabon para sa pakikipagkalakalan; nanggaling ito sa salitang may mila, na may unlaping ma- na tumutukoy kung saan ang isang lugar ay mayroong isang malagong bagay (ang nila ay pwedeng sanskrit na nila \"punong indigo\"). (ang sinasabing naging pangalan ng halaman ay nilad ay kathang isip lamang.) ang lungsod ay may humigit sa 100 mga parke na nakakalat sa buong lungsod. ang maynila ang naging upuang kolonyal na pamahalaan ng espanya noong opisyal na pinamahalaan ang mga isla ng pilipinas ng tatlong siglo simula 1565",
+          "expected_label": "news",
+          "predicted_label": "news",
+          "score": 0.9919,
+          "top_labels": "news|sports|education",
+          "top_scores": "0.9919|0.0035|0.0023",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_news_09",
+          "text": "ang panahon ng bagyo sa pasipiko ng 2021 ay ang panahon ng bagyo na taunang nagaganap sa hilagang-kanlurang bahagi ng karagatang pasipiko. bagamat taunan, nagiging aktibo ito pagsapit ng buwan ng mayo. limitado ang artikulong ito sa karagatang pasipikong nasa hilaga ng ekwador sa pagitan ng 100° silangan at ika-180 meridyan. sa loob ng bahaging ito ng pasipiko, may dalawang pangunahing ahensiyang nagpapangalan sa mga bagyo na nagiging dahilan para magkaroon ng dalawang pangalan ang iisang bagyo. papangalanan ng ahensiyang pampanahon ng hapon (japan meteorological agency, jma) ang isang sama ng panahon kung ito ay may 10-minutong napapanatiling bilis ng hangin na hindi bababa sa 65 kilometro kada oras (40 milya kada oras) saanman sa nasasakupang lugar, samantalang pinapangalanan naman ng pangasiwaan ng pilipinas sa serbisyong atmosperiko, heopisiko, at astronomiko (pagasa) ang mga dumadaan na bagyo o nagiging depresyong tropikal (tropical depression) sa loob ng kanilang lugar ng responsibilidad sa pagitan ng 135° sa silangan hanggang 115° sa silangan at sa pagitan ng 5° hilaga hanggang 25° hilaga kahit na wala pang binibigay na pangalan ang jma. ang mga minamanmanan na depresyon ng",
+          "expected_label": "news",
+          "predicted_label": "news",
+          "score": 0.9929,
+          "top_labels": "news|sports|education",
+          "top_scores": "0.9929|0.0031|0.002",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_news_10",
+          "text": "ang panahon ng bagyo sa pilipinas ay isang dekadang napapanahon sa loob ng pilipinas at philippine area of responsibility, taong 2000 ay nagpulungan at nag paligsahan ang pagasa sa bawat ipapangalan sa mga bagyong dadaan at papasok sa pilipinas sa natatakdang panahon, ito ay binigyang daan upang malaman ang lawak ng pinsala, fatality at nawalang gross sa mga lugar na dinaanan ng bagyo, ito ay nakahanay sa alpabetikong \"a\" hanggang \"z\" maliban sa letrang \"x\" na hindi na binigyang pansin. ang bawat bagyo ay binigyan rin ng bawat kategorya. at dinagdagan ng auxiliary names at list. daantaon dekada 2000-2020 mga rinetirong pangalan milyon milyon ang mga nasisirang imprastraktura, mga pang kabuhayan ang mga nasira nang mga nagdaang bagyo taon-taon, tinatayang aabot sa bilyon bilyon ang napinsala. kaya't gumawa nang listahan nang mga retiradong bagyo rito sa pilipinas. 2000 2001 2002 2003 2004 2005 2006 2007 2008 ang panahon ng bagyo sa hilagang- kanlurang pasipiko ng 2008, ay walang opisyal na hangganan, ngunit karamihan ng mga bagyo (tropical cyclones) ay kadalasang nabubuo tuwing buwan ng mayo hanggang nobyembre. ang saklaw ng artikulong ito ay limitado lamang sa karagatang pasipiko,",
+          "expected_label": "news",
+          "predicted_label": "news",
+          "score": 0.6615,
+          "top_labels": "news|food|sports",
+          "top_scores": "0.6615|0.3327|0.0029",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_laws_01",
+          "text": "hindi kumpletong talaan ng mga batas na naipasa ng ika-13 na kongreso ng pilipinas: batas republika bilang 9333 — autonomous region in muslim mindanao elections resetting batas republika bilang 9334 — increase of excise tax on alcohol and tobacco products batas republika bilang 9335 —attrition act of 2005 batas republika bilang 9336 — general appropriations act of 2005 batas republika bilang 9337 — expanded value-added tax law batas republika bilang 9338 — mahmoud a.m. asfour citizenship batas republika bilang 9339 — visayan electric company franchise amendment batas republika bilang 9340 — barangay election resetting batas republika bilang 9341 —rent control act of 2005 batas republika bilang 9342 — end time mission broadcasting, inc. franchise batas republika bilang 9343 — special purpose vehicle act of 2002 amendments batas republika bilang 9344 —juvenile justice and welfare act of 2006 batas republika bilang 9345 — conversion of panglao island circumferential road batas republika bilang 9346 — death penalty abolition batas republika bilang 9347 — rationalizing the composition and functions of the national labor relations commission batas republika bilang 9348 — conversion of",
+          "expected_label": "laws",
+          "predicted_label": "news",
+          "score": 0.9947,
+          "top_labels": "news|sports|education",
+          "top_scores": "0.9947|0.0023|0.0015",
+          "matched": false
+        },
+        {
+          "sample_id": "lda_laws_02",
+          "text": "ang kalayaan sa panorama (, dinaglat na fop) ay isang tadhana sa mga batas ng karapatang-ari ng maraming mga hurisdiksiyon na nagpapahintulot sa pagkuha ng mga retrato at bidyo at paglikha ng ibang mga larawan (tulad ng mga pinta) ng mga gusali at kung minsan mga lilok at ibang mga gawang sining na palagiang matatagpuan sa isang pampublikong lugar nang hindi lumalabag sa anumang karapatang-sipi na maaaring manatili sa gayong mga gawa, at ang paglalathala ng gayong mga larawan. nililimitahan ng mga batas o kaso ng batas ng kalayaan sa panorama ang mga mayhawak ng karapatang-sipi sa paggawa ng ligal na hakbang dahil sa paglabag ng karapatang-sipi laban sa mga tagalikha o tagapamahagi ng gayong mga larawan. isa itong kataliwasan sa karaniwang alituntunin na ang mayhawak ng karapatang-sipi ay may tanging karapatan sa pagbibigay ng kapangyarihan sa paglikha at pamamahagi ng mga hinangong likha (derivative works). hango ang parirala sa salitang aleman na (\"kalayaan sa panorama\" o \"panorama freedom\" sa ingles). mga pinagmulan ipinagbawal nang husto ang potograpiya at ibang mga paraan ng pagsasalarawan ng pampublikong espasyo noong nakaraan, sa mga kadahilanang hindi kaugnay sa karapatan",
+          "expected_label": "laws",
+          "predicted_label": "laws",
+          "score": 0.9886,
+          "top_labels": "laws|sports|news",
+          "top_scores": "0.9886|0.0038|0.0038",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_laws_03",
+          "text": "ang demanda o habla o paghahabla (sa ingles ay lawsuit) ay isang sibil na aksiyon na dinadala sa isang korte ng batas kung saan ang nagsasakdal(plaintiff) na partidong nang-aangkin na nagkamit ng pinsala o kawalan(loss) bilang resulta ng aksiyon(o kagagawan) ng isinasakdal(defendant), ay humihiling ng legal na makatarungan at walang kinikilingang lunas. ang nasasakdal(defendant) ay kailangang tumugon sa reklamo ng nagsasakdal(plaintiff). kung ang nagsasakdal ay nagtagumpay, ang hatol ay ibibigay sa panig ng nagsasakdal at ang iba ibang mga atas ng korte ay ipalalabas upang magpatupad ng karapatan, magkaloob ng mga danyos(damages) o magpataw ng temporaryo o permanenteng inhunksiyon upang magpigil o magpilit ng isang akto(pag-aasal). ang isang deklaratoryong hatol ay maaaring ilabas upang pigilan ang mga hinaharap na alitang legal. bagaman hindi karaniwan, ang demanda ay maaari ring tumukoy sa kriminal na aksiyon, pamamarang kriminal o pag-aangking kriminal. pag-usad ng isang demanda pagsamo(pleading) ang isang demanda ay nagsisimula kung ang isang reklamo ay isinampa(filed) sa korte. ang nagrereklamong ito ay magsasaad na ang isa o maraming mga nagsasakdal(plaintiff) ay naghahagad",
+          "expected_label": "laws",
+          "predicted_label": "laws",
+          "score": 0.9827,
+          "top_labels": "laws|news|sports",
+          "top_scores": "0.9827|0.0058|0.0058",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_laws_04",
+          "text": "ang saligang batas ng pilipinas o konstitusyon ng pilipinas ay ang kataas-taasang batas ng pilipinas. ang kasalukuyang saligang batas ng pilipinas ang saligang batas ng pilipinas ng 1987 na pinagtibay noong 2 pebrero 1987 sa ilalim ni corazon aquino sa isang plebisito kung saan ang higit sa 3/4 o 76.37% ng mga humalal (17,059,495) ang sumang-ayon dito, laban sa 22.65% (5,058,714) na bumutong tutol sa pagpapatibay nito. ito ang pumalit sa saligang batas ng pilipinas ng 1973 na pinagtibay sa ilalim ni ferdinand marcos. panimula ito ang panimula ng kasalukuyang saligang batas ng 1987: panimula mga naunang saligang batas ng pilipinas saligang batas ng la liga filipina ang isang maikling buhay na saligang batas na hinanda ng makabayang si jose rizal para sa samahang la liga filipina ngunit nabuwag nang si rizal ay ipinatapon sa dapitan. saligang batas ng biak-na-bato (1897) ang himagsikang katipunan ay nagdulot ng pagpupulong tejeros kung saan ang unang pampangulo at pang ikalawang pangulong mga halalan ay isinagawa noong 22 marso 1897 sa san francisco de malabon, kabite. gayunpaman, tanging mga kasapi lamang ng katipunan ang nakalahok at hindi ang buong mamamayan. ang kalaunang",
+          "expected_label": "laws",
+          "predicted_label": "laws",
+          "score": 0.9924,
+          "top_labels": "laws|news|sports",
+          "top_scores": "0.9924|0.0025|0.0025",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_laws_05",
+          "text": "ang reyno unido (ingles: united kingdom), opisyal na reyno unido ng dakilang britanya at hilagang irlanda, karaniwang tinatawag na britanya (ingles: britain), at dinadaglat bilang ru (ingles: uk), ay bansang kapuluan na pangunahing matatagpuan sa hilagang-kanlurang europang kontinental. pinapaligiran ito ng karagatang atlantiko sa hilaga't kanluran, dagat hilaga sa silangan, dagat irlandes sa kanluran, at bambang ng inglatera sa timog, nagbabahagi rin ito ng limitasyong lupain sa republika ng irlanda. sumasaklaw ng halos 242,495 km2, ito ang pinakamalaking bansa sa europa at kanlurang emisperyo. mayroon itong populasyon ng mahigit 67 milyong tao. ang kabisera at pinakamalaking lungsod nito ay londres. ang uk ay isang kahariang may saligang-batas na may pambatasang pamamaraan. ang pununglunsod nito ay londres. ito ay binubuo ng apat na danay: inglatera, eskosya, gales, at hilagang irlanda. ang huling tatlo ay may mga kinatawang pangasiwaan, na may kanya-kanyang kapangyarihan, sa kani-kanilang mga pununglunsod, edimburgo, cardiff, at belfast. mayroong tatlong sakupbayan ng kaputungan ang uk. ito ay ang guernsey, jersey, at ang pulo ng man. ngunit ang mga ito ay hindi bahagi ng uk",
+          "expected_label": "laws",
+          "predicted_label": "sports",
+          "score": 0.774,
+          "top_labels": "sports|education|laws",
+          "top_scores": "0.774|0.169|0.0531",
+          "matched": false
+        },
+        {
+          "sample_id": "lda_laws_06",
+          "text": "ang kahigpunuan o soberanya (nagmula kastila soberaniya, mula sa gitnang latin na superanus 'sa itaas', 'nakahihigit'), ay may pakahulugan na \"kataas-taasang kapangyarihan\" o \"dakilang kapangyarihan\" at \"paghahari\". ang kahigpunuan ay nangangailangan ng pamununuan sa loob ng estado, gayundin ang panlabas na awtonomiya para sa mga estado. sa anumang himansaan o estado, ang kahigpunuan ay natatalaga sa tao, kinatawan, o katatagan na may pinakamataas na karapatan sa ibang tao upang magtatag ng batas o baguhin ang mga umiiral na batas. sa kaisipang pampulitika, ang kahigpunuan ay isang mahalagang salita na nagtatalaga ng pinakamataas na lehitimong awtoridad sa isang pangkat. sa pandaigdigang batas, ang kahigpunuan ay ang paggamit ng kapangyarihan ng isang estado. ang kahigpunuang de jure ay tumutukoy sa pambatas na karapatang gawin ito; ang kahigpunuang de facto ay tumutukoy sa makatotohanang kakayahang gawin ito. ito ay maaaring maging isang paksa ng natatanging pagkabahala sa pagkabigo ng karaniwang pagaasam na ang de jure at de facto na kahigpunuan na umiiral sa lugar at panahon ng pagkabalisa, at naninirahan sa loob ng parehong katatagan. ang kahigpunuan ay ang kapangyarihan ng",
+          "expected_label": "laws",
+          "predicted_label": "news",
+          "score": 0.5719,
+          "top_labels": "news|laws|sports",
+          "top_scores": "0.5719|0.421|0.0036",
+          "matched": false
+        },
+        {
+          "sample_id": "lda_laws_07",
+          "text": "ang sosyalistang saligang batas ng republikang bayang demokratiko ng korea (koreano: , mr. chosŏn minjujuŭi inmin konghwaguk sahoe) ay ang naglilingkod bilang saligang batas ng hilagang korea. inaprubahan ito ng ika-6 na asembleyang bayang kataas-taasan sa unang sesyon nito noong 27 disyembre 1972, at dinagdaga't sinusog noong 1998, 2009, 2012, 2013, 2016 at 2019. pinalitan nito ang unang saligang batas ng bansa na inaprubahan noong 1948. kasalukuyan itong binubuo ng pitong kabanata at 172 artikulo na naglalahad ng mga prinsipyong pangunahin ng hilagang korea sa politika, ekonomiya, kalinangan, simbolo't tanggulang pambansa, karapatan at tungkuling pangunahin ng mga mamamayan, at organisasyon ng pamahalaan. pinamamahalaan din ang bansa ng sampung prinsipyo para sa pagkakatatag ng isang sistemang ideolohikong monolitiko, na sinasabi ng ilan na pumalit sa saligang batas at sa praktika'y pinakamataas na batas ng bansa. kasaysayan sinimulan ng hilagang korea na magburador ng unang saligang batas nito kasunod ng kumbensyon ng interim asembleyang tagapagbatas ng timog korea noong 12 disyembre 1946, na nagsimulang bumalangkas ng interim saligang batas para sa timog korea at pagkabigo na",
+          "expected_label": "laws",
+          "predicted_label": "sports",
+          "score": 0.5101,
+          "top_labels": "sports|laws|news",
+          "top_scores": "0.5101|0.4841|0.0029",
+          "matched": false
+        },
+        {
+          "sample_id": "lda_laws_08",
+          "text": "ang mga karapatang pantao sa bhutan ay ang mga nakabalangkas sa ikapitong artikulo ng saligang batas ng bansa ang makaharing pamahalaan ng bhutan ay nagpatibay sa pangako nito sa \"kasiyahan ng lahat ng mga karapatan ng tao\" bilang mahalaga sa katagumpayan ng 'pambansang kabuuang kaligayahan' (pkk); ang mga natatanging mga prinsipyo na kung saan nagsusumikap ang bhutan, bilang laban sa pananalapi batay sa mga panukala tulad ng gdp. sa pagsasagawa, ang mga karapatang pantao ng bhutan record ay natanggap ng pamimintas para sa pakikitungo sa mga taong lhotshampa, na marami'y naging refugee sa nepal, pati na rin ang para sa kabiguan upang mapanghawakan ang kalayaan ng relihiyon. balangkas na alinsunod sa batas mga karapatan sa ilalim ng saligang-batas ang saligang batas ng bhutan ay pinagtibayan noong 2008 at nagpabago sa bansa mula sa isang ganap na monarkiya tungo sa isang demokratikong monarkiya na sang-ayon sa batas. ang ikapitong artikulo ng saligang-batas ay nagpatatag ng maraming mga karapatan, kabilang na ang \"marami sa mga pangunahing karapatang pantaong idinambana sa pagtitipong sandaigidigan\", na kung saan ay sinabi na maging \"napakahalaga para sa pag-unlad ng pagkatao ng",
+          "expected_label": "laws",
+          "predicted_label": "laws",
+          "score": 0.7227,
+          "top_labels": "laws|sports|news",
+          "top_scores": "0.7227|0.2695|0.0039",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_laws_09",
+          "text": "ang batas, sa politika at hurisprudensiya, ay ang mga kumpol ng alituntunin sa pag-aasal na naguutos o nagbabawal (o pareho) sa isang natukoy na pakikipagugnayan sa pagitan ng mga tao at kapisanan. kasama rin dito ang mga kaparusahan sa mga hindi sumusunod sa mga nakatatag na alituntunin sa pag-aasal. mga sakop ang lahat ng mga sistemang batas ay tumutungkol sa parehong mga pangunahing isyu bagaman ang mga hurisdiksiyon ay umuuri at tumutukoy sa mga paksang legal ng mga ito sa iba't ibang paraan. ang karaniwang distinksiyon ang sa pagitan ng \"publikong batas\"(public law) na terminong malapit na kaugnay sa estado kabilang ang konstitusyonal, administratibo at kriminal na batas at ng \"pribadong batas\"(private law) na sumasakop sa mga kontrata, tort at pag-aari. sa mga sistemang sibil na batas, ang kontrata at tort ay nahuhulog sa pangkalahatang batas ng mga obligasyon samantalang ang mga batas tiwala(trust law) ay tinatalakay sa ilalim ng mga statyutoryong rehimen o mga internasyonal na konbensiyon. batas internasyonal ang batas internasyonal ay maaaring tumukoy sa tatlong bagay: publikong internasyonal na batas, pribadong internasyonal na batas o alitan ng mga batas at ang batas ng",
+          "expected_label": "laws",
+          "predicted_label": "laws",
+          "score": 0.6285,
+          "top_labels": "laws|sports|news",
+          "top_scores": "0.6285|0.3641|0.0037",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_laws_10",
+          "text": "ang binagong kodigo penal ay naglalaman ng mga pangkahalatang batas parusa ng pilipinas. unang itinalaga noong 1930 (isang-libo-siyamnapung-daan-at-tatlongpu), nanatiling itong epektibo hangang ngayon, sa kabila ng maraming susog dito. hindi ito binubuo ng isang malawakang saklaw kompendyum ng lahat ng mga batas parusa ng pilipinas. ang binagong kodigo penal ay isinabatas bilang batas blg. 3815 (tatlopung-libo-walongpung-daan-at-isangput-lima), at ilang mga batas kriminal sa pilipinas ay naisabatas sa labas ng bagong kodigo penal bilang magkakahiwalay na batas republika. karanasan ng kasaysayan ang binagong kodigo penal ay humalili sa kodigo penal ng espanya, na kong saan ay may bisa pa sa pilipinas (pagkatapos ay isang kolonya ng imperyo kastila hangang 1898) mula sa 1886 hangang 1930. ang bagong kodigo ay nai-krokis nang isang pangangasera na nilikha noong 1927 (isang-libo-siyamnapung-daan-at-dalawangpung-pito), pinamunuan ni hukom anacleto diaz, na kalaunan ay maglilingkod sa korte suprema. mga susog ang kodigo na ito ay nabago at nabura nang maraming beses: batas komonwelt blg. 616 - an act to punish espionage and other offenses against the national security (isang batas upang",
+          "expected_label": "laws",
+          "predicted_label": "news",
+          "score": 0.9932,
+          "top_labels": "news|sports|education",
+          "top_scores": "0.9932|0.0029|0.0019",
+          "matched": false
+        },
+        {
+          "sample_id": "lda_education_01",
+          "text": "ang unibersidad ng philippines, mindanao (up mindanao, upmin; cebuano: unibersidad sa pilipinas mindanao) ay ang ika-anim at pinakahuling yunit ng unibersidad ng pilipinas. itinalaga noong 20 pebrero 1995 sa pamamagitan ng republic act 7889. pagkaraan, ang mga lupon ng mga rehente ng sistema ng unibersidad ng pilipinas ay pormal na nilikha ang up mindanao noong 23 marso 1995. ito lamang ang natatangging constituent university ng unibersidad ng pilipinas na naitatag sa pamamagitan ng isang batas na inihain sa kongreso. pagkaraan, ang mga lupon ng mga rehente ng sistema ng unibersidad ng pilipinas ay pormal na nilikha ang u.p. mindanao noong 23 marso 1995. layunin ng up mindanao na maibahagi at mabigyang pagkakataon ang mga mag-aaral ng mindanao, lalung-lalo na ang mga mag-aaral na muslim at lumad, na maging mga iskolar ng bayan, kasali na ang mga naghihikaos ngunit magagaling na estudyante. dahil dito, ang mga programang pang-akademiko at pagsasaliksik ay nakatuon sa pag-aaral sa mindanao (mindanao studies) sa larangan ng sangkalikhaan, arkitektura, food science, biolohiya, computer science, at supply chain management. ang up mindanao ay matatagpuan sa bago oshiro, mintal, lungsod",
+          "expected_label": "education",
+          "predicted_label": "education",
+          "score": 0.9631,
+          "top_labels": "education|sports|news",
+          "top_scores": "0.9631|0.0322|0.0029",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_education_02",
+          "text": "ang pamantasang estado sa gitnang luzon (ingles: central luzon state university, dinadaglat bilang clsu) ay isang pamantasang estado na may 658-ektaryang nasasakupan sa lungsod agham ng muñoz, nueva ecija, pilipinas. ito ang pangunahing ahensya ng muñoz science community at ang tahanan ng regional research and development center sa gitnang luzon. sa ngayon, ang clsu ay isa sa mga pangunahing institusyon para sa agrikultura ng pilipinas at sa timog silangang asya na kilala sa pagsasaliksik nito sa aquaculture, ruminants, pananim, halamanan, at pamamahala ng tubig . naitala din ito sa pagitan ng ikaanim at dalawampu't isang lugar para sa pinkamahusay sa pang-akademikong unibersidad sa bansa para sa iba't ibang mga taon, na labis na nakararami sa mga paaralan sa kalakhang maynila. naitala din ito sa 100 pinaka-makabuluhang mga paaralan sa asya ng maraming beses. ang clsu ay ang unang komprehensibong unibersidad ng estado na sumailalim sa akreditasyong institusyonal. ito ay ipinahayag na pag- aari ng kultura ng pilipinas na may code na ph-03-0027 dahil sa mataas na kahalagahang kasaysayan, pang-kultura, pang-akademiko, at kahalagahan ng agrikultura sa bansa. ito ay isa sa apat na",
+          "expected_label": "education",
+          "predicted_label": "education",
+          "score": 0.9918,
+          "top_labels": "education|news|sports",
+          "top_scores": "0.9918|0.0031|0.0031",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_education_03",
+          "text": "ang polis - ang instituto ng wika at humanidades ng herusalem, kilala sa ingles bilang ang polis - the jerusalem institute of languages and humanities, ay isang institusyong pang-akademikong di-pangkalakalan na nakabase sa herusalem, israel at itinatag noong 2011 bilang tugon sa bagong interes ng mundo sa mga sinaunang wika at sibilisasyon, gayundin para buhayin muli ang pag-aaral ng humanidades sa pamamagitan ng pag-aaral sa mga pinagkukunan ng kulturang kanluranin at silangan. mula sa mga kamakailang pagbabago sa lingwistikang nalalapat pati na rin sa kadalubhasaan ng mga israeli sa pagtuturo ng modernong ebreo (ang paraang ulpan), itinuturo ng paraang polis ang mga tinaguriang \"patay na wika\" sa isang monolingwal at malapít na kapaligiran. nasa musrara ang institusyon, malapit sa lumang lungsod ng herusalem. mula sa lagpas tatlumpung bansa ng anim na kontinente ang mga mag-aaral nila. kasaysayan ang polis institute ay inirehistro noong 2011 sa non-profit registry ng israel (ang dokumento ay nakasulat sa hebreo) at nag-alok sa buong taon ng mga kursong modernong hebreo at arabe, pati na rin ang sinaunang griyego. ang pangunahing ideya ay magturo ng mga sinaunang wika bilang mga",
+          "expected_label": "education",
+          "predicted_label": "education",
+          "score": 0.5645,
+          "top_labels": "education|laws|news",
+          "top_scores": "0.5645|0.4275|0.0034",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_education_04",
+          "text": "ang paaralan, eskwelahan, iskwelahan, o iskul ay isang institusyong pang-edukasyon na idinisenyo upang magbigay ng mga learning space at mga learning environment para sa pagtuturo ng mag-aaral sa ilalim ng direksyon ng guro. karamihan sa mga bansa ay may mga sistema ng pormal na edukasyon, na kung minsan ay sapilitan. sa mga sistemang ito, umuunlad ang mga mag-aaral sa isang serye ng mga paaralan. ang mga pangalan para sa mga paaralang ito ay nag-iiba ayon sa bansa (tinalakay sa regional terms na seksyon sa ibaba) ngunit sa pangkalahatan ay kinabibilangan ng mababang paaralan para sa maliliit na bata at secondary school para sa mga tinedyer na nakatapos ng primary education. ang isang institusyon kung saan itinuturo ang mas mataas na edukasyon ay karaniwang tinatawag na dalubahasaang pamantasan o pamanatasan. bilang karagdagan sa mga pangunahing paaralang ito, ang mga mag-aaral sa isang partikular na bansa ay maaari ding pumasok sa mga paaralan bago at pagkatapos ng elementarya (elementarya sa estados unidos) at sekondarya (middle school sa estados unidos) na edukasyon. ang kindergarten ay nagbibigay ng ilang pag-aaral sa napakabata na mga bata (karaniwang edad 3–5). ang",
+          "expected_label": "education",
+          "predicted_label": "laws",
+          "score": 0.4374,
+          "top_labels": "laws|education|news",
+          "top_scores": "0.4374|0.3235|0.2345",
+          "matched": false
+        },
+        {
+          "sample_id": "lda_education_05",
+          "text": "ang pamantasang de la salle (de la salle university (dlsu) sa wikang ingles), o kilala rin bilang la salle, ay isang pribadong katolikong pampananaliksik na pamantasan na itinaguyod at ipinatatakbo ng kapatirang de la salle na matatagpuan sa taft avenue, malate, maynila, pilipinas. itinaguyod ito noong 1911 bilang kolehiyong de la salle sa daang nozaleda sa paco, maynila. inilipat ito sa kasalukuyan nitong kinaroroonan noong ikadalawampu't-isa ng setyembre upang tugonan ang pagdami ng mga pumapasok na mag-aaral. naging pamantasan ito noong pebrero noong 1975. ito ang pinakamatandang miyembro ng de la salle philippines (dlsp), isang samahan ng mga pamantasang lasalyano sa pilipinas. nagsimula ito bilang isang institusyong panlalaki. sa kasalukuyan, nag-aalok ito ng mga koedukasyong kursong pang-undergraduate at pang-graduate sa pamamagitan ng pito nitong mga dalubhasaan at isa nitong paaralan. ilan sa mga pinagdadalubhasaan ng mga ito ay ang mga disiplinang negosyo, inhenyeriya, at ang malalayang sining. ikinilala ng komisyon sa mas mataas na edukasyon (ched) ang pamantasang de la salle bilang isang center of excellence sa anim nitong mga programa, at center of development sa tatlo",
+          "expected_label": "education",
+          "predicted_label": "education",
+          "score": 0.5261,
+          "top_labels": "education|laws|food",
+          "top_scores": "0.5261|0.4069|0.0614",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_education_06",
+          "text": "ang sql (structured query language) ay isang wikang pamprograma na ginagamit sa pamamahala ng data sa isang relasyonal na sistemang database. ang pamamahala sa data ay kinabibilangan ng pagpasok ng data(insert), kweri(query) o pagtingin sa data, pagbabago ng data(update), pagbura ng data(delete), paglikha ng mga tabla at skema at pagbibigay karapatan sa mga manggagamit ng database at iba pa. mga ginagamit na instruksiyon paglikha ng tabla ang instruksiyon na ginagamit sa paglikha ng tabla ng isang database ay: create table estudyante( id int, pangalan varchar(50), tirahan varchar(50), primary key (id) ); ang tablang estudyante ay nilikha na may mga kolumn na id, pangalan, at petsa kung saan ang pangunahing susi(primary key) ay ang id. pagpasok upang lagyan ng data ang tablang nilikha, ang sumusunod na instruksiyon ay ginagamit: insert into estudyante (id, pangalan, tirahan) values (102, juan dela cruz , 222 maligaya st. lungsod quezon); insert into estudyante (id, pangalan, tirahan) values (202, jose santos , 333 masagana st. tondo); insert into estudyante (id, pangalan, tirahan) values (104, michael reyes , 444 mahusay st. paranaque); insert into estudyante (id, pangalan,",
+          "expected_label": "education",
+          "predicted_label": "news",
+          "score": 0.9933,
+          "top_labels": "news|sports|education",
+          "top_scores": "0.9933|0.0029|0.0019",
+          "matched": false
+        },
+        {
+          "sample_id": "lda_education_07",
+          "text": "1001–1100 |-bgcolor=#d6d6d6 | 1001 gaussia || 1923 oa || || agosto 8, 1923 || crimea-simeis || s. belyavskyj || — || align=right | 73 km || |-id=002 bgcolor=#e9e9e9 | 1002 olbersia || 1923 ob || || agosto 15, 1923 || crimea-simeis || v. albitskij || — || align=right | 23 km || |-id=003 bgcolor=#d6d6d6 | 1003 lilofee || 1923 ok || || setyembre 13, 1923 || heidelberg || k. reinmuth || thm || align=right | 34 km || |-id=004 bgcolor=#d6d6d6 | 1004 belopolskya || 1923 os || || setyembre 5, 1923 || crimea-simeis || s. belyavskyj || 7:4 || align=right | 72 km || |-id=005 bgcolor=#d6d6d6 | 1005 arago || 1923 ot || || setyembre 5, 1923 || crimea-simeis || s. belyavskyj || — || align=right | 61 km || |-id=006 bgcolor=#d6d6d6 | 1006 lagrangea || 1923 ou || || setyembre 12, 1923 || crimea-simeis || s. belyavskyj || — || align=right | 35 km || |-id=007 bgcolor=#e9e9e9 | 1007 pawlowia || 1923 ox || || oktubre 5, 1923 || crimea-simeis || v. albitskij || mabagal || align=right | 18 km || |-id=008 bgcolor=#d6d6d6 | 1008 la paz || 1923 pd || || oktubre 31, 1923 || heidelberg || m. f. wolf || — || align=right | 41 km || |-id=009 bgcolor=#fa8072 | 1009 sirene || 1923 pe || || oktubre 31, 1923 ||",
+          "expected_label": "education",
+          "predicted_label": "news",
+          "score": 0.9929,
+          "top_labels": "news|sports|education",
+          "top_scores": "0.9929|0.0031|0.002",
+          "matched": false
+        },
+        {
+          "sample_id": "lda_education_08",
+          "text": "ang ay isang seryeng manga mula sa bansang hapon na sinulat at ginuhit ni masashi kishimoto. kinukuwento nito ang istorya ni naruto uzumaki, isang batang ninja na ninais na makuha ang pagkilala mula sa kanyang mga kauri at nangangarap rin siya na maging isang hokage, ang pinuno ng kanyang nayon. may dalawang bahagi ang salaysay, ang unang tagpo ay noong mga taon bago pa naging tinedyer si narutoy, at ikalawa ay noong tinedyer na siya. batay ang serye sa dalawag one-shot o nag-iisang isyu na manga ni by kishimoto: ang karakuri (1995), na nag-ani para kay kishimoto ng isang marangal na pagbanggit sa buwanang hop step award ng shueisha noong sumunod na taon, at naruto (1997). nailathala ang naruto sa magasin ng shueisha na weekly shōnen jump mula 1999 hanggang 2014, at nailabas sa anyong tankōbon (aklat) sa 72 bolyum. nagkaroon ang mang ng adaptasyon sa anime sa telebisyon na ginawa ng pierrot at aniplex, na umere sa 220 kabanata sa hapon mula 2002 hanggang 2007; ang adaptasyong ingles ng serye ay umere sa cartoon network at sa ytv mula 2005 hanggang 2009. ang sequel o ang sumunod na serye, ang naruto: shippuden, ay unang lumabas sa bansang hapon noong in 2007, at natapos noong 2017,",
+          "expected_label": "education",
+          "predicted_label": "education",
+          "score": 0.9902,
+          "top_labels": "education|sports|news",
+          "top_scores": "0.9902|0.0037|0.0037",
+          "matched": true
+        },
+        {
+          "sample_id": "lda_education_09",
+          "text": "si mao zedong (o mao tse-tung) (26 disyembre 1893 - 9 setyembre 1976), ay isang rebolusyonaryo at komunistang pinuno ng tsina. siya ang pinuno ng republikang popular ng tsina magmula nang itatag ito noong 1949 hanggang sa kaniyang kamatayan noong 1976. nagapi ni mao, na isang intsik na han, ang isang hukbong makabansa para sa pagkontrol ng tsina. karaniwan siyang tinutukoy bilang chairman mao (\"tagapangulong mao\") sapagkat pinamunuan niya ang republikang popular ng tsina bilang tagapangulo o chairman ng partidong komunista ng tsina. ang kaniyang mga teoriyang marxista-leninista, mga estratehiyang militar at mga patakarang pampulitika ay magkakasamang nakikilala bilang marxismo-leninismo-maoismo (na madalas pinaiikli bilang maoismo) o kaisipang mao zedong (kaisipang mao tse-tung). si mao ay anak ng isang maunlad na magsasaka sa shaoshan, hunan. sinuportahan niya ang nasyonalismong tsino at nagkaroon ng anti-imperyalistang pananaw sa maagang bahagi ng kaniyang buhay, at partikular na naimpluwensiyahan ng mga pangyayari ng rebolusyong xinhai ng 1911 at kilusang mayo apat ng 1919. kalaunan ay pinagtibay niya ang marxismo–leninismo habang nagtatrabaho sa unibersidad ng peking bilang",
+          "expected_label": "education",
+          "predicted_label": "news",
+          "score": 0.9905,
+          "top_labels": "news|sports|education",
+          "top_scores": "0.9905|0.0041|0.0027",
+          "matched": false
+        },
+        {
+          "sample_id": "lda_education_10",
+          "text": "ang pagsusulit o eksaminasyon ng pagtataya na naglalayong sukatin ang kaalaman, kasanayan, kakayahan, kalakasan ng katawan, pagkamarapat sa iba pang paksa (halimbawa ay ang pinaniniwalaan) ng nagsusulit. ang pagsusulit ay maaaring pangasiwaan na pasalita, sa papel, sa kompyuter, o sa isang limitadong lugar na ngangailangan ng pisikal na pagganap ng mga kasanayan ng nagsusulit. ang mga pagsusulit ay nagkakaiba rin sa estilo, hirap at mga pangangailangan. halimbawa, sa isang pagsusulit kung saan nakasarado ang aklat, ang nagsusulit kadalasan ay kailangang umasa sa kanyang memorya upang makasagot sa partikular na aytem samantalang sa pagsusulit na nakabukas ang aklat, ang nagsusulit ay maaaring gumamit ng is o marami pang karagdagang kasangkapan katulad ng sangguniang aklat o kalkulador sa pagsagot sa isang aytem. ito rin ay maaaring pormal o di-pormal na pangasiwaan. halimbawa ng di-pormal na pagsusulit ay ang pagbabasa ng bata na pinangasiwaan ng kanyang magulang. halimbawa naman ng pormal na pagsusulit ay ang huling eksaminasyon na pinangasiwaan ng guro sa klase o kaya ang pagsusulit ng i.q. na pinangasiwaan ng sikologo sa klinika. ang kadalasang resulta ng pormal na pagsusulit ay",
+          "expected_label": "education",
+          "predicted_label": "laws",
+          "score": 0.5477,
+          "top_labels": "laws|news|sports",
+          "top_scores": "0.5477|0.4436|0.0043",
+          "matched": false
+        }
+      ]
+    },
+    "bart": {
+      "title": "BART-Large-MNLI",
+      "evaluation_type": "supervised zero-shot sample",
+      "status": "completed",
+      "sample_set": "evaluation/sample_sets/bart_test_set.csv",
+      "metrics": {
+        "total_samples": 10,
+        "correct": 10,
+        "accuracy": 1.0,
+        "per_label": {
+          "education": {
+            "support": 2,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "food": {
+            "support": 2,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "laws": {
+            "support": 2,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "news": {
+            "support": 2,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "sports": {
+            "support": 2,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        "confusion_matrix": {
+          "education": {
+            "education": 2,
+            "food": 0,
+            "laws": 0,
+            "news": 0,
+            "sports": 0
+          },
+          "food": {
+            "education": 0,
+            "food": 2,
+            "laws": 0,
+            "news": 0,
+            "sports": 0
+          },
+          "laws": {
+            "education": 0,
+            "food": 0,
+            "laws": 2,
+            "news": 0,
+            "sports": 0
+          },
+          "news": {
+            "education": 0,
+            "food": 0,
+            "laws": 0,
+            "news": 2,
+            "sports": 0
+          },
+          "sports": {
+            "education": 0,
+            "food": 0,
+            "laws": 0,
+            "news": 0,
+            "sports": 2
+          }
+        }
+      },
+      "samples": [
+        {
+          "sample_id": "bart_food_01",
+          "text": "The chef prepared fresh vegetables and soup for dinner.",
+          "expected_label": "food",
+          "predicted_label": "food",
+          "score": 0.9945,
+          "top_labels": "food",
+          "top_scores": "0.9945",
+          "matched": true
+        },
+        {
+          "sample_id": "bart_food_02",
+          "text": "We ordered rice, chicken, and dessert at the restaurant.",
+          "expected_label": "food",
+          "predicted_label": "food",
+          "score": 0.9975,
+          "top_labels": "food",
+          "top_scores": "0.9975",
+          "matched": true
+        },
+        {
+          "sample_id": "bart_sports_03",
+          "text": "The athlete scored the winning point in the basketball game.",
+          "expected_label": "sports",
+          "predicted_label": "sports",
+          "score": 0.9982,
+          "top_labels": "sports|news",
+          "top_scores": "0.9982|0.7823",
+          "matched": true
+        },
+        {
+          "sample_id": "bart_sports_04",
+          "text": "The team trained every morning for the tournament.",
+          "expected_label": "sports",
+          "predicted_label": "sports",
+          "score": 0.9875,
+          "top_labels": "sports",
+          "top_scores": "0.9875",
+          "matched": true
+        },
+        {
+          "sample_id": "bart_news_05",
+          "text": "The president gave a report after the election results.",
+          "expected_label": "news",
+          "predicted_label": "news",
+          "score": 0.9248,
+          "top_labels": "news",
+          "top_scores": "0.9248",
+          "matched": true
+        },
+        {
+          "sample_id": "bart_news_06",
+          "text": "Police confirmed the incident during a public briefing.",
+          "expected_label": "news",
+          "predicted_label": "news",
+          "score": 0.9642,
+          "top_labels": "news",
+          "top_scores": "0.9642",
+          "matched": true
+        },
+        {
+          "sample_id": "bart_laws_07",
+          "text": "The judge explained the legal rights of the accused person.",
+          "expected_label": "laws",
+          "predicted_label": "laws",
+          "score": 0.8889,
+          "top_labels": "laws",
+          "top_scores": "0.8889",
+          "matched": true
+        },
+        {
+          "sample_id": "bart_laws_08",
+          "text": "Congress approved a new policy after a long debate.",
+          "expected_label": "laws",
+          "predicted_label": "laws",
+          "score": 0.9103,
+          "top_labels": "laws|news",
+          "top_scores": "0.9103|0.8441",
+          "matched": true
+        },
+        {
+          "sample_id": "bart_education_09",
+          "text": "The students studied their lessons in the classroom.",
+          "expected_label": "education",
+          "predicted_label": "education",
+          "score": 0.9811,
+          "top_labels": "education",
+          "top_scores": "0.9811",
+          "matched": true
+        },
+        {
+          "sample_id": "bart_education_10",
+          "text": "The university awarded scholarships to new graduates.",
+          "expected_label": "education",
+          "predicted_label": "education",
+          "score": 0.9889,
+          "top_labels": "education|news",
+          "top_scores": "0.9889|0.5563",
+          "matched": true
+        }
+      ]
+    },
+    "bertopic_en": {
+      "title": "BERTopic (English)",
+      "evaluation_type": "unsupervised",
+      "status": "completed",
+      "model_dir": "bertopic_classifier/models/topic_english",
+      "topics_csv": "evaluation/results/bertopic_en_topics.csv",
+      "metrics": {
+        "total_documents": 9999,
+        "topic_count": 265,
+        "outlier_count": 2995,
+        "outlier_rate": 0.2995,
+        "assigned_document_rate": 0.7005,
+        "topic_diversity_top_10": 0.7823,
+        "coherence_approximation_npmi": -0.5641
+      },
+      "sample_check_status": "completed",
+      "sample_check_error": null,
+      "samples": [
+        {
+          "sample_id": "bertopic_en_01",
+          "text": "i want to cook chicken for dinner",
+          "description": "English food/cooking topic",
+          "expected_keyword": "cook",
+          "topic_id": 262,
+          "topic_name": "262_chicken_ricky_grain_chickens",
+          "score": 0.7374,
+          "keyword_matched": false,
+          "is_outlier": false
+        },
+        {
+          "sample_id": "bertopic_en_02",
+          "text": "she is studying french at the university",
+          "description": "English education/language topic",
+          "expected_keyword": "french",
+          "topic_id": 25,
+          "topic_name": "25_french_speak_france_teaches",
+          "score": 0.6211,
+          "keyword_matched": true,
+          "is_outlier": false
+        },
+        {
+          "sample_id": "bertopic_en_03",
+          "text": "he was arrested by the police",
+          "description": "English police/news topic",
+          "expected_keyword": "police",
+          "topic_id": 209,
+          "topic_name": "209_police_policeman_object_protecting",
+          "score": 0.6009,
+          "keyword_matched": true,
+          "is_outlier": false
+        },
+        {
+          "sample_id": "bertopic_en_04",
+          "text": "it is raining heavily outside",
+          "description": "English weather topic",
+          "expected_keyword": "rain",
+          "topic_id": 8,
+          "topic_name": "8_rain_rained_raining_weather",
+          "score": 0.7669,
+          "keyword_matched": true,
+          "is_outlier": false
+        },
+        {
+          "sample_id": "bertopic_en_05",
+          "text": "she is reading a book in the library",
+          "description": "English reading/library topic",
+          "expected_keyword": "book",
+          "topic_id": 2,
+          "topic_name": "2_book_books_read_reading",
+          "score": 0.488,
+          "keyword_matched": true,
+          "is_outlier": false
+        }
+      ]
+    },
+    "bertopic_en_tl": {
+      "title": "BERTopic (EN + TL)",
+      "evaluation_type": "unsupervised",
+      "status": "completed",
+      "model_dir": "bertopic_classifier/models/topic_english_tagalog",
+      "topics_csv": "evaluation/results/bertopic_en_tl_topics.csv",
+      "metrics": {
+        "total_documents": 9999,
+        "topic_count": 253,
+        "outlier_count": 3135,
+        "outlier_rate": 0.3135,
+        "assigned_document_rate": 0.6865,
+        "topic_diversity_top_10": 0.8945,
+        "coherence_approximation_npmi": -0.3973
+      },
+      "sample_check_status": "completed",
+      "sample_check_error": null,
+      "samples": [
+        {
+          "sample_id": "bertopic_en_tl_01",
+          "text": "gusto kong kumain ng manok",
+          "description": "Tagalog food/cooking assignment",
+          "expected_keyword": "eating",
+          "topic_id": 30,
+          "topic_name": "30_eats_ate_maja_mark",
+          "score": 0.8245,
+          "keyword_matched": false,
+          "is_outlier": false
+        },
+        {
+          "sample_id": "bertopic_en_tl_02",
+          "text": "nag-aaral siya ng pranses",
+          "description": "Tagalog education/language assignment",
+          "expected_keyword": "french",
+          "topic_id": 26,
+          "topic_name": "26_twitter_peter_busog_ekkantu",
+          "score": 0.7878,
+          "keyword_matched": false,
+          "is_outlier": false
+        },
+        {
+          "sample_id": "bertopic_en_tl_03",
+          "text": "pumunta siya sa ospital",
+          "description": "Tagalog hospital/health assignment",
+          "expected_keyword": "hospital",
+          "topic_id": -1,
+          "topic_name": "No clear topic (outlier)",
+          "score": 0.7697,
+          "keyword_matched": false,
+          "is_outlier": true
+        },
+        {
+          "sample_id": "bertopic_en_tl_04",
+          "text": "nagbabasa ako ng libro",
+          "description": "Tagalog reading/book assignment",
+          "expected_keyword": "book",
+          "topic_id": 3,
+          "topic_name": "3_book_aklat_libro_books",
+          "score": 0.6982,
+          "keyword_matched": true,
+          "is_outlier": false
+        },
+        {
+          "sample_id": "bertopic_en_tl_05",
+          "text": "masarap ang kape",
+          "description": "Tagalog coffee/food assignment",
+          "expected_keyword": "coffee",
+          "topic_id": -1,
+          "topic_name": "No clear topic (outlier)",
+          "score": 0.7882,
+          "keyword_matched": false,
+          "is_outlier": true
+        }
+      ]
+    },
+    "bertopic_tri": {
+      "title": "BERTopic (Trilingual)",
+      "evaluation_type": "unsupervised",
+      "status": "completed",
+      "model_dir": "bertopic_classifier/models/topic_trilingual",
+      "topics_csv": "evaluation/results/bertopic_tri_topics.csv",
+      "metrics": {
+        "total_documents": 9999,
+        "topic_count": 215,
+        "outlier_count": 2978,
+        "outlier_rate": 0.2978,
+        "assigned_document_rate": 0.7022,
+        "topic_diversity_top_10": 0.9153,
+        "coherence_approximation_npmi": -0.2256
+      },
+      "sample_check_status": "completed",
+      "sample_check_error": null,
+      "samples": [
+        {
+          "sample_id": "bertopic_tri_01",
+          "text": "ganahan ko magluto og manok",
+          "description": "Cebuano food/cooking assignment",
+          "expected_keyword": "chicken",
+          "topic_id": 161,
+          "topic_name": "161_rice_kanin_kan_mapo",
+          "score": 0.7116,
+          "keyword_matched": false,
+          "is_outlier": false
+        },
+        {
+          "sample_id": "bertopic_tri_02",
+          "text": "nagbasa siya og libro",
+          "description": "Cebuano reading/book assignment",
+          "expected_keyword": "book",
+          "topic_id": 191,
+          "topic_name": "191_magbasa_read_marisol_babasahin",
+          "score": 0.7998,
+          "keyword_matched": false,
+          "is_outlier": false
+        },
+        {
+          "sample_id": "bertopic_tri_03",
+          "text": "gidakop siya sa pulis",
+          "description": "Cebuano police/news assignment",
+          "expected_keyword": "police",
+          "topic_id": 123,
+          "topic_name": "123_pulis_police_pulisya_policeman",
+          "score": 0.821,
+          "keyword_matched": true,
+          "is_outlier": false
+        },
+        {
+          "sample_id": "bertopic_tri_04",
+          "text": "nag eskwela siya sa unibersidad",
+          "description": "Cebuano education assignment",
+          "expected_keyword": "university",
+          "topic_id": 15,
+          "topic_name": "15_nakasabot_say_one_naiintindihan",
+          "score": 0.7734,
+          "keyword_matched": false,
+          "is_outlier": false
+        },
+        {
+          "sample_id": "bertopic_tri_05",
+          "text": "gutom na gutom ako",
+          "description": "Tagalog hunger/food assignment",
+          "expected_keyword": "hungry",
+          "topic_id": 4,
+          "topic_name": "4_busog_ran_benny_tumakbo",
+          "score": 0.8888,
+          "keyword_matched": false,
+          "is_outlier": false
+        }
+      ]
+    }
+  }
+}

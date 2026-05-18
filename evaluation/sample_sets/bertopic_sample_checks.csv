@@ -1,0 +1,16 @@
+sample_id,model,expected_keyword,description,text
+bertopic_en_01,bertopic_en,cook,English food/cooking topic,i want to cook chicken for dinner
+bertopic_en_02,bertopic_en,french,English education/language topic,she is studying french at the university
+bertopic_en_03,bertopic_en,police,English police/news topic,he was arrested by the police
+bertopic_en_04,bertopic_en,rain,English weather topic,it is raining heavily outside
+bertopic_en_05,bertopic_en,book,English reading/library topic,she is reading a book in the library
+bertopic_en_tl_01,bertopic_en_tl,eating,Tagalog food/cooking assignment,gusto kong kumain ng manok
+bertopic_en_tl_02,bertopic_en_tl,french,Tagalog education/language assignment,nag-aaral siya ng pranses
+bertopic_en_tl_03,bertopic_en_tl,hospital,Tagalog hospital/health assignment,pumunta siya sa ospital
+bertopic_en_tl_04,bertopic_en_tl,book,Tagalog reading/book assignment,nagbabasa ako ng libro
+bertopic_en_tl_05,bertopic_en_tl,coffee,Tagalog coffee/food assignment,masarap ang kape
+bertopic_tri_01,bertopic_tri,chicken,Cebuano food/cooking assignment,ganahan ko magluto og manok
+bertopic_tri_02,bertopic_tri,book,Cebuano reading/book assignment,nagbasa siya og libro
+bertopic_tri_03,bertopic_tri,police,Cebuano police/news assignment,gidakop siya sa pulis
+bertopic_tri_04,bertopic_tri,university,Cebuano education assignment,nag eskwela siya sa unibersidad
+bertopic_tri_05,bertopic_tri,hungry,Tagalog hunger/food assignment,gutom na gutom ako

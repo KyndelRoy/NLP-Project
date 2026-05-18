@@ -1,0 +1,31 @@
+model,title,evaluation_type,status,metric,value
+language,Language Detection,supervised,completed,total_samples,30
+language,Language Detection,supervised,completed,correct,29
+language,Language Detection,supervised,completed,accuracy,0.9667
+lda,Latent Dirichlet Allocation,supervised,completed,total_samples,50
+lda,Latent Dirichlet Allocation,supervised,completed,correct,31
+lda,Latent Dirichlet Allocation,supervised,completed,accuracy,0.62
+bart,BART-Large-MNLI,supervised zero-shot sample,completed,total_samples,10
+bart,BART-Large-MNLI,supervised zero-shot sample,completed,correct,10
+bart,BART-Large-MNLI,supervised zero-shot sample,completed,accuracy,1.0
+bertopic_en,BERTopic (English),unsupervised,completed,total_documents,9999
+bertopic_en,BERTopic (English),unsupervised,completed,topic_count,265
+bertopic_en,BERTopic (English),unsupervised,completed,outlier_count,2995
+bertopic_en,BERTopic (English),unsupervised,completed,outlier_rate,0.2995
+bertopic_en,BERTopic (English),unsupervised,completed,assigned_document_rate,0.7005
+bertopic_en,BERTopic (English),unsupervised,completed,topic_diversity_top_10,0.7823
+bertopic_en,BERTopic (English),unsupervised,completed,coherence_approximation_npmi,-0.5641
+bertopic_en_tl,BERTopic (EN + TL),unsupervised,completed,total_documents,9999
+bertopic_en_tl,BERTopic (EN + TL),unsupervised,completed,topic_count,253
+bertopic_en_tl,BERTopic (EN + TL),unsupervised,completed,outlier_count,3135
+bertopic_en_tl,BERTopic (EN + TL),unsupervised,completed,outlier_rate,0.3135
+bertopic_en_tl,BERTopic (EN + TL),unsupervised,completed,assigned_document_rate,0.6865
+bertopic_en_tl,BERTopic (EN + TL),unsupervised,completed,topic_diversity_top_10,0.8945
+bertopic_en_tl,BERTopic (EN + TL),unsupervised,completed,coherence_approximation_npmi,-0.3973
+bertopic_tri,BERTopic (Trilingual),unsupervised,completed,total_documents,9999
+bertopic_tri,BERTopic (Trilingual),unsupervised,completed,topic_count,215
+bertopic_tri,BERTopic (Trilingual),unsupervised,completed,outlier_count,2978
+bertopic_tri,BERTopic (Trilingual),unsupervised,completed,outlier_rate,0.2978
+bertopic_tri,BERTopic (Trilingual),unsupervised,completed,assigned_document_rate,0.7022
+bertopic_tri,BERTopic (Trilingual),unsupervised,completed,topic_diversity_top_10,0.9153
+bertopic_tri,BERTopic (Trilingual),unsupervised,completed,coherence_approximation_npmi,-0.2256

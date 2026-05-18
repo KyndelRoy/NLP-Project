@@ -582,6 +582,56 @@ body.modal-open {
   background: transparent;
 }
 
+.evaluation-report {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.evaluation-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.75rem;
+}
+
+.evaluation-metric {
+  border: 1px solid var(--code-border);
+  border-radius: 8px;
+  padding: 0.8rem;
+  background: color-mix(in srgb, var(--code-header-bg) 70%, transparent);
+}
+
+.evaluation-metric span {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 0.35rem;
+}
+
+.evaluation-metric strong {
+  color: var(--text-primary);
+  font-size: 1.15rem;
+  line-height: 1.2;
+}
+
+.evaluation-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.evaluation-section h4 {
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.evaluation-table {
+  min-width: 900px;
+}
+
 /* Results Area */
 .results-area {
   width: 100%;

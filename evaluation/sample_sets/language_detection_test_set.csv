@@ -1,0 +1,31 @@
+sample_id,expected_language,text
+lang_english_01,english,The students reviewed their lessons before the final exam.
+lang_english_02,english,My family cooked rice and chicken for dinner tonight.
+lang_english_03,english,The mayor announced new rules during the morning briefing.
+lang_english_04,english,She plays basketball with her classmates every weekend.
+lang_english_05,english,The court explained the rights of every citizen clearly.
+lang_english_06,english,A strong storm damaged several houses near the river.
+lang_english_07,english,The teacher asked the children to read another book.
+lang_english_08,english,He bought vegetables and fresh fish from the market.
+lang_english_09,english,The police reported the incident to local officials.
+lang_english_10,english,They practiced English conversation after school.
+lang_tagalog_01,tagalog,Nag-aral ang mga estudyante para sa kanilang pagsusulit.
+lang_tagalog_02,tagalog,Nagluto kami ng kanin at manok para sa hapunan.
+lang_tagalog_03,tagalog,Nagbigay ng bagong patakaran ang alkalde ngayong umaga.
+lang_tagalog_04,tagalog,Naglalaro siya ng basketbol kasama ang mga kaklase.
+lang_tagalog_05,tagalog,Ipinaliwanag ng korte ang karapatan ng bawat mamamayan.
+lang_tagalog_06,tagalog,Sinira ng malakas na bagyo ang ilang bahay sa tabing ilog.
+lang_tagalog_07,tagalog,Pinabasa ng guro ang mga bata ng isa pang aklat.
+lang_tagalog_08,tagalog,Bumili siya ng gulay at sariwang isda sa palengke.
+lang_tagalog_09,tagalog,Iniulat ng pulisya ang pangyayari sa mga opisyal.
+lang_tagalog_10,tagalog,Nagsanay sila magsalita ng Tagalog pagkatapos ng klase.
+lang_cebuano_01,cebuano,Nagtuon ang mga estudyante para sa ilang eksaminasyon.
+lang_cebuano_02,cebuano,Nagluto mi og kan-on ug manok para sa panihapon.
+lang_cebuano_03,cebuano,Nagpahibalo ang mayor og bag-ong balaod karong buntag.
+lang_cebuano_04,cebuano,Nagdula siya og basketbol kuyog ang iyang mga klasmet.
+lang_cebuano_05,cebuano,Gipasabot sa korte ang katungod sa matag lungsoranon.
+lang_cebuano_06,cebuano,Giguba sa kusog nga bagyo ang pipila ka balay daplin sa suba.
+lang_cebuano_07,cebuano,Gipabasa sa maestro ang mga bata og laing libro.
+lang_cebuano_08,cebuano,Mipamalit siya og utanon ug preskong isda sa merkado.
+lang_cebuano_09,cebuano,Gisumbong sa pulis ang hitabo ngadto sa mga opisyal.
+lang_cebuano_10,cebuano,Nagpraktis sila og Cebuano human sa klase.

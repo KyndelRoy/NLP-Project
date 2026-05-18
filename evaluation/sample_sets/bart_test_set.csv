@@ -1,0 +1,11 @@
+sample_id,expected_label,text
+bart_food_01,food,The chef prepared fresh vegetables and soup for dinner.
+bart_food_02,food,"We ordered rice, chicken, and dessert at the restaurant."
+bart_sports_03,sports,The athlete scored the winning point in the basketball game.
+bart_sports_04,sports,The team trained every morning for the tournament.
+bart_news_05,news,The president gave a report after the election results.
+bart_news_06,news,Police confirmed the incident during a public briefing.
+bart_laws_07,laws,The judge explained the legal rights of the accused person.
+bart_laws_08,laws,Congress approved a new policy after a long debate.
+bart_education_09,education,The students studied their lessons in the classroom.
+bart_education_10,education,The university awarded scholarships to new graduates.
