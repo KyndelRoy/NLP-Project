@@ -21,8 +21,10 @@ pip install -r requirements.txt
 ### 3. Train the language detection model
 
 ```bash
-python models/language.detect.py
+python models/language_detector.py
 ```
+
+The compatibility command `python models/language.detect.py` also works.
 
 This saves `language_identifer.pkl` in `models/pkl/`.
 

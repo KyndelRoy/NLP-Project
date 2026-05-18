@@ -23,9 +23,9 @@ models/server.py  FastAPI application
         | loads and routes predictions to
         v
 models/bart_classifier.py
-models/bertopic_classifier.py
+models/bertopic_model.py
 models/lda_model.py
-models/language.detect.py
+models/language_detector.py
 ```
 
 ### Frontend
@@ -54,7 +54,8 @@ models/language.detect.py
 
 Language detector:
 
-- Trained by `models/language.detect.py`.
+- Trained by `models/language_detector.py`.
+- `models/language.detect.py` is kept as a compatibility launcher.
 - Saved at `models/pkl/language_identifer.pkl`.
 
 LDA:
@@ -87,7 +88,7 @@ pip install -r requirements.txt
 Train or refresh local model artifacts:
 
 ```bash
-python models/language.detect.py
+python models/language_detector.py
 python models/lda_model.py
 python bertopic_classifier/topic_english.py
 python bertopic_classifier/topic_english_tagalog.py
@@ -173,13 +174,13 @@ Language response shape:
 Run unit tests:
 
 ```bash
-python -m unittest discover -s tests -v
+./venv/bin/python -m unittest discover -s tests -v
 ```
 
 Run syntax checks:
 
 ```bash
-python -m py_compile models/server.py models/lda_model.py models/bertopic_classifier.py models/bart_classifier.py models/language.detect.py
+python -m py_compile models/server.py models/lda_model.py models/bertopic_model.py models/bart_classifier.py models/language_detector.py models/language.detect.py
 node --check js/app-utils.js
 node --check js/results-view.js
 node --check js/script.js
@@ -189,6 +190,7 @@ node --check js/viewer.js
 ## Engineering Notes
 
 - Keep generated model artifacts out of normal source changes unless the project explicitly needs to version a small baseline artifact.
+- Keep ignored caches such as `__pycache__/`, `bertopic_classifier/models/`, and temporary model outputs out of commits.
 - Avoid adding model loading at module import time; heavy initialization belongs in startup paths.
 - Escape all text rendered from backend responses before inserting it into `innerHTML`.
 - Prefer reusable CSS classes over inline styles so theme and responsive behavior stay consistent.

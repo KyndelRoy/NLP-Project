@@ -34,7 +34,7 @@ First run trains and saves the model. Subsequent runs load instantly.
 
 ## Server Integration
 
-All three models are also available through the main FastAPI server via `models/bertopic_classifier.py`. Select them from the dropdown:
+All three models are also available through the main FastAPI server via `models/bertopic_model.py`. Select them from the dropdown:
 
 - **BERTopic (English)** — `bertopic_en`
 - **BERTopic (EN + TL)** — `bertopic_en_tl`

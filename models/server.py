@@ -8,10 +8,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import joblib
 
-from config import MODEL_CONFIGS, BERTOPIC_CONFIGS, CANDIDATE_LABELS
-from bart_classifier import BartClassifier
-from bertopic_classifier import BertopicClassifier
-from lda_model import LDAClassifier
+try:
+    from .config import MODEL_CONFIGS, BERTOPIC_CONFIGS, CANDIDATE_LABELS
+    from .bart_classifier import BartClassifier
+    from .bertopic_model import BertopicClassifier
+    from .lda_model import LDAClassifier
+except ImportError:
+    from config import MODEL_CONFIGS, BERTOPIC_CONFIGS, CANDIDATE_LABELS
+    from bart_classifier import BartClassifier
+    from bertopic_model import BertopicClassifier
+    from lda_model import LDAClassifier
 
 logger = logging.getLogger("uvicorn.error")
 

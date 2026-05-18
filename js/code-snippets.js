@@ -55,7 +55,7 @@ result = classifier.classify("Nag-aaral ang estudyante sa paaralan.")`
         tabs: [
             { key: 'model', label: 'Model Script', title: 'topic_english.py', source: 'bertopic_classifier/topic_english.py' },
             { key: 'base', label: 'Load + Predict', title: 'base.py', source: 'bertopic_classifier/base.py' },
-            { key: 'wrapper', label: 'Server Wrapper', title: 'bertopic_classifier.py', source: 'models/bertopic_classifier.py' },
+            { key: 'wrapper', label: 'Server Wrapper', title: 'bertopic_model.py', source: 'models/bertopic_model.py' },
             { key: 'server', label: 'API Route', title: 'server.py', source: 'models/server.py' },
             { key: 'config', label: 'Config', title: 'config.py', source: 'models/config.py' }
         ],
@@ -76,7 +76,7 @@ name, topic_id, prob = predict_topic(model, "i want to cook chicken")`
         tabs: [
             { key: 'model', label: 'Model Script', title: 'topic_english_tagalog.py', source: 'bertopic_classifier/topic_english_tagalog.py' },
             { key: 'base', label: 'Load + Predict', title: 'base.py', source: 'bertopic_classifier/base.py' },
-            { key: 'wrapper', label: 'Server Wrapper', title: 'bertopic_classifier.py', source: 'models/bertopic_classifier.py' },
+            { key: 'wrapper', label: 'Server Wrapper', title: 'bertopic_model.py', source: 'models/bertopic_model.py' },
             { key: 'server', label: 'API Route', title: 'server.py', source: 'models/server.py' },
             { key: 'config', label: 'Config', title: 'config.py', source: 'models/config.py' }
         ],
@@ -97,7 +97,7 @@ name, topic_id, prob = predict_topic(model, "gusto kong kumain ng manok")`
         tabs: [
             { key: 'model', label: 'Model Script', title: 'topic_trilingual.py', source: 'bertopic_classifier/topic_trilingual.py' },
             { key: 'base', label: 'Load + Predict', title: 'base.py', source: 'bertopic_classifier/base.py' },
-            { key: 'wrapper', label: 'Server Wrapper', title: 'bertopic_classifier.py', source: 'models/bertopic_classifier.py' },
+            { key: 'wrapper', label: 'Server Wrapper', title: 'bertopic_model.py', source: 'models/bertopic_model.py' },
             { key: 'server', label: 'API Route', title: 'server.py', source: 'models/server.py' },
             { key: 'config', label: 'Config', title: 'config.py', source: 'models/config.py' }
         ],
@@ -116,7 +116,7 @@ name, topic_id, prob = predict_topic(model, "ganahan ko magluto og manok")`
     language: {
         title: 'Language Detection Code',
         tabs: [
-            { key: 'training', label: 'Training', title: 'language.detect.py', source: 'models/language.detect.py' },
+            { key: 'training', label: 'Training', title: 'language_detector.py', source: 'models/language_detector.py' },
             { key: 'server', label: 'API Route', title: 'server.py', source: 'models/server.py' },
             { key: 'config', label: 'Config', title: 'config.py', source: 'models/config.py' }
         ],

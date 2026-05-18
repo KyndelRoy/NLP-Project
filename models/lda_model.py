@@ -222,10 +222,13 @@ class LDAClassifier:
         # Uses the candidate labels defined in config; fall back to a default
         # set if config is unavailable.
         try:
-            from config import CANDIDATE_LABELS
-            candidate_labels = CANDIDATE_LABELS
+            from .config import CANDIDATE_LABELS
         except ImportError:
-            candidate_labels = ["food", "sports", "news", "laws", "education"]
+            try:
+                from config import CANDIDATE_LABELS
+            except ImportError:
+                CANDIDATE_LABELS = ["food", "sports", "news", "laws", "education"]
+            candidate_labels = CANDIDATE_LABELS
 
         self.topic_label_map = metadata.get("topic_label_map") or map_topics_to_labels(
             self.lda, self.vectorizer, candidate_labels
